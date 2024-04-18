@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:start_gym_app/main.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -239,45 +241,52 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildLoginButton() {
-    return ElevatedButton(
-      onPressed: () async {
-        setLoading(true);
-        String email = emailController.text;
-        String senha = passwordController.text;
+    return StoreConnector(converter: (store) {
+      return () => store.dispatch(token('token recebido', 'setToken'));
+    }, builder: (context, callback) {
+      return ElevatedButton(
+        onPressed: () async {
+          callback;
+          setLoading(true);
+          String email = emailController.text;
+          String senha = passwordController.text;
 
-        if (email.isEmpty || senha.isEmpty) {
-          await Future.delayed(const Duration(milliseconds: 500));
-          setLoading(false);
-          showDialog(
-              // ignore: use_build_context_synchronously
-              context: context,
-              builder: (BuildContext context) {
-                return const AlertDialog(
-                  content: Text("Login Não Realizado"),
-                );
-              });
-        } else {
-          await Future.delayed(const Duration(milliseconds: 300));
-          setLoading(false);
-          showDialog(
-              // ignore: use_build_context_synchronously
-              context: context,
-              builder: (BuildContext context) {
-                return const AlertDialog(
-                  content: Text("Login Realizado"),
-                );
-              });
-        }
-      },
-      style: ElevatedButton.styleFrom(
-        shape: const StadiumBorder(),
-        elevation: 20,
-        shadowColor: const Color.fromARGB(255, 253, 224, 136),
-        minimumSize: const Size.fromHeight(60),
-      ),
-      child: const Text("LOGIN",
-          style: TextStyle(fontSize: 14, color: Colors.black)),
-    );
+          if (email.isEmpty || senha.isEmpty) {
+            await Future.delayed(const Duration(milliseconds: 500));
+            setLoading(false);
+            showDialog(
+                // ignore: use_build_context_synchronously
+                context: context,
+                builder: (BuildContext context) {
+                  return const AlertDialog(
+                    content: Text("Login Não Realizado"),
+                  );
+                });
+          } else {
+            await Future.delayed(const Duration(milliseconds: 300));
+            setLoading(false);
+            // ignore: use_build_context_synchronously
+            Navigator.pushNamed(context, '/home');
+            showDialog(
+                // ignore: use_build_context_synchronously
+                context: context,
+                builder: (BuildContext context) {
+                  return const AlertDialog(
+                    content: Text("Login Realizado"),
+                  );
+                });
+          }
+        },
+        style: ElevatedButton.styleFrom(
+          shape: const StadiumBorder(),
+          elevation: 20,
+          shadowColor: const Color.fromARGB(255, 253, 224, 136),
+          minimumSize: const Size.fromHeight(60),
+        ),
+        child: const Text("LOGIN",
+            style: TextStyle(fontSize: 14, color: Colors.black)),
+      );
+    });
   }
 
   Widget _buildResetButton() {
