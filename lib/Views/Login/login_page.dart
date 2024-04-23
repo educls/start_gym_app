@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 
 import '../../controllers/users/users_controller.dart';
 import '../../utils/provider/data_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -29,6 +30,12 @@ class _LoginPageState extends State<LoginPage> {
   late int _remainingTimeInSeconds = 60;
   late int _remainingTimeInSecondsBlock = 60;
   bool emailSend = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedCredentials();
+  }
 
   void setObscure(bool isObscure) {
     setState(() {
@@ -80,6 +87,26 @@ class _LoginPageState extends State<LoginPage> {
         }
       });
     });
+  }
+
+  Future<void> _loadSavedCredentials() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String savedEmail = prefs.getString('email') ?? '';
+    String savedPassword = prefs.getString('password') ?? '';
+    bool savedUserRemember = prefs.getBool('rememberUser') ?? false;
+
+    setState(() {
+      emailController.text = savedEmail;
+      passwordController.text = savedPassword;
+      rememberUser = savedUserRemember;
+    });
+  }
+
+  Future<void> _saveCredentialsAndPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('email', emailController.text);
+    prefs.setString('password', passwordController.text);
+    prefs.setBool('rememberUser', rememberUser);
   }
 
   @override
@@ -330,8 +357,10 @@ class _LoginPageState extends State<LoginPage> {
 
     // Envia a requisicao de LOGIN para a API e armazena a resposta a ser
     // tratata pelo app
-    http.Response response =
-        await userLogin(emailController.text, passwordController.text);
+    late http.Response response;
+    if (emailController.text.isNotEmpty || passwordController.text.isNotEmpty) {
+      response = await userLogin(emailController.text, passwordController.text);
+    }
 
     if (emailController.text.isEmpty || passwordController.text.isEmpty) {
       await Future.delayed(const Duration(milliseconds: 500));
@@ -365,6 +394,9 @@ class _LoginPageState extends State<LoginPage> {
         },
       );
     } else {
+      if (rememberUser) {
+        _saveCredentialsAndPreferences();
+      }
       await Future.delayed(const Duration(milliseconds: 300));
       setState(() {
         attempts = 0;
