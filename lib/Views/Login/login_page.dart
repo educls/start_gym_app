@@ -365,14 +365,39 @@ class _LoginPageState extends State<LoginPage> {
     if (emailController.text.isEmpty || passwordController.text.isEmpty) {
       await Future.delayed(const Duration(milliseconds: 500));
       setLoading(false);
+
       showDialog(
-          // ignore: use_build_context_synchronously
-          context: context,
-          builder: (BuildContext context) {
-            return const AlertDialog(
-              content: Text("Campos Vazios"),
-            );
-          });
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text(
+              'Mensagem',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+            content: const Text(
+              'Alguns Campos estão vazios',
+              style: TextStyle(fontSize: 16),
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'OK',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      );
     } else if (response.statusCode == 401) {
       await Future.delayed(const Duration(milliseconds: 500));
       setLoading(false);
@@ -384,12 +409,35 @@ class _LoginPageState extends State<LoginPage> {
         startTimer();
       }
       showDialog(
-        // ignore: use_build_context_synchronously
         context: context,
         builder: (BuildContext context) {
           var body = json.decode(response.body);
           return AlertDialog(
-            content: Text('${body['mensagem']}'),
+            title: const Text(
+              'Mensagem',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+            content: Text(
+              '${body['mensagem']}',
+              style: const TextStyle(fontSize: 16),
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'OK',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ],
           );
         },
       );
