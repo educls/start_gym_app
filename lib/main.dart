@@ -6,6 +6,8 @@ import './utils/provider/data_provider.dart';
 
 import 'package:provider/provider.dart';
 
+import 'Views/signUp/sign_up_page.dart';
+
 void main() {
   Provider.debugCheckInvalidValueType = null;
   runApp(
@@ -30,6 +32,7 @@ class MyApp extends StatelessWidget {
       ),
       home: const LoginPage(),
       routes: {
+        '/cadastro': (context) => const SignUpPage(),
         '/home': (context) => HomePage(),
         '/login': (context) => const LoginPage()
       },

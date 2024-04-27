@@ -1,5 +1,4 @@
-import 'dart:convert';
-import 'dart:io';
+// import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../../utils/constants/constants.dart';
 
@@ -17,7 +16,7 @@ class FetchApiUsers {
       );
 
       if (response.statusCode == 200) {
-        final responseData = json.decode(response.body);
+        // final responseData = json.decode(response.body);
 
         return response;
       } else {
@@ -44,7 +43,7 @@ class FetchApiUsers {
       );
 
       if (response.statusCode == 200) {
-        final responseData = json.decode(response.body);
+        // final responseData = json.decode(response.body);
 
         return response;
       } else {

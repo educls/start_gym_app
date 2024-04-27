@@ -2,10 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:start_gym_app/models/users/LoginModel.dart';
+
 import 'package:http/http.dart' as http;
 
+import '../../common_widget/round_button.dart';
 import '../../controllers/users/users_controller.dart';
 import '../../utils/provider/data_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -250,9 +252,9 @@ class _LoginPageState extends State<LoginPage> {
         SizedBox(height: attempts < 5 ? 0 : 20),
         _buildRememberForgot(),
         const SizedBox(height: 20),
-        _buildLoginButton(),
+        _buildRoundLoginButton(),
         const SizedBox(height: 10),
-        _buildSignUpButton(),
+        _buildRoundSignUpButton(),
       ],
     );
   }
@@ -329,27 +331,45 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-// Retorna um Widget ElevatedButton com a logica para o LOGIN
-  Widget _buildLoginButton() {
-    return ElevatedButton(
-      onPressed: _remainingTimeInSecondsBlock == 60 ||
-              _remainingTimeInSecondsBlock == 0
-          ? () async {
-              setLoading(true);
-              //Funcao que executa toda a logica de LOGIN
-              onPressedForLoginButton();
-            }
-          : null,
-      style: ElevatedButton.styleFrom(
-        shape: const StadiumBorder(),
-        elevation: 20,
-        shadowColor: const Color.fromARGB(255, 253, 224, 136),
-        minimumSize: const Size.fromHeight(60),
-      ),
-      child: const Text("LOGIN",
-          style: TextStyle(fontSize: 14, color: Colors.black)),
+  Widget _buildRoundLoginButton() {
+    return RoundButton(
+      width: 330,
+      isLoading: _isLoading,
+      title: "LOGIN",
+      onPressed: () async {
+        if (_remainingTimeInSecondsBlock == 60 ||
+            _remainingTimeInSecondsBlock == 0) {
+          setLoading(true);
+          //Funcao que executa toda a logica de LOGIN
+          onPressedForLoginButton();
+        } else {
+          null;
+        }
+      },
     );
   }
+
+// Retorna um Widget ElevatedButton com a logica para o LOGIN
+  // Widget _buildLoginButton() {
+  //   return ElevatedButton(
+  //     onPressed: _remainingTimeInSecondsBlock == 60 ||
+  //             _remainingTimeInSecondsBlock == 0
+  //         ? () async {
+  //             setLoading(true);
+  //             //Funcao que executa toda a logica de LOGIN
+  //             onPressedForLoginButton();
+  //           }
+  //         : null,
+  //     style: ElevatedButton.styleFrom(
+  //       shape: const StadiumBorder(),
+  //       elevation: 20,
+  //       shadowColor: const Color.fromARGB(255, 253, 224, 136),
+  //       minimumSize: const Size.fromHeight(60),
+  //     ),
+  //     child: const Text("LOGIN",
+  //         style: TextStyle(fontSize: 14, color: Colors.black)),
+  //   );
+  // }
 
 // Executa toda a logica do LOGIN
   void onPressedForLoginButton() async {
@@ -457,19 +477,15 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Widget _buildSignUpButton() {
-    return Center(
-      child: ElevatedButton(
-        onPressed: () async {},
-        style: ElevatedButton.styleFrom(
-            shape: const StadiumBorder(),
-            elevation: 20,
-            backgroundColor: Colors.amber,
-            shadowColor: const Color.fromARGB(255, 253, 224, 136),
-            minimumSize: const Size(160, 60)),
-        child: const Text("PRIMEIRO ACESSO",
-            style: TextStyle(fontSize: 14, color: Colors.black)),
-      ),
+  Widget _buildRoundSignUpButton() {
+    return RoundButton(
+      width: 200,
+      isLoading: _isLoading,
+      title: "PRIMEIRO ACESSO",
+      type: RoundButtonType.bgSGradient,
+      onPressed: () async {
+        Navigator.pushNamed(context, '/cadastro');
+      },
     );
   }
 
@@ -534,23 +550,5 @@ class _LoginPageState extends State<LoginPage> {
             );
           });
     }
-  }
-
-// Retorna um Widget com o LOGIN COM O GOOGLE(OBS: ainda nao implementado)
-  Widget _buildOtherLogin() {
-    return Center(
-      child: Column(
-        children: [
-          _buildGreyText("Login usando"),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Tab(icon: Image.asset("assets/images/google.png")),
-            ],
-          )
-        ],
-      ),
-    );
   }
 }
