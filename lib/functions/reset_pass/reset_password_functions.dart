@@ -4,6 +4,7 @@ import 'package:quickalert/quickalert.dart';
 
 import '../../common_widget/dialog_modal.dart';
 import '../../controllers/users/users_controller.dart';
+import '../../common/color_extension.dart';
 
 class ResetPasswordFunctions {
   final BuildContext context;
@@ -40,6 +41,7 @@ class ResetPasswordFunctions {
         text: 'Email não Encontrado',
         confirmBtnText: 'Ok',
         title: 'Aviso',
+        confirmBtnColor: TColor.primaryColor1,
       );
     } else {
       await Future.delayed(const Duration(milliseconds: 500));

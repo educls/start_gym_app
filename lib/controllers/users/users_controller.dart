@@ -24,3 +24,19 @@ Future<http.Response> userSendEmailForResetPassword(String email) async {
 
   return response;
 }
+
+Future<http.Response> checkIfEmailIsVerified(String email) async {
+  http.Response response =
+      await fetchApiUsers.fetchForCheckIfEmailWasVerified(email);
+
+  return response;
+}
+
+Future<http.Response> sendEmailForVerifiedEmail(String email) async {
+  var sendEmailData = sendEmailForResetToJson(SendEmailForReset(email: email));
+
+  http.Response response =
+      await fetchApiUsers.fetchForSendEmailForVerifyEmail(sendEmailData);
+
+  return response;
+}

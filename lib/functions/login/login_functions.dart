@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'package:quickalert/quickalert.dart';
 
+import '../../common/color_extension.dart';
 import '../../common_widget/dialog_modal.dart';
 import '../../controllers/users/users_controller.dart';
 import '../../utils/provider/data_provider.dart';
@@ -51,6 +52,7 @@ class LoginFunctions {
         text: 'Alguns Campos estão vazios',
         confirmBtnText: 'Ok',
         title: 'Aviso',
+        confirmBtnColor: TColor.primaryColor1,
       );
     } else if (response.statusCode == 401) {
       await Future.delayed(const Duration(milliseconds: 500));
@@ -65,16 +67,18 @@ class LoginFunctions {
           text: '${body['mensagem']}',
           confirmBtnText: 'Ok',
           title: 'Bloqueado Temporariamente!',
+          confirmBtnColor: TColor.primaryColor1,
         );
       } else {
         QuickAlert.show(
           context: context,
           type: QuickAlertType.warning,
           text: body['tentativas'] >= 3
-              ? '${body['mensagem']}\n${5 - body['tentativas']} tentativas até o bloqueio temporario'
+              ? '${body['mensagem']}\n${5 - body['tentativas']} tentativas até o bloqueio temporário'
               : '${body['mensagem']}',
           confirmBtnText: 'Ok',
           title: 'Aviso',
+          confirmBtnColor: TColor.primaryColor1,
         );
       }
     } else {

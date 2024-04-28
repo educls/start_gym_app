@@ -17,4 +17,18 @@ class FetchApiUsers {
         .fetch();
     return resp;
   }
+
+  Future<http.Response> fetchForSendEmailForVerifyEmail(sendEmailData) async {
+    http.Response resp = await FetchApi(
+            route: '/verifica-email', method: 'POST', body: sendEmailData)
+        .fetch();
+    return resp;
+  }
+
+  Future<http.Response> fetchForCheckIfEmailWasVerified(email) async {
+    http.Response resp = await FetchApi(
+            route: '/check-if-email-is-verified/$email', method: 'GET')
+        .fetch();
+    return resp;
+  }
 }
