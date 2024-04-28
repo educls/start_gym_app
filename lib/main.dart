@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'Views/Login/login_page.dart';
 import 'Views/home/home_page.dart';
+import 'Views/signUp/sign_up_page.dart';
+
 import './utils/provider/data_provider.dart';
 
 import 'package:provider/provider.dart';
 
-import 'Views/signUp/sign_up_page.dart';
+import 'Views/test/test.dart';
 
 void main() {
   Provider.debugCheckInvalidValueType = null;
@@ -34,7 +36,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/cadastro': (context) => const SignUpPage(),
         '/home': (context) => HomePage(),
-        '/login': (context) => const LoginPage()
+        '/login': (context) => const LoginPage(),
       },
     );
   }

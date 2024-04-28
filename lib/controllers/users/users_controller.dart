@@ -1,8 +1,8 @@
 import 'package:http/http.dart' as http;
-import 'package:start_gym_app/services/users/users_service.dart';
 
 import '../../models/users/LoginModel.dart';
 import '../../models/users/SendEmailForResetModel.dart';
+import '../../services/users/users_service.dart';
 
 FetchApiUsers fetchApiUsers = FetchApiUsers();
 

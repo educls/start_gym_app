@@ -1,59 +1,20 @@
-// import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../../utils/constants/constants.dart';
+import 'package:start_gym_app/services/req_api_class.dart';
 
 class FetchApiUsers {
   Future<http.Response> fetchLoginUsers(loginData) async {
-    String url = '${AppConstants.baseUrlApi}/login';
-
-    try {
-      final response = await http.post(
-        Uri.parse(url),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: loginData,
-      );
-
-      if (response.statusCode == 200) {
-        // final responseData = json.decode(response.body);
-
-        return response;
-      } else {
-        print('Falha na requisição: ${response.statusCode}');
-
-        return response;
-      }
-    } catch (err) {
-      print('Erro na requisição: $err');
-      return http.Response('Erro na requisição: $err', 500);
-    }
+    http.Response resp =
+        await FetchApi(route: '/login', method: 'POST', body: loginData)
+            .fetch();
+    return resp;
   }
 
-  Future<http.Response> fetchSendEmailForReset(data) async {
-    String url = '${AppConstants.baseUrlApi}/send-email-reset-password';
-
-    try {
-      final response = await http.post(
-        Uri.parse(url),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: data,
-      );
-
-      if (response.statusCode == 200) {
-        // final responseData = json.decode(response.body);
-
-        return response;
-      } else {
-        print('Falha na requisição: ${response.statusCode}');
-
-        return response;
-      }
-    } catch (err) {
-      print('Erro na requisição: $err');
-      return http.Response('Erro na requisição: $err', 500);
-    }
+  Future<http.Response> fetchSendEmailForReset(sendEmailData) async {
+    http.Response resp = await FetchApi(
+            route: '/send-email-reset-password',
+            method: 'POST',
+            body: sendEmailData)
+        .fetch();
+    return resp;
   }
 }

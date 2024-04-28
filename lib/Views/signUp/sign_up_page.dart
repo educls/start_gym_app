@@ -9,6 +9,7 @@ import '../../common_widget/round_button.dart';
 import '../../common_widget/round_textfield.dart';
 
 import 'package:image_picker/image_picker.dart';
+import 'dart:io' as Io;
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -47,14 +48,19 @@ class _SignUpPageState extends State<SignUpPage> {
       setState(() {
         _imageFile = pickedImage;
       });
-      Uint8List bytes = await File(_imageFile!.path).readAsBytes();
-      print(bytes);
+
+      final bytes = await File(_imageFile!.path).readAsBytes();
       String base64Image = base64Encode(bytes);
 
-      print(base64Image);
+      print('Imagem em base64: $base64Image');
     } catch (e) {
       print('Erro ao pegar a imagem: $e');
     }
+  }
+
+  Uint8List decodeImage(String base64Image) {
+    List<int> bytes = base64.decode(base64Image);
+    return Uint8List.fromList(bytes);
   }
 
   void showChoiceForPhotoPerfil() {
@@ -62,34 +68,41 @@ class _SignUpPageState extends State<SignUpPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text(
-            'Escolha uma opção',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
+          title: const Center(
+            child: Text(
+              'Escolha uma opção',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
             ),
           ),
           actions: <Widget>[
-            TextButton(
-                onPressed: () {
-                  _pickImage(ImageSource.gallery);
-                  Navigator.of(context).pop();
-                },
-                child: Icon(
-                  Icons.photo_library,
-                  size: 60,
-                  color: Colors.grey[600],
-                )),
-            TextButton(
-                onPressed: () {
-                  _pickImage(ImageSource.camera);
-                  Navigator.of(context).pop();
-                },
-                child: Icon(
-                  Icons.camera_alt,
-                  size: 60,
-                  color: Colors.grey[600],
-                )),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                    onPressed: () {
+                      _pickImage(ImageSource.gallery);
+                      Navigator.of(context).pop();
+                    },
+                    child: Icon(
+                      Icons.photo_library,
+                      size: 60,
+                      color: Colors.grey[600],
+                    )),
+                TextButton(
+                    onPressed: () {
+                      _pickImage(ImageSource.camera);
+                      Navigator.of(context).pop();
+                    },
+                    child: Icon(
+                      Icons.camera_alt,
+                      size: 60,
+                      color: Colors.grey[600],
+                    )),
+              ],
+            )
           ],
         );
       },
@@ -294,7 +307,9 @@ class _SignUpPageState extends State<SignUpPage> {
                     width: 330,
                     isLoading: isLoading,
                     title: "Cadastrar",
-                    onPressed: () async {},
+                    onPressed: () async {
+                      Navigator.pushNamed(context, '/test');
+                    },
                   ),
                 ],
               ),

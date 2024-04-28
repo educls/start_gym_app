@@ -1,15 +1,15 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
 
 import 'package:http/http.dart' as http;
 
 import '../../common_widget/round_button.dart';
+import '../../common_widget/dialog_modal.dart';
 import '../../controllers/users/users_controller.dart';
-import '../../utils/provider/data_provider.dart';
+import '../../functions/login/login_functions.dart';
+import '../../functions/reset_pass/reset_password_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
@@ -55,6 +55,18 @@ class _LoginPageState extends State<LoginPage> {
   void setLoading(bool isLoading) {
     setState(() {
       _isLoading = isLoading;
+    });
+  }
+
+  void setAttempts(int attempt) {
+    setState(() {
+      attempts = attempt;
+    });
+  }
+
+  void setEmailSend(bool sent) {
+    setState(() {
+      emailSend = sent;
     });
   }
 
@@ -104,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  Future<void> _saveCredentialsAndPreferences() async {
+  Future<void> saveCredentialsAndPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('email', emailController.text);
     prefs.setString('password', passwordController.text);
@@ -333,150 +345,33 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildRoundLoginButton() {
     return RoundButton(
-      width: 330,
-      isLoading: _isLoading,
-      title: "LOGIN",
-      onPressed: () async {
-        if (_remainingTimeInSecondsBlock == 60 ||
-            _remainingTimeInSecondsBlock == 0) {
-          setLoading(true);
-          //Funcao que executa toda a logica de LOGIN
-          onPressedForLoginButton();
-        } else {
-          null;
-        }
-      },
-    );
+        width: 330,
+        isLoading: _isLoading,
+        title: "LOGIN",
+        onPressed: _remainingTimeInSecondsBlock == 60 ||
+                _remainingTimeInSecondsBlock == 0
+            ? () async {
+                setLoading(true);
+                //Classe que executa toda a logica de LOGIN
+                await LoginFunctions(
+                        context: context,
+                        emailController: emailController,
+                        passwordController: passwordController,
+                        rememberUser: rememberUser,
+                        setLoading: setLoading,
+                        attempts: attempts,
+                        startTimer: startTimer,
+                        setAttempts: setAttempts,
+                        saveCredentialsAndPreferences:
+                            saveCredentialsAndPreferences)
+                    .onPressedForLoginButton(context);
+              }
+            : () {
+                null;
+              });
   }
 
-// Retorna um Widget ElevatedButton com a logica para o LOGIN
-  // Widget _buildLoginButton() {
-  //   return ElevatedButton(
-  //     onPressed: _remainingTimeInSecondsBlock == 60 ||
-  //             _remainingTimeInSecondsBlock == 0
-  //         ? () async {
-  //             setLoading(true);
-  //             //Funcao que executa toda a logica de LOGIN
-  //             onPressedForLoginButton();
-  //           }
-  //         : null,
-  //     style: ElevatedButton.styleFrom(
-  //       shape: const StadiumBorder(),
-  //       elevation: 20,
-  //       shadowColor: const Color.fromARGB(255, 253, 224, 136),
-  //       minimumSize: const Size.fromHeight(60),
-  //     ),
-  //     child: const Text("LOGIN",
-  //         style: TextStyle(fontSize: 14, color: Colors.black)),
-  //   );
-  // }
-
-// Executa toda a logica do LOGIN
-  void onPressedForLoginButton() async {
-    final value = Provider.of<DataAppProvider>(context, listen: false);
-
-    // Envia a requisicao de LOGIN para a API e armazena a resposta a ser
-    // tratata pelo app
-    late http.Response response;
-    if (emailController.text.isNotEmpty || passwordController.text.isNotEmpty) {
-      response = await userLogin(emailController.text, passwordController.text);
-    }
-
-    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
-      await Future.delayed(const Duration(milliseconds: 500));
-      setLoading(false);
-
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text(
-              'Mensagem',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-            content: const Text(
-              'Alguns Campos estão vazios',
-              style: TextStyle(fontSize: 16),
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text(
-                  'OK',
-                  style: TextStyle(
-                    color: Colors.blue,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
-      );
-    } else if (response.statusCode == 401) {
-      await Future.delayed(const Duration(milliseconds: 500));
-      setLoading(false);
-      var body = json.decode(response.body);
-      setState(() {
-        attempts = body['tentativas'];
-      });
-      if (attempts == 5) {
-        startTimer();
-      }
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          var body = json.decode(response.body);
-          return AlertDialog(
-            title: const Text(
-              'Mensagem',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-            content: Text(
-              '${body['mensagem']}',
-              style: const TextStyle(fontSize: 16),
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text(
-                  'OK',
-                  style: TextStyle(
-                    color: Colors.blue,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
-      );
-    } else {
-      if (rememberUser) {
-        _saveCredentialsAndPreferences();
-      }
-      await Future.delayed(const Duration(milliseconds: 300));
-      setState(() {
-        attempts = 0;
-      });
-      var body = json.decode(response.body);
-      value.setToken(body["token"]);
-      setLoading(false);
-      // ignore: use_build_context_synchronously
-      Navigator.pushNamed(context, '/home');
-    }
-  }
-
+// Retorna um Widget Button que abre a tela de PRIMEIRO ACESSO(Cadastro)
   Widget _buildRoundSignUpButton() {
     return RoundButton(
       width: 200,
@@ -489,66 +384,25 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-// Retorna um Widget ElevatedButton com a logica para o envio do email para
+// Retorna um Widget Button com a logica para o envio do email para
 // a Redefinição da Senha
   Widget _buildResetButton() {
-    return ElevatedButton(
-      onPressed: emailSend == false
-          ? () async {
-              setLoading(true);
-              onPressedForSendEmailResetPassword();
-            }
-          : null,
-      style: ElevatedButton.styleFrom(
-        shape: const StadiumBorder(),
-        elevation: 20,
-        shadowColor: const Color.fromARGB(255, 253, 224, 136),
-        minimumSize: const Size.fromHeight(60),
-      ),
-      child: const Text("ENVIAR",
-          style: TextStyle(fontSize: 14, color: Colors.black)),
-    );
-  }
-
-// Executa toda a logica do botao que envia o email para a redefinicao da senha
-  void onPressedForSendEmailResetPassword() async {
-    // Envia a requisicao do Envio de email para a API e armazena a resposta
-    //a ser tratata pelo app
-    http.Response response =
-        await userSendEmailForResetPassword(emailController.text);
-
-    if (response.statusCode == 200) {
-      startTimerForResetPassword();
-      setState(() {
-        emailSend = true;
-      });
-    }
-
-    if (emailController.text.isEmpty || response.statusCode == 401) {
-      await Future.delayed(const Duration(milliseconds: 500));
-      setLoading(false);
-      showDialog(
-          // ignore: use_build_context_synchronously
-          context: context,
-          builder: (BuildContext context) {
-            return const AlertDialog(
-              content: Text("Email Invalido"),
-            );
-          });
-    } else {
-      await Future.delayed(const Duration(milliseconds: 500));
-      setLoading(false);
-      showDialog(
-          // ignore: use_build_context_synchronously
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              content: Text("Email Enviado para ${emailController.text}",
-                  style: const TextStyle(
-                    color: Color.fromARGB(255, 22, 134, 26),
-                  )),
-            );
-          });
-    }
+    return RoundButton(
+        width: 330,
+        title: 'ENVIAR',
+        onPressed: emailSend == false
+            ? () async {
+                setLoading(true);
+                ResetPasswordFunctions(
+                        context: context,
+                        emailController: emailController,
+                        startTimerForResetPassword: startTimerForResetPassword,
+                        setEmailSend: setEmailSend,
+                        setLoading: setLoading)
+                    .onPressedForSendEmailResetPasswordButton(context);
+              }
+            : () {
+                null;
+              });
   }
 }
