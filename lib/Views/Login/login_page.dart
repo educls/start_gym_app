@@ -3,11 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import 'package:http/http.dart' as http;
-
 import '../../common_widget/round_button.dart';
-import '../../common_widget/dialog_modal.dart';
-import '../../controllers/users/users_controller.dart';
 import '../../functions/login/login_functions.dart';
 import '../../functions/reset_pass/reset_password_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,6 +28,7 @@ class _LoginPageState extends State<LoginPage> {
   late int _remainingTimeInSeconds = 60;
   late int _remainingTimeInSecondsBlock = 60;
   bool emailSend = false;
+  bool waitingConfirmation = false;
 
   @override
   void initState() {
@@ -89,17 +86,19 @@ class _LoginPageState extends State<LoginPage> {
   void startTimerForResetPassword() {
     _remainingTimeInSeconds = 60;
     Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        if (_remainingTimeInSeconds > 0) {
-          _remainingTimeInSeconds--;
-        } else {
-          timer.cancel();
-          setState(() {
-            emailSend = false;
-            _remainingTimeInSeconds = 60;
-          });
-        }
-      });
+      setState(
+        () {
+          if (_remainingTimeInSeconds > 0) {
+            _remainingTimeInSeconds--;
+          } else {
+            timer.cancel();
+            setState(() {
+              emailSend = false;
+              _remainingTimeInSeconds = 60;
+            });
+          }
+        },
+      );
     });
   }
 
@@ -108,6 +107,14 @@ class _LoginPageState extends State<LoginPage> {
     String savedEmail = prefs.getString('email') ?? '';
     String savedPassword = prefs.getString('password') ?? '';
     bool savedUserRemember = prefs.getBool('rememberUser') ?? false;
+    bool waitingConfirmationEmail =
+        prefs.getBool('waitingConfirmation') ?? false;
+    String emailSignUo = prefs.getString('emailSignUp') ?? '';
+    print(emailSignUo);
+
+    if (waitingConfirmationEmail == true) {
+      Navigator.pushNamed(context, '/cadastro');
+    }
 
     setState(() {
       emailController.text = savedEmail;

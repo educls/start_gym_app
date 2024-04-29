@@ -6,6 +6,8 @@ import 'dart:typed_data';
 import 'package:quickalert/quickalert.dart';
 import 'package:http/http.dart' as http;
 import 'package:quickalert/widgets/quickalert_container.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:start_gym_app/functions/sign_up/sign_up_functions.dart';
 
 import '../../common/color_extension.dart';
 import '../../common_widget/round_button.dart';
@@ -29,9 +31,11 @@ class _SignUpPageState extends State<SignUpPage> {
   String base64Image = '';
 
   String name = "";
-  String lastName = "";
+  String numberwhats = "";
   String email = "";
   String password = "";
+  String confirmPassword = '';
+  bool waitingConfirmationEmail = false;
   bool isLoading = false;
   final GlobalKey<FormState> _formkeysignup = GlobalKey<FormState>();
   TextEditingController txtName = TextEditingController();
@@ -39,6 +43,48 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController txtEmail = TextEditingController();
   TextEditingController txtPassword = TextEditingController();
   TextEditingController txtConfirmPassword = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedCredentials();
+  }
+
+  Future<void> _loadSavedCredentials() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    base64Image = prefs.getString('photoSignUp') ?? '';
+    name = prefs.getString('nameSignUp') ?? '';
+    numberwhats = prefs.getString('numberSignUp') ?? '';
+    email = prefs.getString('emailSignUp') ?? '';
+    password = prefs.getString('passwordSignUp') ?? '';
+    confirmPassword = prefs.getString('passwordConfirmSignUp') ?? '';
+    waitingConfirmationEmail = prefs.getBool('waitingConfirmation') ?? false;
+
+    setState(() {
+      base64Image = base64Image;
+      txtName.text = name;
+      txtNumero.text = numberwhats;
+      txtEmail.text = email;
+      txtPassword.text = password;
+      txtConfirmPassword.text = confirmPassword;
+    });
+    print(txtEmail.text);
+
+    if (waitingConfirmationEmail == true) {
+      setLoading(true);
+      SignUpFunctions(
+        context: context,
+        base64Image: base64Image,
+        txtName: txtName,
+        txtNumero: txtNumero,
+        txtEmail: txtEmail,
+        txtPassword: txtPassword,
+        txtConfirmPassword: txtConfirmPassword,
+        setLoading: setLoading,
+        waitingConfirmationEmail: waitingConfirmationEmail,
+      ).onPressedForSignUpButton(context);
+    }
+  }
 
   bool isCheck = false;
   bool showPassword = false;
@@ -174,18 +220,19 @@ class _SignUpPageState extends State<SignUpPage> {
                           : Stack(
                               children: [
                                 Container(
-                                    decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(80),
+                                    child: Image.file(
+                                      File(_imageFile!.path),
+                                      fit: BoxFit.cover,
+                                      width: 160,
+                                      height: 160,
                                     ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(80),
-                                      child: Image.file(
-                                        File(_imageFile!.path),
-                                        fit: BoxFit.cover,
-                                        width: 160,
-                                        height: 160,
-                                      ),
-                                    )),
+                                  ),
+                                ),
                                 Positioned(
                                   bottom: 0,
                                   right: 0,
@@ -320,130 +367,40 @@ class _SignUpPageState extends State<SignUpPage> {
                       togglePasswordVisibility();
                     },
                     child: Container(
-                        alignment: Alignment.center, width: 20, height: 20),
+                      alignment: Alignment.center,
+                      width: 20,
+                      height: 20,
+                    ),
                   ),
                 ),
                 SizedBox(
                   height: media.width * 0.3,
                 ),
                 RoundButton(
-                    width: 330,
-                    isLoading: isLoading,
-                    title: "Cadastrar",
-                    onPressed: () async {
-                      setLoading(true);
-                      await Future.delayed(const Duration(milliseconds: 500));
-                      await signUpNewUser();
-                    }),
+                  width: 330,
+                  isLoading: isLoading,
+                  title: "Cadastrar",
+                  onPressed: () async {
+                    setLoading(true);
+                    await Future.delayed(const Duration(milliseconds: 500));
+                    SignUpFunctions(
+                      context: context,
+                      base64Image: base64Image,
+                      txtName: txtName,
+                      txtNumero: txtNumero,
+                      txtEmail: txtEmail,
+                      txtPassword: txtPassword,
+                      txtConfirmPassword: txtConfirmPassword,
+                      setLoading: setLoading,
+                      waitingConfirmationEmail: false,
+                    ).onPressedForSignUpButton(context);
+                  },
+                ),
               ],
             ),
           ),
         ),
       ),
     );
-  }
-
-  Future<void> signUpNewUser() async {
-    String photoPerfilBase64Encode = base64Image;
-    String name = txtName.text;
-    String numWhats = txtNumero.text;
-    String email = txtEmail.text;
-    String password = txtPassword.text;
-    String confirmPassword = txtConfirmPassword.text;
-
-    if (name.isEmpty ||
-        numWhats.isEmpty ||
-        email.isEmpty ||
-        password.isEmpty ||
-        confirmPassword.isEmpty) {
-      QuickAlert.show(
-        context: context,
-        type: QuickAlertType.warning,
-        text: 'Alguns Campos estão vazios',
-        confirmBtnText: 'Ok',
-        title: 'Aviso',
-        confirmBtnColor: TColor.primaryColor1,
-        onConfirmBtnTap: () {
-          setLoading(false);
-          Navigator.pop(context);
-        },
-      );
-    } else if (password != confirmPassword) {
-      QuickAlert.show(
-        context: context,
-        type: QuickAlertType.warning,
-        text: 'As senhas não conferem',
-        confirmBtnText: 'Ok',
-        title: 'Aviso',
-        confirmBtnColor: TColor.primaryColor1,
-        onConfirmBtnTap: () {
-          setLoading(false);
-          Navigator.pop(context);
-        },
-      );
-    } else {
-      sendEmailForVerifiedEmail(txtEmail.text);
-      await Future.delayed(const Duration(milliseconds: 500));
-      await waitForEmailVerified();
-      await Future.delayed(const Duration(milliseconds: 100));
-      setLoading(true);
-      await Future.delayed(const Duration(milliseconds: 700));
-      QuickAlert.show(
-        context: context,
-        type: QuickAlertType.success,
-        text: 'Cadastro Realizado com Sucesso!',
-        disableBackBtn: true,
-        barrierDismissible: false,
-        onConfirmBtnTap: () {
-          setLoading(false);
-          Navigator.pop(context);
-          Navigator.pop(context);
-        },
-      );
-    }
-  }
-
-  Future<void> waitForEmailVerified() async {
-    bool receivedData = false;
-    late http.Response response;
-    late dynamic body;
-
-    QuickAlert.show(
-      context: context,
-      type: QuickAlertType.loading,
-      title: 'Aguardando',
-      text: 'Confirmação de Email',
-      confirmBtnText: 'Ok',
-      barrierDismissible: false,
-      disableBackBtn: true,
-    );
-
-    // Loop infinito até que os dados sejam recebidos
-    while (!receivedData) {
-      await Future.delayed(const Duration(milliseconds: 5000));
-      // Simula uma operação assíncrona que verifica se os dados foram recebidos
-      response = await checkIfEmailIsVerified(txtEmail.text);
-      body = json.decode(response.body);
-      print(body);
-
-      // Verifica se os dados foram recebidos (você pode substituir isso por sua lógica real)
-      if (body['mensagem'] == true) {
-        setState(() {
-          receivedData = true;
-        });
-        Navigator.pop(context);
-        await QuickAlert.show(
-          context: context,
-          type: QuickAlertType.success,
-          text: 'Email foi confirmado com sucesso!',
-          disableBackBtn: true,
-          barrierDismissible: false,
-          onConfirmBtnTap: () {
-            setLoading(false);
-            Navigator.pop(context);
-          },
-        );
-      }
-    }
   }
 }
