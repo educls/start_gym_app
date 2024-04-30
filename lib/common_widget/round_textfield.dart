@@ -1,4 +1,6 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../common/color_extension.dart';
 
@@ -11,20 +13,21 @@ class RoundTextField extends StatelessWidget {
   final bool obscureText;
   final EdgeInsets? margin;
   final String? Function(String?)? validator;
-  final Function setPassword;
+  final Function? setPassword;
+  final TextInputFormatter? formatter;
 
-  const RoundTextField({
-    super.key,
-    required this.hitText,
-    required this.icon,
-    this.controller,
-    this.margin,
-    this.keyboardType,
-    this.obscureText = false,
-    this.rigtIcon,
-    this.validator,
-    required this.setPassword,
-  });
+  const RoundTextField(
+      {super.key,
+      required this.hitText,
+      required this.icon,
+      this.controller,
+      this.margin,
+      this.keyboardType,
+      this.obscureText = false,
+      this.rigtIcon,
+      this.validator,
+      this.setPassword,
+      this.formatter});
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +36,21 @@ class RoundTextField extends StatelessWidget {
       decoration: BoxDecoration(
           color: TColor.lightGray, borderRadius: BorderRadius.circular(15)),
       child: TextFormField(
+        inputFormatters: formatter != null
+            ? [
+                FilteringTextInputFormatter.digitsOnly,
+                formatter!,
+              ]
+            : null,
         controller: controller,
         keyboardType: keyboardType,
         obscureText: obscureText,
         validator: validator,
-        onChanged: (value) {
-          setPassword(value);
-        },
+        onChanged: setPassword != null
+            ? (value) {
+                setPassword!(value);
+              }
+            : null,
         decoration: InputDecoration(
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 15, horizontal: 15),

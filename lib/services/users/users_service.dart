@@ -9,6 +9,13 @@ class FetchApiUsers {
     return resp;
   }
 
+  Future<http.Response> fetchSignUpForUsers(dataForSignUp) async {
+    http.Response resp =
+        await FetchApi(route: '/usuarios', method: 'POST', body: dataForSignUp)
+            .fetch();
+    return resp;
+  }
+
   Future<http.Response> fetchSendEmailForReset(sendEmailData) async {
     http.Response resp = await FetchApi(
             route: '/send-email-reset-password',

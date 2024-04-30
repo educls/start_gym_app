@@ -2,16 +2,17 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
+import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:start_gym_app/functions/sign_up/pick_img_perfil.dart';
 import 'package:start_gym_app/functions/sign_up/sign_up_functions.dart';
+import 'package:brasil_fields/brasil_fields.dart';
 
 import '../../common/color_extension.dart';
 import '../../common_widget/round_button.dart';
 import '../../common_widget/round_textfield.dart';
-
-import 'package:image_picker/image_picker.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -21,9 +22,8 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  XFile? _imageFile;
-  final ImagePicker _picker = ImagePicker();
   String base64Image = '';
+  XFile? _imageFile;
 
   String name = "";
   String numberwhats = "";
@@ -102,25 +102,17 @@ class _SignUpPageState extends State<SignUpPage> {
     });
   }
 
-  Future<void> _pickImage(ImageSource source) async {
-    try {
-      final pickedImage = await _picker.pickImage(source: source);
-      setState(() {
-        _imageFile = pickedImage;
-      });
-
-      final bytes = await File(_imageFile!.path).readAsBytes();
-      base64Image = base64Encode(bytes);
-
-      print('Imagem em base64: $base64Image');
-    } catch (e) {
-      print('Erro ao pegar a imagem: $e');
-    }
+  void setBase64Image(String base64Img) {
+    setState(() {
+      base64Image = base64Img;
+    });
+    print(base64Image);
   }
 
-  Uint8List decodeImage(String base64Image) {
-    List<int> bytes = base64.decode(base64Image);
-    return Uint8List.fromList(bytes);
+  void setImgFile(XFile? imgFile) {
+    setState(() {
+      _imageFile = imgFile;
+    });
   }
 
   void showChoiceForPhotoPerfil() {
@@ -143,7 +135,11 @@ class _SignUpPageState extends State<SignUpPage> {
               children: [
                 TextButton(
                     onPressed: () {
-                      _pickImage(ImageSource.gallery);
+                      PickImgFunction(
+                        context: context,
+                        setImgFile: setImgFile,
+                        setBase64Image: setBase64Image,
+                      ).pickImage(ImageSource.gallery);
                       Navigator.of(context).pop();
                     },
                     child: Icon(
@@ -153,7 +149,11 @@ class _SignUpPageState extends State<SignUpPage> {
                     )),
                 TextButton(
                     onPressed: () {
-                      _pickImage(ImageSource.camera);
+                      PickImgFunction(
+                        context: context,
+                        setImgFile: setImgFile,
+                        setBase64Image: setBase64Image,
+                      ).pickImage(ImageSource.camera);
                       Navigator.of(context).pop();
                     },
                     child: Icon(
@@ -167,6 +167,11 @@ class _SignUpPageState extends State<SignUpPage> {
         );
       },
     );
+  }
+
+  Uint8List decodeImage(String base64Image) {
+    List<int> bytes = base64.decode(base64Image);
+    return Uint8List.fromList(bytes);
   }
 
   @override
@@ -255,9 +260,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                       ],
                                     ),
                                     child: const Center(
-                                      child: Icon(
-                                        Icons.camera_alt,
-                                        size: 40,
+                                      child: ImageIcon(
+                                        AssetImage('assets/img/camera_tab.png'),
                                       ),
                                     ),
                                   ),
@@ -277,7 +281,6 @@ class _SignUpPageState extends State<SignUpPage> {
                     }
                     return null;
                   },
-                  setPassword: setPassword,
                   controller: txtName,
                   hitText: "Nome",
                   icon: "assets/img/user_text.png",
@@ -292,10 +295,10 @@ class _SignUpPageState extends State<SignUpPage> {
                     }
                     return null;
                   },
-                  setPassword: setPassword,
+                  formatter: TelefoneInputFormatter(),
                   controller: txtNumero,
-                  hitText: "Numero(whatsapp)",
-                  icon: "assets/img/user_text.png",
+                  hitText: "(00) 12345-1234",
+                  icon: "assets/img/zap_icone.png",
                 ),
                 SizedBox(
                   height: media.width * 0.04,
@@ -311,7 +314,6 @@ class _SignUpPageState extends State<SignUpPage> {
                     }
                     return null;
                   },
-                  setPassword: setPassword,
                 ),
                 SizedBox(
                   height: media.width * 0.04,
@@ -378,7 +380,6 @@ class _SignUpPageState extends State<SignUpPage> {
                     }
                     return null;
                   },
-                  setPassword: setPassword,
                   hitText: "Confirme sua senha",
                   icon: "assets/img/lock.png",
                   obscureText: !showPassword,

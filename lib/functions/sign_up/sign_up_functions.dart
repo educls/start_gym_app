@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:quickalert/quickalert.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../common/color_extension.dart';
 import '../../controllers/users/users_controller.dart';
+import '../shared_preferences/shared_preferences_functions.dart';
 
 class SignUpFunctions {
   final BuildContext context;
@@ -30,30 +29,9 @@ class SignUpFunctions {
     required this.waitingConfirmationEmail,
   });
 
-  Future<void> saveCredentialsForSignUpAndEmailConfirmation() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('photoSignUp', base64Image);
-    prefs.setString('nameSignUp', txtName.text);
-    prefs.setString('numberSignUp', txtNumero.text);
-    prefs.setString('emailSignUp', txtEmail.text);
-    prefs.setString('passwordSignUp', txtPassword.text);
-    prefs.setString('passwordConfirmSignUp', txtConfirmPassword.text);
-    prefs.setBool('waitingConfirmation', true);
-  }
-
-  Future<void> deleteCredentialsForSignUpAndEmailConfirmation() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('photoSignUp');
-    await prefs.remove('nameSignUp');
-    await prefs.remove('numberSignUp');
-    await prefs.remove('emailSignUp');
-    await prefs.remove('passwordSignUp');
-    await prefs.remove('passwordConfirmSignUp');
-    await prefs.remove('waitingConfirmation');
-  }
-
   Future<void> onPressedForSignUpButton(BuildContext context) async {
-    String photoPerfilBase64Encode = base64Image;
+    String accountType = 'aluno';
+    String photoBase64 = base64Image;
     String name = txtName.text;
     String numWhats = txtNumero.text;
     String email = txtEmail.text;
@@ -92,39 +70,49 @@ class SignUpFunctions {
           },
         );
       } else {
-        sendEmailForVerifiedEmail(txtEmail.text);
-        await Future.delayed(const Duration(milliseconds: 500));
-        bool status = await waitForEmailVerified();
-        await Future.delayed(const Duration(milliseconds: 700));
-        await deleteCredentialsForSignUpAndEmailConfirmation();
-        if (status == true) {
-          QuickAlert.show(
-            context: context,
-            type: QuickAlertType.success,
-            text: 'Cadastro Realizado com Sucesso!',
-            disableBackBtn: true,
-            barrierDismissible: false,
-            confirmBtnText: 'Ok',
-            onConfirmBtnTap: () {
-              setLoading(false);
-              Navigator.pop(context);
-              Navigator.pop(context);
-            },
-          );
-        }
+        http.Response response = await sendEmailForVerifiedEmail(txtEmail.text);
+        print(response.statusCode);
+        registerUserAfterVerifiedEmail(
+          accountType,
+          photoBase64,
+          name,
+          numWhats,
+          email,
+          password,
+        );
       }
     } else {
-      if (waitingConfirmationEmail == false) {
-        sendEmailForVerifiedEmail(txtEmail.text);
-      }
-      await Future.delayed(const Duration(milliseconds: 500));
-      bool status = await waitForEmailVerified();
-      await Future.delayed(const Duration(milliseconds: 700));
-      await deleteCredentialsForSignUpAndEmailConfirmation();
-      if (status == true) {
+      registerUserAfterVerifiedEmail(
+        accountType,
+        photoBase64,
+        name,
+        numWhats,
+        email,
+        password,
+      );
+    }
+  }
+
+  void registerUserAfterVerifiedEmail(
+    accountType,
+    photoBase64,
+    name,
+    numWhats,
+    email,
+    password,
+  ) async {
+    bool status = await waitForEmailVerified();
+    await Future.delayed(const Duration(milliseconds: 700));
+    SharedPreferencesFunctions()
+        .deleteCredentialsForSignUpAndEmailConfirmation();
+    if (status == true) {
+      http.Response resp = await userSignUp(
+          accountType, photoBase64, name, numWhats, email, password);
+      if (resp.statusCode == 201) {
         QuickAlert.show(
           context: context,
           type: QuickAlertType.success,
+          title: 'Sucesso',
           text: 'Cadastro Realizado com Sucesso!',
           disableBackBtn: true,
           barrierDismissible: false,
@@ -132,6 +120,21 @@ class SignUpFunctions {
           onConfirmBtnTap: () {
             setLoading(false);
             Navigator.pop(context);
+            Navigator.pop(context);
+          },
+        );
+      } else {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          title: 'Erro',
+          disableBackBtn: true,
+          barrierDismissible: false,
+          text: 'Ao Realizar cadastro!',
+          confirmBtnText: 'Ok',
+          onConfirmBtnTap: () {
+            setLoading(false);
+            deleteEmailIsAboutVerified(txtEmail.text);
             Navigator.pop(context);
           },
         );
@@ -144,20 +147,30 @@ class SignUpFunctions {
     late http.Response response;
     late dynamic body;
 
-    await saveCredentialsForSignUpAndEmailConfirmation();
+    SharedPreferencesFunctions().saveCredentialsForSignUpAndEmailConfirmation(
+      base64Image,
+      txtName,
+      txtNumero,
+      txtEmail,
+      txtPassword,
+      txtConfirmPassword,
+      true,
+    );
 
     QuickAlert.show(
       context: context,
       type: QuickAlertType.loading,
       title: 'Aguardando',
-      text: 'Confirmação de Email \n ${txtEmail.text}',
+      text:
+          'Email de confirmação enviado para:\n ${txtEmail.text}\n Verifique seu email',
       showCancelBtn: true,
       cancelBtnText: 'Cancelar',
       onCancelBtnTap: () async {
         await deleteEmailIsAboutVerified(txtEmail.text);
         Navigator.pop(context);
         receivedData = true;
-        deleteCredentialsForSignUpAndEmailConfirmation();
+        SharedPreferencesFunctions()
+            .deleteCredentialsForSignUpAndEmailConfirmation();
         setLoading(false);
       },
       barrierDismissible: false,
@@ -176,14 +189,16 @@ class SignUpFunctions {
           await QuickAlert.show(
             context: context,
             type: QuickAlertType.success,
+            title: 'Sucesso',
             text: 'Email foi confirmado com sucesso!',
             disableBackBtn: true,
             barrierDismissible: false,
             onConfirmBtnTap: () {
               Navigator.pop(context);
+              deleteEmailIsAboutVerified(txtEmail.text);
             },
           );
-          return true;
+          return body['status'];
         }
       }
     }
