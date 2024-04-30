@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -95,15 +94,41 @@ class SignUpFunctions {
       } else {
         sendEmailForVerifiedEmail(txtEmail.text);
         await Future.delayed(const Duration(milliseconds: 500));
-        await waitForEmailVerified();
+        bool status = await waitForEmailVerified();
         await Future.delayed(const Duration(milliseconds: 700));
         await deleteCredentialsForSignUpAndEmailConfirmation();
+        if (status == true) {
+          QuickAlert.show(
+            context: context,
+            type: QuickAlertType.success,
+            text: 'Cadastro Realizado com Sucesso!',
+            disableBackBtn: true,
+            barrierDismissible: false,
+            confirmBtnText: 'Ok',
+            onConfirmBtnTap: () {
+              setLoading(false);
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+          );
+        }
+      }
+    } else {
+      if (waitingConfirmationEmail == false) {
+        sendEmailForVerifiedEmail(txtEmail.text);
+      }
+      await Future.delayed(const Duration(milliseconds: 500));
+      bool status = await waitForEmailVerified();
+      await Future.delayed(const Duration(milliseconds: 700));
+      await deleteCredentialsForSignUpAndEmailConfirmation();
+      if (status == true) {
         QuickAlert.show(
           context: context,
           type: QuickAlertType.success,
           text: 'Cadastro Realizado com Sucesso!',
           disableBackBtn: true,
           barrierDismissible: false,
+          confirmBtnText: 'Ok',
           onConfirmBtnTap: () {
             setLoading(false);
             Navigator.pop(context);
@@ -111,30 +136,10 @@ class SignUpFunctions {
           },
         );
       }
-    } else {
-      if (waitingConfirmationEmail == false) {
-        sendEmailForVerifiedEmail(txtEmail.text);
-      }
-      await Future.delayed(const Duration(milliseconds: 500));
-      await waitForEmailVerified();
-      await Future.delayed(const Duration(milliseconds: 700));
-      await deleteCredentialsForSignUpAndEmailConfirmation();
-      QuickAlert.show(
-        context: context,
-        type: QuickAlertType.success,
-        text: 'Cadastro Realizado com Sucesso!',
-        disableBackBtn: true,
-        barrierDismissible: false,
-        onConfirmBtnTap: () {
-          setLoading(false);
-          Navigator.pop(context);
-          Navigator.pop(context);
-        },
-      );
     }
   }
 
-  Future<void> waitForEmailVerified() async {
+  Future<bool> waitForEmailVerified() async {
     bool receivedData = false;
     late http.Response response;
     late dynamic body;
@@ -145,36 +150,43 @@ class SignUpFunctions {
       context: context,
       type: QuickAlertType.loading,
       title: 'Aguardando',
-      text: 'Confirmação de Email',
-      confirmBtnText: 'Ok',
+      text: 'Confirmação de Email \n ${txtEmail.text}',
+      showCancelBtn: true,
+      cancelBtnText: 'Cancelar',
+      onCancelBtnTap: () async {
+        await deleteEmailIsAboutVerified(txtEmail.text);
+        Navigator.pop(context);
+        receivedData = true;
+        deleteCredentialsForSignUpAndEmailConfirmation();
+        setLoading(false);
+      },
       barrierDismissible: false,
       disableBackBtn: true,
     );
 
-    // Loop infinito até que os dados sejam recebidos
     while (!receivedData) {
       await Future.delayed(const Duration(milliseconds: 5000));
-      // Simula uma operação assíncrona que verifica se os dados foram recebidos
       response = await checkIfEmailIsVerified(txtEmail.text);
-      print(txtEmail.text);
       body = json.decode(response.body);
-      print(body);
 
-      // Verifica se os dados foram recebidos (você pode substituir isso por sua lógica real)
       if (body['mensagem'] == true) {
         receivedData = true;
-        Navigator.pop(context);
-        await QuickAlert.show(
-          context: context,
-          type: QuickAlertType.success,
-          text: 'Email foi confirmado com sucesso!',
-          disableBackBtn: true,
-          barrierDismissible: false,
-          onConfirmBtnTap: () {
-            Navigator.pop(context);
-          },
-        );
+        if (body['status'] == true) {
+          Navigator.pop(context);
+          await QuickAlert.show(
+            context: context,
+            type: QuickAlertType.success,
+            text: 'Email foi confirmado com sucesso!',
+            disableBackBtn: true,
+            barrierDismissible: false,
+            onConfirmBtnTap: () {
+              Navigator.pop(context);
+            },
+          );
+          return true;
+        }
       }
     }
+    return false;
   }
 }

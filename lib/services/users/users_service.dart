@@ -31,4 +31,11 @@ class FetchApiUsers {
         .fetch();
     return resp;
   }
+
+  Future<http.Response> fetchForDeleteEmailIsAboutVerified(email) async {
+    http.Response resp = await FetchApi(
+            route: '/check-if-email-is-verified/$email', method: 'DELETE')
+        .fetch();
+    return resp;
+  }
 }

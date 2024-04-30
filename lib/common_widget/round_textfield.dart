@@ -11,6 +11,7 @@ class RoundTextField extends StatelessWidget {
   final bool obscureText;
   final EdgeInsets? margin;
   final String? Function(String?)? validator;
+  final Function setPassword;
 
   const RoundTextField({
     super.key,
@@ -22,6 +23,7 @@ class RoundTextField extends StatelessWidget {
     this.obscureText = false,
     this.rigtIcon,
     this.validator,
+    required this.setPassword,
   });
 
   @override
@@ -35,6 +37,9 @@ class RoundTextField extends StatelessWidget {
         keyboardType: keyboardType,
         obscureText: obscureText,
         validator: validator,
+        onChanged: (value) {
+          setPassword(value);
+        },
         decoration: InputDecoration(
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 15, horizontal: 15),

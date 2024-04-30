@@ -1,11 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:quickalert/quickalert.dart';
-import 'package:http/http.dart' as http;
-import 'package:quickalert/widgets/quickalert_container.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:start_gym_app/functions/sign_up/sign_up_functions.dart';
 
@@ -14,9 +12,6 @@ import '../../common_widget/round_button.dart';
 import '../../common_widget/round_textfield.dart';
 
 import 'package:image_picker/image_picker.dart';
-import 'dart:io' as Io;
-
-import '../../controllers/users/users_controller.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -98,6 +93,12 @@ class _SignUpPageState extends State<SignUpPage> {
   void setLoading(bool isLoading) {
     setState(() {
       _isLoading = isLoading;
+    });
+  }
+
+  void setPassword(String txtPass) {
+    setState(() {
+      txtPassword.text = txtPass;
     });
   }
 
@@ -276,6 +277,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     }
                     return null;
                   },
+                  setPassword: setPassword,
                   controller: txtName,
                   hitText: "Nome",
                   icon: "assets/img/user_text.png",
@@ -290,6 +292,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     }
                     return null;
                   },
+                  setPassword: setPassword,
                   controller: txtNumero,
                   hitText: "Numero(whatsapp)",
                   icon: "assets/img/user_text.png",
@@ -308,6 +311,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     }
                     return null;
                   },
+                  setPassword: setPassword,
                 ),
                 SizedBox(
                   height: media.width * 0.04,
@@ -320,6 +324,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     }
                     return null;
                   },
+                  setPassword: setPassword,
                   hitText: "Senha",
                   icon: "assets/img/lock.png",
                   obscureText: !showPassword,
@@ -348,6 +353,20 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                 ),
+                txtPassword.text.isNotEmpty
+                    ? FlutterPwValidator(
+                        controller: txtPassword,
+                        minLength: 6,
+                        uppercaseCharCount: 1,
+                        lowercaseCharCount: 1,
+                        numericCharCount: 1,
+                        specialCharCount: 1,
+                        width: 350,
+                        height: 130,
+                        onSuccess: () {},
+                        onFail: () {},
+                      )
+                    : Container(),
                 SizedBox(
                   height: media.width * 0.04,
                 ),
@@ -359,6 +378,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     }
                     return null;
                   },
+                  setPassword: setPassword,
                   hitText: "Confirme sua senha",
                   icon: "assets/img/lock.png",
                   obscureText: !showPassword,
@@ -374,7 +394,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ),
                 SizedBox(
-                  height: media.width * 0.3,
+                  height: media.width * 0.05,
                 ),
                 RoundButton(
                   width: 330,
@@ -395,6 +415,9 @@ class _SignUpPageState extends State<SignUpPage> {
                       waitingConfirmationEmail: false,
                     ).onPressedForSignUpButton(context);
                   },
+                ),
+                SizedBox(
+                  height: media.width * 0.2,
                 ),
               ],
             ),

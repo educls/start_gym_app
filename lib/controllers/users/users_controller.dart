@@ -32,6 +32,13 @@ Future<http.Response> checkIfEmailIsVerified(String email) async {
   return response;
 }
 
+Future<http.Response> deleteEmailIsAboutVerified(String email) async {
+  http.Response response =
+      await fetchApiUsers.fetchForDeleteEmailIsAboutVerified(email);
+
+  return response;
+}
+
 Future<http.Response> sendEmailForVerifiedEmail(String email) async {
   var sendEmailData = sendEmailForResetToJson(SendEmailForReset(email: email));
 

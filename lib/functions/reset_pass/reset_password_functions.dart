@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:quickalert/quickalert.dart';
 
-import '../../common_widget/dialog_modal.dart';
 import '../../controllers/users/users_controller.dart';
 import '../../common/color_extension.dart';
 
