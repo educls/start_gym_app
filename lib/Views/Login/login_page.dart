@@ -8,6 +8,8 @@ import '../../functions/login/login_functions.dart';
 import '../../functions/reset_pass/reset_password_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../common/color_extension.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -173,9 +175,9 @@ class _LoginPageState extends State<LoginPage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           ImageIcon(
-            AssetImage("assets/images/icon_logo.png"),
-            color: Colors.yellow,
-            size: 80,
+            AssetImage("assets/images/logoStartGymAmarelo.png"),
+            color: Color.fromRGBO(242, 187, 19, 5),
+            size: 90,
           ),
           Text(
             "Start Gym",
@@ -226,7 +228,7 @@ class _LoginPageState extends State<LoginPage> {
             const Text(
               "Recuperar Senha",
               style: TextStyle(
-                  color: Colors.amber,
+                  color: Color.fromRGBO(242, 187, 19, 5),
                   fontSize: 32,
                   fontWeight: FontWeight.w500),
             ),
@@ -254,7 +256,9 @@ class _LoginPageState extends State<LoginPage> {
         const Text(
           "Bem Vindo",
           style: TextStyle(
-              color: Colors.amber, fontSize: 32, fontWeight: FontWeight.w500),
+              color: Color.fromRGBO(31, 35, 115, 1),
+              fontSize: 32,
+              fontWeight: FontWeight.w500),
         ),
         _buildGreyText("Realizar Login"),
         const SizedBox(height: 20),
