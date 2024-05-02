@@ -64,3 +64,9 @@ Future<http.Response> sendEmailForVerifiedEmail(String email) async {
 
   return response;
 }
+
+Future<http.Response> getInformationsUser(String token) async {
+  http.Response response = await fetchApiUsers.fetchInfosUser(token);
+
+  return response;
+}
