@@ -45,4 +45,11 @@ class FetchApiUsers {
         .fetch();
     return resp;
   }
+
+  Future<http.Response> fetchInfosUser(token) async {
+    http.Response resp = await FetchApi(
+            route: '/usuarios/get-user-info', method: 'GET', authToken: token)
+        .fetch();
+    return resp;
+  }
 }

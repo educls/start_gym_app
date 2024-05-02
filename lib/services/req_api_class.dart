@@ -6,11 +6,13 @@ class FetchApi {
   final String route;
   final String body;
   final String method;
+  final String authToken;
 
   const FetchApi({
     required this.route,
     this.body = '',
     required this.method,
+    this.authToken = '',
   });
 
   Future<http.Response> fetch() async {
@@ -22,6 +24,7 @@ class FetchApi {
           Uri.parse(url),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': authToken,
           },
           body: body,
         );
@@ -30,6 +33,7 @@ class FetchApi {
           Uri.parse(url),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': authToken,
           },
         );
       } else if (method == 'PUT') {
@@ -37,6 +41,7 @@ class FetchApi {
           Uri.parse(url),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': authToken,
           },
           body: body,
         );
@@ -45,6 +50,7 @@ class FetchApi {
           Uri.parse(url),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': authToken,
           },
         );
       } else {
