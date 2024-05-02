@@ -8,6 +8,8 @@ import './utils/provider/data_provider.dart';
 
 import 'package:provider/provider.dart';
 
+import 'common/color_extension.dart';
+
 void main() {
   Provider.debugCheckInvalidValueType = null;
   runApp(
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Start Gym',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: TColor.darkBlue),
         useMaterial3: true,
       ),
       home: const LoginPage(),
