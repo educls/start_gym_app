@@ -8,6 +8,8 @@ import '../../functions/login/login_functions.dart';
 import '../../functions/reset_pass/reset_password_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../common/color_extension.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -141,7 +143,7 @@ class _LoginPageState extends State<LoginPage> {
           image: const AssetImage("assets/images/bg.png"),
           fit: BoxFit.cover,
           colorFilter:
-              ColorFilter.mode(myColor.withOpacity(0.2), BlendMode.dstATop),
+              ColorFilter.mode(myColor.withOpacity(0.1), BlendMode.dstATop),
         ),
       ),
       child: Scaffold(
@@ -173,9 +175,9 @@ class _LoginPageState extends State<LoginPage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           ImageIcon(
-            AssetImage("assets/images/icon_logo.png"),
-            color: Colors.yellow,
-            size: 80,
+            AssetImage("assets/images/logoStartGymAmarelo.png"),
+            color: Color.fromRGBO(242, 187, 19, 5),
+            size: 90,
           ),
           Text(
             "Start Gym",
@@ -226,7 +228,7 @@ class _LoginPageState extends State<LoginPage> {
             const Text(
               "Recuperar Senha",
               style: TextStyle(
-                  color: Colors.amber,
+                  color: Color.fromRGBO(31, 35, 115, 1),
                   fontSize: 32,
                   fontWeight: FontWeight.w500),
             ),
@@ -254,7 +256,9 @@ class _LoginPageState extends State<LoginPage> {
         const Text(
           "Bem Vindo",
           style: TextStyle(
-              color: Colors.amber, fontSize: 32, fontWeight: FontWeight.w500),
+              color: Color.fromRGBO(31, 35, 115, 1),
+              fontSize: 32,
+              fontWeight: FontWeight.w500),
         ),
         _buildGreyText("Realizar Login"),
         const SizedBox(height: 20),
@@ -310,6 +314,11 @@ class _LoginPageState extends State<LoginPage> {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+                color: Color.fromRGBO(31, 35, 115,
+                    1)), // Define a cor da borda quando o campo está focado
+          ),
           suffixIcon: isPassword
               ? IconButton(
                   onPressed: () {
@@ -332,12 +341,15 @@ class _LoginPageState extends State<LoginPage> {
         Row(
           children: [
             Checkbox(
-                value: rememberUser,
-                onChanged: (value) {
-                  setState(() {
-                    rememberUser = value!;
-                  });
-                }),
+              value: rememberUser,
+              onChanged: (value) {
+                setState(() {
+                  rememberUser = value!;
+                });
+              },
+              activeColor: Color.fromRGBO(
+                  50, 56, 230, 1), // Definindo a cor azul para o Checkbox
+            ),
             _buildGreyText("Lembrar-me"),
           ],
         ),

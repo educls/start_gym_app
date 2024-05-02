@@ -48,10 +48,10 @@ class LoginFunctions {
       QuickAlert.show(
         context: context,
         type: QuickAlertType.warning,
-        text: 'Alguns Campos estão vazios',
+        text: 'Alguns campos estão vazios',
         confirmBtnText: 'Ok',
         title: 'Aviso',
-        confirmBtnColor: TColor.primaryColor1,
+        confirmBtnColor: TColor.darkYellow,
       );
     } else if (response.statusCode == 401) {
       await Future.delayed(const Duration(milliseconds: 500));
@@ -66,7 +66,7 @@ class LoginFunctions {
           text: '${body['mensagem']}',
           confirmBtnText: 'Ok',
           title: 'Bloqueado Temporariamente!',
-          confirmBtnColor: TColor.primaryColor1,
+          confirmBtnColor: TColor.darkYellow,
         );
       } else {
         QuickAlert.show(
@@ -77,7 +77,7 @@ class LoginFunctions {
               : '${body['mensagem']}',
           confirmBtnText: 'Ok',
           title: 'Aviso',
-          confirmBtnColor: TColor.primaryColor1,
+          confirmBtnColor: TColor.darkYellow,
         );
       }
     } else {
