@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -89,8 +90,12 @@ class _HomePageState extends State<HomePage> {
 
     modelUserInfos = modelUserInfosFromMap(response.body);
 
-    bytes = base64Decode(modelUserInfos.photo);
-    image = Image.memory(bytes);
+    if (modelUserInfos.photo == '') {
+      image = Image.asset('assets/img/profile_tab.png');
+    } else {
+      bytes = base64Decode(modelUserInfos.photo);
+      image = Image.memory(bytes);
+    }
 
     setUser(modelUserInfos.mensagem.accounttype);
     setLoading(false);
@@ -159,5 +164,20 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     }
+  }
+
+  Future<Uint8List> imageToBytes(String imagePath) async {
+    // Carrega a imagem como um arquivo
+    File imageFile = File(imagePath);
+
+    // Verifica se o arquivo de imagem existe
+    // Lê o conteúdo do arquivo como bytes
+    List<int> bytes = await imageFile.readAsBytes();
+
+    // Converte a lista de inteiros em Uint8List
+    Uint8List uint8list = Uint8List.fromList(bytes);
+
+    // Retorna os bytes da imagem
+    return uint8list;
   }
 }

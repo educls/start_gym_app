@@ -39,6 +39,7 @@ class LoginFunctions {
     late http.Response response;
     if (emailController.text.isNotEmpty || passwordController.text.isNotEmpty) {
       response = await userLogin(emailController.text, passwordController.text);
+      print(response.body);
     }
 
     if (emailController.text.isEmpty || passwordController.text.isEmpty) {
