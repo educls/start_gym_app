@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../common_widget/round_button.dart';
 import '../../functions/login/login_functions.dart';
@@ -150,19 +152,26 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: Colors.transparent,
         body: Stack(children: [
           Positioned(
-              top: 50,
-              child: Column(
-                children: [
-                  _buildTop(),
-                  const SizedBox(height: 200),
-                  _isLoading
-                      ? const Center(child: CircularProgressIndicator())
-                      : const Center()
-                ],
-              )),
+            top: 50,
+            child: Column(
+              children: [
+                _buildTop(),
+                const SizedBox(height: 200),
+                _isLoading
+                    ? Center(
+                        child: LoadingAnimationWidget.dotsTriangle(
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                      )
+                    : const Center()
+              ],
+            ),
+          ),
           Positioned(
-              bottom: 00,
-              child: _isLoading ? const Center() : _buildBottom(context)),
+            bottom: 00,
+            child: _isLoading ? const Center() : _buildBottom(context),
+          ),
         ]),
       ),
     );
@@ -215,36 +224,51 @@ class _LoginPageState extends State<LoginPage> {
 
 // Conteudo da tela ESQUECI MINHA SENHA
   Widget _buildResetPasswordForm() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            IconButton(
-                onPressed: () {
-                  toggleForm();
-                },
-                icon: const Icon(Icons.arrow_back)),
-            const Text(
-              "Recuperar Senha",
-              style: TextStyle(
-                  color: Color.fromRGBO(31, 35, 115, 1),
-                  fontSize: 32,
-                  fontWeight: FontWeight.w500),
+    return AnimationLimiter(
+      child: Column(
+        children: AnimationConfiguration.toStaggeredList(
+          duration: const Duration(milliseconds: 375),
+          childAnimationBuilder: (widget) => SlideAnimation(
+            horizontalOffset: 50.0,
+            child: FadeInAnimation(
+              child: widget,
             ),
+          ),
+          children: [
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    toggleForm();
+                  },
+                  icon: const Icon(Icons.arrow_back),
+                ),
+                const Text(
+                  "Recuperar Senha",
+                  style: TextStyle(
+                      color: Color.fromRGBO(31, 35, 115, 1),
+                      fontSize: 32,
+                      fontWeight: FontWeight.w500),
+                ),
+              ],
+            ),
+            const SizedBox(height: 60),
+            Row(
+              children: [
+                _buildGreyText("Email"),
+              ],
+            ),
+            _buildInputField(emailController, false),
+            const SizedBox(height: 40),
+            _buildGreyText(emailSend == true
+                ? 'Enviar Novamente em: $_remainingTimeInSeconds segundos'
+                : ''),
+            const SizedBox(height: 10),
+            _buildResetButton(),
+            const SizedBox(height: 150)
           ],
         ),
-        const SizedBox(height: 60),
-        _buildGreyText("Email"),
-        _buildInputField(emailController, false),
-        const SizedBox(height: 40),
-        _buildGreyText(emailSend == true
-            ? 'Enviar Novamente em: $_remainingTimeInSeconds segundos'
-            : ''),
-        const SizedBox(height: 10),
-        _buildResetButton(),
-        const SizedBox(height: 150)
-      ],
+      ),
     );
   }
 
@@ -303,6 +327,7 @@ class _LoginPageState extends State<LoginPage> {
 // TEXT com a cor cinza claro
   Widget _buildGreyText(String text) {
     return Text(
+      textAlign: TextAlign.left,
       text,
       style: const TextStyle(color: Colors.grey),
     );
@@ -314,10 +339,10 @@ class _LoginPageState extends State<LoginPage> {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
-          focusedBorder: UnderlineInputBorder(
+          focusedBorder: const UnderlineInputBorder(
             borderSide: BorderSide(
-                color: Color.fromRGBO(31, 35, 115,
-                    1)), // Define a cor da borda quando o campo está focado
+              color: Color.fromRGBO(31, 35, 115, 1),
+            ), // Define a cor da borda quando o campo está focado
           ),
           suffixIcon: isPassword
               ? IconButton(
@@ -326,7 +351,8 @@ class _LoginPageState extends State<LoginPage> {
                   },
                   icon: isObscurePassword
                       ? const Icon(Icons.visibility)
-                      : const Icon(Icons.visibility_off_outlined))
+                      : const Icon(Icons.visibility_off_outlined),
+                )
               : null),
       obscureText: isPassword ? isObscurePassword : isPassword,
     );
@@ -347,17 +373,18 @@ class _LoginPageState extends State<LoginPage> {
                   rememberUser = value!;
                 });
               },
-              activeColor: Color.fromRGBO(
+              activeColor: const Color.fromRGBO(
                   50, 56, 230, 1), // Definindo a cor azul para o Checkbox
             ),
             _buildGreyText("Lembrar-me"),
           ],
         ),
         TextButton(
-            onPressed: () {
-              toggleForm();
-            },
-            child: _buildGreyText("Esqueci Minha Senha"))
+          onPressed: () {
+            toggleForm();
+          },
+          child: _buildGreyText("Esqueci Minha Senha"),
+        )
       ],
     );
   }
@@ -371,6 +398,7 @@ class _LoginPageState extends State<LoginPage> {
                 _remainingTimeInSecondsBlock == 0
             ? () async {
                 setLoading(true);
+                await Future.delayed(const Duration(milliseconds: 500));
                 //Classe que executa toda a logica de LOGIN
                 await LoginFunctions(
                         context: context,
@@ -392,36 +420,48 @@ class _LoginPageState extends State<LoginPage> {
 
 // Retorna um Widget Button que abre a tela de PRIMEIRO ACESSO(Cadastro)
   Widget _buildRoundSignUpButton() {
-    return RoundButton(
-      width: 200,
-      isLoading: _isLoading,
-      title: "PRIMEIRO ACESSO",
-      type: RoundButtonType.bgSGradient,
-      onPressed: () async {
-        Navigator.pushNamed(context, '/cadastro');
-      },
-    );
+    // return RoundButton(
+    //   width: 200,
+    //   isLoading: _isLoading,
+    //   title: "PRIMEIRO ACESSO",
+    //   type: RoundButtonType.bgSGradient,
+    //   onPressed: () async {
+    //     Navigator.pushNamed(context, '/cadastro');
+    //   },
+    // );
+    return Center(
+        child: Material(
+      elevation: 4,
+      borderRadius: BorderRadius.circular(50),
+      child: TextButton(
+        onPressed: () {
+          Navigator.pushNamed(context, '/cadastro');
+        },
+        child: _buildGreyText("Primeiro Acesso"),
+      ),
+    ));
   }
 
 // Retorna um Widget Button com a logica para o envio do email para
 // a Redefinição da Senha
   Widget _buildResetButton() {
     return RoundButton(
-        width: 330,
-        title: 'ENVIAR',
-        onPressed: emailSend == false
-            ? () async {
-                setLoading(true);
-                ResetPasswordFunctions(
-                        context: context,
-                        emailController: emailController,
-                        startTimerForResetPassword: startTimerForResetPassword,
-                        setEmailSend: setEmailSend,
-                        setLoading: setLoading)
-                    .onPressedForSendEmailResetPasswordButton(context);
-              }
-            : () {
-                null;
-              });
+      width: 330,
+      title: 'ENVIAR',
+      onPressed: emailSend == false
+          ? () async {
+              setLoading(true);
+              ResetPasswordFunctions(
+                      context: context,
+                      emailController: emailController,
+                      startTimerForResetPassword: startTimerForResetPassword,
+                      setEmailSend: setEmailSend,
+                      setLoading: setLoading)
+                  .onPressedForSendEmailResetPasswordButton(context);
+            }
+          : () {
+              null;
+            },
+    );
   }
 }

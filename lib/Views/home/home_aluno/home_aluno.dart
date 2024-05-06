@@ -22,7 +22,7 @@ class HomeAluno extends StatelessWidget {
       child: BlocConsumer<HomeBloc, HomeState>(
         buildWhen: (_, currState) => currState is HomeInitial,
         builder: (context, state) {
-          return HomeContent();
+          return const HomeContent();
         },
         listenWhen: (_, currState) => true,
         listener: (context, state) {},
@@ -79,7 +79,7 @@ class HomeContent extends StatelessWidget {
         children: [
           _createProfileData(context),
           const SizedBox(height: 35),
-          HomeStatistics(),
+          const HomeStatistics(),
           const SizedBox(height: 30),
           _createExercisesList(context),
           const SizedBox(height: 25),
@@ -93,8 +93,8 @@ class HomeContent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
           child: Text(
             TextConstants.discoverWorkouts,
             style: TextStyle(
@@ -147,13 +147,13 @@ class HomeContent extends StatelessWidget {
             children: [
               Text(
                 'Hi, $displayName',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 2),
-              Text(
+              const Text(
                 TextConstants.checkActivity,
                 style: TextStyle(
                   fontSize: 18,
@@ -169,7 +169,7 @@ class HomeContent extends StatelessWidget {
                   //FirebaseAuth.instance.currentUser?.photoURL ?? null;
               return GestureDetector(
                 child: photoUrl == null
-                    ? CircleAvatar(
+                    ? const CircleAvatar(
                         backgroundImage: AssetImage(PathConstants.profile),
                         radius: 60)
                     : CircleAvatar(
@@ -210,7 +210,7 @@ class HomeContent extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
+      child: const Row(
         children: [
           Image(
             image: AssetImage(
@@ -229,7 +229,7 @@ class HomeContent extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 3),
+                SizedBox(height: 3),
                 Text(
                   TextConstants.profileSuccessful,
                   style: TextStyle(
@@ -286,7 +286,7 @@ class WorkoutCard extends StatelessWidget {
                     const SizedBox(height: 5),
                     Text(
                       workout.title,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: ColorConstants.white,
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -295,7 +295,7 @@ class WorkoutCard extends StatelessWidget {
                     const SizedBox(height: 10),
                     Text(
                       "${workout.exercices} exercises",
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: ColorConstants.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -304,7 +304,7 @@ class WorkoutCard extends StatelessWidget {
                     const SizedBox(height: 5),
                     Text(
                       "${workout.minutes} minutes",
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: ColorConstants.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -363,7 +363,7 @@ class HomeStatistics extends StatelessWidget {
           ),
         ],
       ),
-      child: Column(
+      child: const Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Row(
@@ -373,7 +373,7 @@ class HomeStatistics extends StatelessWidget {
                   PathConstants.finished,
                 ),
               ),
-              const SizedBox(width: 10),
+              SizedBox(width: 10),
               Expanded(
                 child: Text(
                   TextConstants.finished,
@@ -471,7 +471,7 @@ class DataWorkouts extends StatelessWidget {
               const SizedBox(width: 10),
               Text(
                 title,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w500,
                   color: ColorConstants.textBlack,
@@ -483,7 +483,7 @@ class DataWorkouts extends StatelessWidget {
             children: [
               Text(
                 count.toString(),
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w700,
                   color: ColorConstants.textBlack,
@@ -492,7 +492,7 @@ class DataWorkouts extends StatelessWidget {
               const SizedBox(width: 10),
               Text(
                 text,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                   color: ColorConstants.grey,

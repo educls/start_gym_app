@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:start_gym_app/Views/home/admin/home_admin_page.dart';
-import 'package:start_gym_app/Views/home/aluno/home_aluno_page.dart';
-import 'package:start_gym_app/Views/home/professor/home_professor_page.dart';
 
 import 'Views/Login/login_page.dart';
 import 'Views/home/home_page.dart';

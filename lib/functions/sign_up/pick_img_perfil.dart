@@ -18,7 +18,8 @@ class PickImgFunction {
   void pickImage(ImageSource source) async {
     final ImagePicker picker = ImagePicker();
     try {
-      final pickedImage = await picker.pickImage(source: source);
+      final pickedImage =
+          await picker.pickImage(source: source, maxHeight: 250, maxWidth: 250);
       setImgFile(pickedImage);
 
       final bytes = await File(pickedImage!.path).readAsBytes();
