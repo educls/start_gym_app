@@ -11,7 +11,7 @@ class NavBar extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: const Text("Corpinho"),
-      bottomNavigationBar: BottomNavigationBar(currentIndex: 1, items: [
+      bottomNavigationBar: BottomNavigationBar(currentIndex: 1, items: const [
         BottomNavigationBarItem(
             icon: Image(image: AssetImage(PathConstants.workouts)),
             label: "Treinos"),

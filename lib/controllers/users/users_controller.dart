@@ -1,4 +1,6 @@
 import 'package:http/http.dart' as http;
+import 'package:start_gym_app/models/users/ModelEditUser.dart';
+import 'package:start_gym_app/models/users/ModelSignUpNewTeacher.dart';
 
 import '../../models/users/LoginModel.dart';
 import '../../models/users/SendEmailForResetModel.dart';
@@ -67,6 +69,41 @@ Future<http.Response> sendEmailForVerifiedEmail(String email) async {
 
 Future<http.Response> getInformationsUser(String token) async {
   http.Response response = await fetchApiUsers.fetchInfosUser(token);
+
+  return response;
+}
+
+Future<http.Response> getTeachersInfos(String token) async {
+  http.Response response = await fetchApiUsers.fetchTeachersInfos(token);
+
+  return response;
+}
+
+Future<http.Response> signUpNewTeacher(String name, String email,
+    String password, String teachertype, String userToken) async {
+  var data = modelSignUpTeacherToJson(
+    ModelSignUpTeacher(
+        name: name, email: email, password: password, teachertype: teachertype),
+  );
+
+  http.Response response =
+      await fetchApiUsers.fetchSignUpNewTeacher(data, userToken);
+
+  return response;
+}
+
+Future<http.Response> editUser(String photo, String name, String numWhats,
+    String email, String password, String userToken) async {
+  var data = modelEditUserToJson(
+    ModelEditUser(
+        photo: photo,
+        name: name,
+        numWhats: numWhats,
+        email: email,
+        password: password),
+  );
+
+  http.Response response = await fetchApiUsers.fetchEditUser(data, userToken);
 
   return response;
 }

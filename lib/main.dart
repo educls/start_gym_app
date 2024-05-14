@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:start_gym_app/Views/home/edit_info_user_page.dart';
 
 import 'Views/Login/login_page.dart';
+import 'Views/home/admin/sign_up_new_teacher_page.dart';
 import 'Views/home/home_page.dart';
 import 'Views/signUp/sign_up_page.dart';
 
@@ -37,6 +39,8 @@ class MyApp extends StatelessWidget {
         '/cadastro': (context) => const SignUpPage(),
         '/home': (context) => HomePage(),
         '/login': (context) => const LoginPage(),
+        '/edit-user-perfil': (context) => const EditInfoUserPage(),
+        '/sign-up-new-teacher': (context) => const SignUpNewTeacher(),
       },
     );
   }

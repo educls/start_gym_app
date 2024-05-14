@@ -33,29 +33,26 @@ class Mensagem {
   int id;
   String accounttype;
   String name;
+  String numberwhats;
   String email;
   String password;
-  int iat;
-  int exp;
 
   Mensagem({
     required this.id,
     required this.accounttype,
     required this.name,
+    required this.numberwhats,
     required this.email,
     required this.password,
-    required this.iat,
-    required this.exp,
   });
 
   factory Mensagem.fromMap(Map<String, dynamic> json) => Mensagem(
         id: json["id"],
         accounttype: json["accounttype"],
         name: json["name"],
+        numberwhats: json["numberwhats"],
         email: json["email"],
         password: json["password"],
-        iat: json["iat"],
-        exp: json["exp"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -64,7 +61,5 @@ class Mensagem {
         "name": name,
         "email": email,
         "password": password,
-        "iat": iat,
-        "exp": exp,
       };
 }

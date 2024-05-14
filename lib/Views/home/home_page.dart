@@ -15,10 +15,9 @@ import 'admin/agenda_treinos_admin_page.dart';
 import 'admin/alunos_admin_page.dart';
 import 'admin/professores_admin_page.dart';
 import 'admin/treinos_admin_page.dart';
-import 'aluno/perfil_aluno.dart';
+import 'aluno/edit_perfil_aluno_page.dart';
 import 'aluno/treinos_aluno.dart';
 import 'professor/agenda_treinos_page.dart';
-import 'professor/perfil_professor_page.dart';
 import 'professor/treinos_professor_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -41,7 +40,7 @@ class _HomePageState extends State<HomePage> {
   List<Widget> bottomBarPagesProfessor = const [
     TreinosProfessorPage(),
     AgendaTreinosProfessorPage(),
-    PerfilProfessorPage(),
+    // PerfilProfessorPage(),
   ];
   List<Widget> bottomBarPagesAluno = const [
     TreinosAlunoPage(),
@@ -82,6 +81,15 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  bool isBase64(String value) {
+    try {
+      base64Decode(value);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   void getInfoUser() async {
     initProvider();
     setLoading(true);
@@ -90,11 +98,11 @@ class _HomePageState extends State<HomePage> {
 
     modelUserInfos = modelUserInfosFromMap(response.body);
 
-    if (modelUserInfos.photo == '') {
-      image = Image.asset('assets/img/profile_tab.png');
-    } else {
+    if (isBase64(modelUserInfos.photo)) {
       bytes = base64Decode(modelUserInfos.photo);
       image = Image.memory(bytes);
+    } else {
+      image = Image.asset('assets/img/profile_tab.png');
     }
 
     setUser(modelUserInfos.mensagem.accounttype);
@@ -125,13 +133,18 @@ class _HomePageState extends State<HomePage> {
           ),
           titleSpacing: 0,
           actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 10, top: 1),
-              child: CircleAvatar(
-                backgroundImage: image.image,
-                radius: 35,
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, '/edit-user-perfil');
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(right: 10, top: 1),
+                child: CircleAvatar(
+                  backgroundImage: image.image,
+                  radius: 35,
+                ),
               ),
-            ),
+            )
           ],
         ),
         body: _isLoading
