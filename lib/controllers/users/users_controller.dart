@@ -1,11 +1,20 @@
+import 'dart:convert';
+
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:start_gym_app/Views/questions/questions_page.dart';
+import 'package:start_gym_app/models/users/ModelAvaliacaoFisica.dart';
 import 'package:start_gym_app/models/users/ModelEditUser.dart';
+import 'package:start_gym_app/models/users/ModelEvolucao.dart';
+import 'package:start_gym_app/models/users/ModelHistoricoAtividades.dart';
+import 'package:start_gym_app/models/users/ModelHistoricoDoencas.dart';
 import 'package:start_gym_app/models/users/ModelSignUpNewTeacher.dart';
 
 import '../../models/users/LoginModel.dart';
 import '../../models/users/SendEmailForResetModel.dart';
 import '../../models/users/SignUpModel.dart';
 import '../../services/users/users_service.dart';
+import '../../utils/constants/questions_constants.dart';
 
 FetchApiUsers fetchApiUsers = FetchApiUsers();
 
@@ -106,4 +115,83 @@ Future<http.Response> editUser(String photo, String name, String numWhats,
   http.Response response = await fetchApiUsers.fetchEditUser(data, userToken);
 
   return response;
+}
+
+sendImageListMinhaEvolucao(
+    String token, List<String?> imagesListBase64, TypeQuestionary type) async {
+  dynamic dataForFetch = modelQuestionEvolucaoToJson(
+    ModelQuestionEvolucao(
+      foto1: imagesListBase64[0],
+      foto2: imagesListBase64[1],
+      foto3: imagesListBase64[2],
+    ),
+  );
+  fetchApiUsers.fetchListImagesMinhaEvolucao(dataForFetch, token, type.name);
+}
+
+sendQuestionaryToApi(String token, Map<String, dynamic> questionsResp,
+    TypeQuestionary type) async {
+  late String index;
+  late String selectedChoicesString;
+  List<String> selectedChoices = [];
+
+  late dynamic dataForFetch;
+
+  setChoicesToString() async {
+    if (index.isNotEmpty) {
+      for (var item in questionsResp[index]) {
+        if (item.isSelected) {
+          selectedChoices.add(item.title);
+        }
+      }
+      selectedChoicesString = selectedChoices.join(', ');
+    }
+  }
+
+  switch (type) {
+    case TypeQuestionary.avalFisica:
+      index = 'Objetivo';
+      await setChoicesToString();
+      dataForFetch = modelQuestionAvaliacaoFisicaToJson(
+        ModelQuestionAvaliacaoFisica(
+          objetivos: selectedChoicesString,
+          peso: questionsResp['Peso'],
+          altura: questionsResp['Altura'],
+          nascimento: questionsResp['Data de nascimento'],
+        ),
+      );
+      break;
+    case TypeQuestionary.histDoencas:
+      index = 'Tem alguma das doenças abaixo?';
+      await setChoicesToString();
+      dataForFetch = modelQuestionHistoricoDoencasToJson(
+        ModelQuestionHistoricoDoencas(
+          doencas: selectedChoicesString,
+          dores: questionsResp[
+              'Dores na coluna, articulação ou muscular? Se sim quais?'],
+          adicional: questionsResp[
+              'Alguma queixa adicional? (incômodos, dores, dificuldades)'],
+        ),
+      );
+      break;
+    case TypeQuestionary.histAtividades:
+      dataForFetch = modelQuestionHistoricoAtividadesToJson(
+        ModelQuestionHistoricoAtividades(
+          atividadeFisica: questionsResp[
+              'Já pratica algum tipo de atividade física? Se sim a quanto tempo?'],
+          dieta:
+              questionsResp['Faz dieta específica? Se sim com qual objetivo?'],
+          suplementos: questionsResp['Faz uso de suplementos? Se sim, quais?'],
+          fuma: questionsResp['Fuma? Se sim, quantos cigarros por dia?'],
+          bebidaAlcoolica: questionsResp[
+              'Consome bebida alcoólica? Se sim, com que frequência?'],
+          medicamentoControlado:
+              questionsResp['Toma algum medicamento controlado? Quais?'],
+          cirurgia: questionsResp['Fez alguma cirurgia? Qual?'],
+        ),
+      );
+      break;
+    default:
+  }
+  fetchApiUsers.fetchQuestionary(dataForFetch, token, type.name);
 }

@@ -81,4 +81,25 @@ class FetchApiUsers {
         .fetch();
     return resp;
   }
+
+  Future<http.Response> fetchQuestionary(data, userToken, type) async {
+    http.Response resp = await FetchApi(
+            route: '/usuarios/send-questionary/$type',
+            method: 'POST',
+            authToken: userToken,
+            body: data)
+        .fetch();
+    return resp;
+  }
+
+  Future<http.Response> fetchListImagesMinhaEvolucao(
+      data, userToken, type) async {
+    http.Response resp = await FetchApi(
+            route: '/usuarios/send-questionary/$type',
+            method: 'POST',
+            authToken: userToken,
+            body: data)
+        .fetch();
+    return resp;
+  }
 }

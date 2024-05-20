@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:ffi';
+import 'dart:isolate';
 import 'dart:typed_data';
 
 import 'package:brasil_fields/brasil_fields.dart';
@@ -12,6 +14,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:start_gym_app/Views/questions/questions_page.dart';
 
 import '../../common/color_extension.dart';
 import '../../common_widget/round_button.dart';
@@ -19,6 +22,7 @@ import '../../common_widget/round_textfield.dart';
 import '../../controllers/users/users_controller.dart';
 import '../../functions/sign_up/pick_img_perfil.dart';
 import '../../models/users/ModelUserInfos.dart';
+
 import '../../utils/provider/data_provider.dart';
 
 class EditInfoUserPage extends StatefulWidget {
@@ -30,9 +34,31 @@ class EditInfoUserPage extends StatefulWidget {
 
 class _EditInfoUserPageState extends State<EditInfoUserPage> {
   TextEditingController txtName = TextEditingController();
-  TextEditingController txtNumero = TextEditingController();
   TextEditingController txtEmail = TextEditingController();
+  TextEditingController txtPhone = TextEditingController();
   TextEditingController txtPassword = TextEditingController();
+
+  bool isEditingName = false;
+  bool isEditingPhone = false;
+  void setEditingPhone(bool isEditing) {
+    setState(() {
+      isEditingPhone = isEditing;
+    });
+  }
+
+  bool isEditingEmail = false;
+  void setEditingEmail(bool isEditing) {
+    setState(() {
+      isEditingEmail = isEditing;
+    });
+  }
+
+  bool isEditingPassoword = false;
+  void setEditingPassword(bool isEditing) {
+    setState(() {
+      isEditingPassoword = isEditing;
+    });
+  }
 
   String base64Image = '';
   XFile? _imageFile;
@@ -70,7 +96,7 @@ class _EditInfoUserPageState extends State<EditInfoUserPage> {
   void setUser(ModelUserInfos _modelUserInfos) {
     setState(() {
       txtName.text = _modelUserInfos.mensagem.name;
-      txtNumero.text = _modelUserInfos.mensagem.numberwhats;
+      txtPhone.text = _modelUserInfos.mensagem.numberwhats;
       txtEmail.text = _modelUserInfos.mensagem.email;
       txtPassword.text = _modelUserInfos.mensagem.password;
     });
@@ -128,10 +154,6 @@ class _EditInfoUserPageState extends State<EditInfoUserPage> {
       getInfoUser();
     }
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Edição de Usuário'),
-      ),
       body: Stack(
         children: [
           _isLoading
@@ -141,7 +163,7 @@ class _EditInfoUserPageState extends State<EditInfoUserPage> {
                     size: 50,
                   ),
                 )
-              : buildFormEditUser(bytes)
+              : buildFormEditUser(bytes),
         ],
       ),
     );
@@ -222,14 +244,50 @@ class _EditInfoUserPageState extends State<EditInfoUserPage> {
                   ),
                 ),
                 children: [
+                  const SizedBox(height: 5),
+                  TextField(
+                    style: TextStyle(
+                      color: TColor.lighBlue,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                    controller: txtName,
+                    decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                        icon: Icon(isEditingName ? Icons.check : Icons.edit,
+                            color: Colors.grey),
+                        onPressed: () {
+                          setState(() {
+                            isEditingName = !isEditingName;
+                          });
+                        },
+                      ),
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                    ),
+                    readOnly: !isEditingName,
+                  ),
+                  // Text(
+                  //   'NOME ALUNO',
+                  //   style: TextStyle(
+                  //     fontSize: 24,
+                  //     fontWeight: FontWeight.bold,
+                  //     color: TColor.lighBlue,
+                  //   ),
+                  // ),
+                  const SizedBox(height: 5),
                   Center(
                     child: GestureDetector(
                       onTap: () {
                         showChoiceForPhotoPerfil();
                       },
                       child: Container(
-                        width: 160,
-                        height: 160,
+                        width: 140,
+                        height: 140,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.grey[300],
@@ -280,119 +338,33 @@ class _EditInfoUserPageState extends State<EditInfoUserPage> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: media.width * 0.05,
-                  ),
-                  RoundTextField(
-                    controller: txtName,
-                    hitText: "Nome",
-                    icon: "assets/img/user_text.png",
-                  ),
-                  SizedBox(
-                    height: media.width * 0.04,
-                  ),
-                  RoundTextField(
-                    formatter: TelefoneInputFormatter(),
-                    controller: txtNumero,
-                    hitText: "(00) 12345-1234",
-                    icon: "assets/img/zap_icone.png",
-                  ),
-                  SizedBox(
-                    height: media.width * 0.04,
-                  ),
-                  RoundTextField(
-                    controller: txtEmail,
-                    hitText: "Email",
-                    icon: "assets/img/email.png",
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                  SizedBox(
-                    height: media.width * 0.04,
-                  ),
-                  RoundTextField(
-                    controller: txtPassword,
-                    setPassword: setPassword,
-                    hitText: "Senha",
-                    icon: "assets/img/lock.png",
-                    obscureText: !showPassword,
-                    rigtIcon: TextButton(
+                  const SizedBox(height: 20),
+                  buildEditableField('Telefone', txtPhone, false,
+                      isEditingPhone, setEditingPhone),
+                  buildEditableField('Email', txtEmail, false, isEditingEmail,
+                      setEditingEmail),
+                  buildEditableField('Senha', txtPassword, true,
+                      isEditingPassoword, setEditingPassword),
+                  const SizedBox(height: 5),
+                  buildOption('Avaliação física', TypeQuestionary.avalFisica),
+                  buildOption('Histórico de atividades',
+                      TypeQuestionary.histAtividades),
+                  buildOption(
+                      'Histórico de doenças', TypeQuestionary.histDoencas),
+                  buildOption('Minha evolução', TypeQuestionary.minhaEvolucao),
+                  const SizedBox(height: 10),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: TextButton.icon(
                       onPressed: () {
-                        togglePasswordVisibility();
+                        Navigator.of(context).pop();
                       },
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: 20,
-                        height: 20,
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: 20,
-                          height: 20,
-                          child: !showPassword
-                              ? Icon(
-                                  Icons.visibility_off_outlined,
-                                  color: TColor.primaryColor1,
-                                )
-                              : Icon(
-                                  Icons.visibility,
-                                  color: TColor.primaryColor1,
-                                ),
-                        ),
+                      icon: Icon(Icons.arrow_back, color: Colors.blue[900]),
+                      label: Text(
+                        'Voltar',
+                        style: TextStyle(color: Colors.blue[900]),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: media.width * 0.3,
-                  ),
-                  RoundButton(
-                    width: 330,
-                    isLoading: _isLoading,
-                    title: "Atualizar",
-                    onPressed: () async {
-                      setLoading(true);
-                      await Future.delayed(const Duration(milliseconds: 200));
-                      http.Response response = await editUser(
-                          base64Image,
-                          txtName.text,
-                          txtNumero.text,
-                          txtEmail.text,
-                          txtPassword.text,
-                          value!.token);
-
-                      if (response.statusCode == 201) {
-                        QuickAlert.show(
-                          context: context,
-                          type: QuickAlertType.success,
-                          title: 'Sucesso',
-                          text: 'Usuario Atualizado',
-                          disableBackBtn: true,
-                          barrierDismissible: false,
-                          confirmBtnText: 'Ok',
-                          onConfirmBtnTap: () {
-                            setLoading(false);
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                          },
-                        );
-                      } else {
-                        QuickAlert.show(
-                          context: context,
-                          type: QuickAlertType.warning,
-                          text: 'Usuario não atualizado',
-                          confirmBtnText: 'Ok',
-                          title: 'Aviso',
-                          confirmBtnColor: TColor.primaryColor1,
-                          onConfirmBtnTap: () {
-                            setLoading(false);
-                            Navigator.pop(context);
-                          },
-                        );
-                      }
-
-                      setLoading(false);
-                    },
-                  ),
-                  SizedBox(
-                    height: media.width * 0.2,
                   ),
                 ],
               ),
@@ -402,4 +374,129 @@ class _EditInfoUserPageState extends State<EditInfoUserPage> {
       ),
     );
   }
+
+  Widget buildEditableField(String label, TextEditingController controller,
+      bool isPassword, bool isEditing, Function setEditingState) {
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      label,
+                      style: TextStyle(
+                        color: TColor.lighBlue,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 226, 226, 226),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: TextField(
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: isEditing ? Colors.black : Colors.black38),
+                  controller: controller,
+                  decoration: InputDecoration(
+                    suffixIcon: IconButton(
+                      icon: Icon(isEditing ? Icons.check : Icons.edit,
+                          color: Colors.grey),
+                      onPressed: () {
+                        setEditingState(!isEditing);
+                      },
+                    ),
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                  ),
+                  obscureText: isPassword ? !isEditing : isPassword,
+                  readOnly: !isEditing,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget buildOption(String text, TypeQuestionary enumType) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: TextButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => QuestionarioWidget(type: enumType),
+            ),
+          );
+        },
+        child: Text(
+          text,
+          style: TextStyle(
+            color: TColor.lighBlue,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
 }
+
+// setLoading(true);
+// await Future.delayed(const Duration(milliseconds: 200));
+// http.Response response = await editUser(
+//     base64Image,
+//     txtName.text,
+//     txtNumero.text,
+//     txtEmail.text,
+//     txtPassword.text,
+//     value!.token);
+
+// if (response.statusCode == 201) {
+//   QuickAlert.show(
+//     context: context,
+//     type: QuickAlertType.success,
+//     title: 'Sucesso',
+//     text: 'Usuario Atualizado',
+//     disableBackBtn: true,
+//     barrierDismissible: false,
+//     confirmBtnText: 'Ok',
+//     onConfirmBtnTap: () {
+//       setLoading(false);
+//       Navigator.pop(context);
+//       Navigator.pop(context);
+//     },
+//   );
+// } else {
+//   QuickAlert.show(
+//     context: context,
+//     type: QuickAlertType.warning,
+//     text: 'Usuario não atualizado',
+//     confirmBtnText: 'Ok',
+//     title: 'Aviso',
+//     confirmBtnColor: TColor.primaryColor1,
+//     onConfirmBtnTap: () {
+//       setLoading(false);
+//       Navigator.pop(context);
+//     },
+//   );
+// }
+
+// setLoading(false);

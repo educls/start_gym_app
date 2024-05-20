@@ -243,12 +243,18 @@ class _LoginPageState extends State<LoginPage> {
                   },
                   icon: const Icon(Icons.arrow_back),
                 ),
-                const Text(
+              ],
+            ),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
                   "Recuperar Senha",
                   style: TextStyle(
-                      color: Color.fromRGBO(31, 35, 115, 1),
-                      fontSize: 32,
-                      fontWeight: FontWeight.w500),
+                    color: Color.fromRGBO(31, 35, 115, 1),
+                    fontSize: 32,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ],
             ),
@@ -300,8 +306,8 @@ class _LoginPageState extends State<LoginPage> {
         _buildRememberForgot(),
         const SizedBox(height: 20),
         _buildRoundLoginButton(),
-        const SizedBox(height: 10),
-        _buildRoundSignUpButton(),
+        const SizedBox(height: 60),
+        // _buildRoundSignUpButton(),
       ],
     );
   }
@@ -419,28 +425,28 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 // Retorna um Widget Button que abre a tela de PRIMEIRO ACESSO(Cadastro)
-  Widget _buildRoundSignUpButton() {
-    // return RoundButton(
-    //   width: 200,
-    //   isLoading: _isLoading,
-    //   title: "PRIMEIRO ACESSO",
-    //   type: RoundButtonType.bgSGradient,
-    //   onPressed: () async {
-    //     Navigator.pushNamed(context, '/cadastro');
-    //   },
-    // );
-    return Center(
-        child: Material(
-      elevation: 4,
-      borderRadius: BorderRadius.circular(50),
-      child: TextButton(
-        onPressed: () {
-          Navigator.pushNamed(context, '/cadastro');
-        },
-        child: _buildGreyText("Primeiro Acesso"),
-      ),
-    ));
-  }
+  // Widget _buildRoundSignUpButton() {
+  //   // return RoundButton(
+  //   //   width: 200,
+  //   //   isLoading: _isLoading,
+  //   //   title: "PRIMEIRO ACESSO",
+  //   //   type: RoundButtonType.bgSGradient,
+  //   //   onPressed: () async {
+  //   //     Navigator.pushNamed(context, '/cadastro');
+  //   //   },
+  //   // );
+  //   return Center(
+  //       child: Material(
+  //     elevation: 4,
+  //     borderRadius: BorderRadius.circular(50),
+  //     child: TextButton(
+  //       onPressed: () {
+  //         Navigator.pushNamed(context, '/questionario');
+  //       },
+  //       child: _buildGreyText("Primeiro Acesso"),
+  //     ),
+  //   ));
+  // }
 
 // Retorna um Widget Button com a logica para o envio do email para
 // a Redefinição da Senha

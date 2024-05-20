@@ -4,6 +4,7 @@ import 'package:start_gym_app/Views/home/edit_info_user_page.dart';
 import 'Views/Login/login_page.dart';
 import 'Views/home/admin/sign_up_new_teacher_page.dart';
 import 'Views/home/home_page.dart';
+import 'Views/questions/questions_page.dart';
 import 'Views/signUp/sign_up_page.dart';
 
 import './utils/provider/data_provider.dart';
