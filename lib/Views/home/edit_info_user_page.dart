@@ -15,6 +15,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:start_gym_app/Views/questions/questions_page.dart';
+import 'package:start_gym_app/models/users/ModelEditUser.dart';
 
 import '../../common/color_extension.dart';
 import '../../common_widget/round_button.dart';
@@ -24,6 +25,14 @@ import '../../functions/sign_up/pick_img_perfil.dart';
 import '../../models/users/ModelUserInfos.dart';
 
 import '../../utils/provider/data_provider.dart';
+
+enum TypeEditUser {
+  name,
+  photo,
+  numWhats,
+  email,
+  password,
+}
 
 class EditInfoUserPage extends StatefulWidget {
   const EditInfoUserPage({super.key});
@@ -38,12 +47,35 @@ class _EditInfoUserPageState extends State<EditInfoUserPage> {
   TextEditingController txtPhone = TextEditingController();
   TextEditingController txtPassword = TextEditingController();
 
+  late String dataForFetch;
+
   bool isEditingName = false;
+  void setEditingName(bool isEditing) {
+    setState(() {
+      isEditingName = isEditing;
+    });
+    if (!isEditingName) {
+      editUserInfo(txtName.text, TypeEditUser.name);
+    }
+  }
+
+  void setBase64Image(String base64Img) {
+    setState(() {
+      base64Image = base64Img;
+      bytes = base64Decode(base64Image);
+      image = Image.memory(bytes);
+    });
+    editUserInfo(base64Image, TypeEditUser.photo);
+  }
+
   bool isEditingPhone = false;
   void setEditingPhone(bool isEditing) {
     setState(() {
       isEditingPhone = isEditing;
     });
+    if (!isEditingPhone) {
+      editUserInfo(txtPhone.text, TypeEditUser.numWhats);
+    }
   }
 
   bool isEditingEmail = false;
@@ -51,6 +83,9 @@ class _EditInfoUserPageState extends State<EditInfoUserPage> {
     setState(() {
       isEditingEmail = isEditing;
     });
+    if (!isEditingEmail) {
+      editUserInfo(txtEmail.text, TypeEditUser.email);
+    }
   }
 
   bool isEditingPassoword = false;
@@ -58,6 +93,33 @@ class _EditInfoUserPageState extends State<EditInfoUserPage> {
     setState(() {
       isEditingPassoword = isEditing;
     });
+    if (!isEditingPassoword) {
+      editUserInfo(txtPassword.text, TypeEditUser.password);
+    }
+  }
+
+  void editUserInfo(String data, TypeEditUser type) {
+    switch (type) {
+      case TypeEditUser.name:
+        dataForFetch = modelEditUserToJson(ModelEditUser(name: data));
+        break;
+      case TypeEditUser.photo:
+        dataForFetch = modelEditUserToJson(ModelEditUser(photo: data));
+        break;
+      case TypeEditUser.numWhats:
+        dataForFetch = modelEditUserToJson(ModelEditUser(numWhats: data));
+        break;
+      case TypeEditUser.email:
+        dataForFetch = modelEditUserToJson(ModelEditUser(email: data));
+        break;
+      case TypeEditUser.password:
+        dataForFetch = modelEditUserToJson(ModelEditUser(password: data));
+        break;
+      default:
+    }
+
+    editUserEachInput(dataForFetch, value!.token);
+    print(dataForFetch);
   }
 
   String base64Image = '';
@@ -96,7 +158,12 @@ class _EditInfoUserPageState extends State<EditInfoUserPage> {
   void setUser(ModelUserInfos _modelUserInfos) {
     setState(() {
       txtName.text = _modelUserInfos.mensagem.name;
-      txtPhone.text = _modelUserInfos.mensagem.numberwhats;
+      if (_modelUserInfos.mensagem.numberwhats == null) {
+        txtPhone.text = '(xx) xxxxx-xxxx';
+      }
+      if (_modelUserInfos.mensagem.numberwhats != null) {
+        txtPhone.text = _modelUserInfos.mensagem.numberwhats;
+      }
       txtEmail.text = _modelUserInfos.mensagem.email;
       txtPassword.text = _modelUserInfos.mensagem.password;
     });
@@ -105,14 +172,6 @@ class _EditInfoUserPageState extends State<EditInfoUserPage> {
   void setImgFile(XFile? imgFile) {
     setState(() {
       _imageFile = imgFile;
-    });
-  }
-
-  void setBase64Image(String base64Img) {
-    setState(() {
-      base64Image = base64Img;
-      bytes = base64Decode(base64Image);
-      image = Image.memory(bytes);
     });
   }
 
@@ -130,7 +189,7 @@ class _EditInfoUserPageState extends State<EditInfoUserPage> {
 
     modelUserInfos = modelUserInfosFromMap(response.body);
 
-    if (isBase64(modelUserInfos.photo)) {
+    if (isBase64(modelUserInfos.photo) && modelUserInfos.photo != '') {
       bytes = base64Decode(modelUserInfos.photo);
       image = Image.memory(bytes);
     }
@@ -258,9 +317,7 @@ class _EditInfoUserPageState extends State<EditInfoUserPage> {
                         icon: Icon(isEditingName ? Icons.check : Icons.edit,
                             color: Colors.grey),
                         onPressed: () {
-                          setState(() {
-                            isEditingName = !isEditingName;
-                          });
+                          setEditingName(!isEditingName);
                         },
                       ),
                       border: InputBorder.none,
@@ -271,14 +328,6 @@ class _EditInfoUserPageState extends State<EditInfoUserPage> {
                     ),
                     readOnly: !isEditingName,
                   ),
-                  // Text(
-                  //   'NOME ALUNO',
-                  //   style: TextStyle(
-                  //     fontSize: 24,
-                  //     fontWeight: FontWeight.bold,
-                  //     color: TColor.lighBlue,
-                  //   ),
-                  // ),
                   const SizedBox(height: 5),
                   Center(
                     child: GestureDetector(
@@ -340,18 +389,24 @@ class _EditInfoUserPageState extends State<EditInfoUserPage> {
                   ),
                   const SizedBox(height: 20),
                   buildEditableField('Telefone', txtPhone, false,
-                      isEditingPhone, setEditingPhone),
+                      isEditingPhone, setEditingPhone, TypeEditUser.numWhats),
                   buildEditableField('Email', txtEmail, false, isEditingEmail,
-                      setEditingEmail),
-                  buildEditableField('Senha', txtPassword, true,
-                      isEditingPassoword, setEditingPassword),
+                      setEditingEmail, TypeEditUser.email),
+                  buildEditableField(
+                      'Senha',
+                      txtPassword,
+                      true,
+                      isEditingPassoword,
+                      setEditingPassword,
+                      TypeEditUser.password),
                   const SizedBox(height: 5),
-                  buildOption('Avaliação física', TypeQuestionary.avalFisica),
-                  buildOption('Histórico de atividades',
-                      TypeQuestionary.histAtividades),
                   buildOption(
-                      'Histórico de doenças', TypeQuestionary.histDoencas),
-                  buildOption('Minha evolução', TypeQuestionary.minhaEvolucao),
+                      'Avaliação física', TypeQuestionary.avaliacao_fisica),
+                  buildOption('Histórico de atividades',
+                      TypeQuestionary.historico_atividades),
+                  buildOption('Histórico de doenças',
+                      TypeQuestionary.historico_doencas),
+                  buildOption('Minha evolução', TypeQuestionary.minha_evolucao),
                   const SizedBox(height: 10),
                   Align(
                     alignment: Alignment.centerLeft,
@@ -375,8 +430,13 @@ class _EditInfoUserPageState extends State<EditInfoUserPage> {
     );
   }
 
-  Widget buildEditableField(String label, TextEditingController controller,
-      bool isPassword, bool isEditing, Function setEditingState) {
+  Widget buildEditableField(
+      String label,
+      TextEditingController controller,
+      bool isPassword,
+      bool isEditing,
+      Function setEditingState,
+      TypeEditUser? type) {
     return StatefulBuilder(
       builder: (context, setState) {
         return Column(
@@ -405,6 +465,12 @@ class _EditInfoUserPageState extends State<EditInfoUserPage> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: TextField(
+                  inputFormatters: type == TypeEditUser.numWhats
+                      ? [
+                          FilteringTextInputFormatter.digitsOnly,
+                          TelefoneInputFormatter(),
+                        ]
+                      : [],
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: isEditing ? Colors.black : Colors.black38),

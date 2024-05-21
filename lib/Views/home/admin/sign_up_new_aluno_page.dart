@@ -3,33 +3,27 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
-import 'package:start_gym_app/controllers/users/users_controller.dart';
 
 import '../../../common/color_extension.dart';
 import '../../../common_widget/round_button.dart';
 import '../../../common_widget/round_textfield.dart';
+import '../../../controllers/users/users_controller.dart';
 import '../../../utils/provider/data_provider.dart';
 
-class SignUpNewTeacher extends StatefulWidget {
-  const SignUpNewTeacher({super.key});
+class SignUpNewAluno extends StatefulWidget {
+  const SignUpNewAluno({super.key});
 
   @override
-  State<SignUpNewTeacher> createState() => _SignUpNewTeacherState();
+  State<SignUpNewAluno> createState() => _SignUpNewAlunoState();
 }
 
-class _SignUpNewTeacherState extends State<SignUpNewTeacher> {
-  final GlobalKey<FormState> _formkeysignup = GlobalKey<FormState>();
-
-  final ValueNotifier<String> _dropValue = ValueNotifier<String>('');
-
+class _SignUpNewAlunoState extends State<SignUpNewAluno> {
   TextEditingController txtName = TextEditingController();
   TextEditingController txtEmail = TextEditingController();
   TextEditingController txtPassword = TextEditingController();
-  List<String> dropdownOptionsTeacherType = <String>[
-    "Personal",
-    "Fisioterapeuta"
-  ];
-  String dropdownValue = '';
+
+  final GlobalKey<FormState> _formkeysignup = GlobalKey<FormState>();
+
   DataAppProvider? value;
 
   bool _isLoading = false;
@@ -65,7 +59,7 @@ class _SignUpNewTeacherState extends State<SignUpNewTeacher> {
     var media = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Cadastrar novo Profissionail"),
+        title: const Text("Cadastrar novo Aluno"),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -143,34 +137,6 @@ class _SignUpNewTeacherState extends State<SignUpNewTeacher> {
                             ),
                           ),
                           SizedBox(
-                            height: media.width * 0.04,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20, right: 20),
-                            child: ValueListenableBuilder<String>(
-                                valueListenable: _dropValue,
-                                builder:
-                                    (BuildContext context, String value, _) {
-                                  return DropdownButton<String>(
-                                    isExpanded: true,
-                                    hint: const Text("Selecione uma Opção"),
-                                    value: (value.isEmpty) ? null : value,
-                                    onChanged: (choice) => {
-                                      _dropValue.value = choice.toString(),
-                                      print(_dropValue.value)
-                                    },
-                                    onTap: () {},
-                                    items: dropdownOptionsTeacherType
-                                        .map((String op) {
-                                      return DropdownMenuItem<String>(
-                                        value: op,
-                                        child: Text(op),
-                                      );
-                                    }).toList(),
-                                  );
-                                }),
-                          ),
-                          SizedBox(
                             height: media.width * 0.2,
                           ),
                           RoundButton(
@@ -183,8 +149,7 @@ class _SignUpNewTeacherState extends State<SignUpNewTeacher> {
                                   const Duration(milliseconds: 200));
                               if (txtName.text.isEmpty ||
                                   txtEmail.text.isEmpty ||
-                                  txtPassword.text.isEmpty ||
-                                  _dropValue.value.isEmpty) {
+                                  txtPassword.text.isEmpty) {
                                 QuickAlert.show(
                                   context: context,
                                   type: QuickAlertType.warning,
@@ -198,17 +163,16 @@ class _SignUpNewTeacherState extends State<SignUpNewTeacher> {
                                   },
                                 );
                               } else {
-                                http.Response response = await signUpNewTeacher(
+                                http.Response response = await signUpNewAluno(
                                     txtName.text,
                                     txtEmail.text,
                                     txtPassword.text,
-                                    _dropValue.value,
                                     value!.token);
                                 if (response.statusCode == 401) {
                                   QuickAlert.show(
                                     context: context,
                                     type: QuickAlertType.warning,
-                                    text: 'Professor não cadastrado',
+                                    text: 'Aluno não cadastrado',
                                     confirmBtnText: 'Ok',
                                     title: 'Aviso',
                                     confirmBtnColor: TColor.primaryColor1,
@@ -222,7 +186,8 @@ class _SignUpNewTeacherState extends State<SignUpNewTeacher> {
                                     context: context,
                                     type: QuickAlertType.success,
                                     title: 'Sucesso',
-                                    text: 'Cadastro Realizado!',
+                                    text:
+                                        'Para efetuar o cadastro o aluno necessita verificar o email',
                                     disableBackBtn: true,
                                     barrierDismissible: false,
                                     confirmBtnText: 'Ok',

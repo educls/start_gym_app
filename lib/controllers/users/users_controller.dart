@@ -8,6 +8,7 @@ import 'package:start_gym_app/models/users/ModelEditUser.dart';
 import 'package:start_gym_app/models/users/ModelEvolucao.dart';
 import 'package:start_gym_app/models/users/ModelHistoricoAtividades.dart';
 import 'package:start_gym_app/models/users/ModelHistoricoDoencas.dart';
+import 'package:start_gym_app/models/users/ModelSignUpAluno.dart';
 import 'package:start_gym_app/models/users/ModelSignUpNewTeacher.dart';
 
 import '../../models/users/LoginModel.dart';
@@ -88,6 +89,12 @@ Future<http.Response> getTeachersInfos(String token) async {
   return response;
 }
 
+Future<http.Response> getAlunosInfos(String token) async {
+  http.Response response = await fetchApiUsers.fetchAlunosInfos(token);
+
+  return response;
+}
+
 Future<http.Response> signUpNewTeacher(String name, String email,
     String password, String teachertype, String userToken) async {
   var data = modelSignUpTeacherToJson(
@@ -97,6 +104,14 @@ Future<http.Response> signUpNewTeacher(String name, String email,
 
   http.Response response =
       await fetchApiUsers.fetchSignUpNewTeacher(data, userToken);
+
+  return response;
+}
+
+Future<http.Response> signUpNewAluno(
+    String name, String email, String password, String userToken) async {
+  http.Response response =
+      await fetchApiUsers.fetchSignUpNewAluno(name, email, password, userToken);
 
   return response;
 }
@@ -113,6 +128,19 @@ Future<http.Response> editUser(String photo, String name, String numWhats,
   );
 
   http.Response response = await fetchApiUsers.fetchEditUser(data, userToken);
+
+  return response;
+}
+
+Future<http.Response> editUserEachInput(String data, String userToken) async {
+  http.Response response = await fetchApiUsers.fetchEditUser(data, userToken);
+
+  return response;
+}
+
+Future<http.Response> getQuestionary(String token, TypeQuestionary type) async {
+  http.Response response =
+      await fetchApiUsers.fetchGetQuestionary(token, type.name);
 
   return response;
 }
@@ -149,7 +177,7 @@ sendQuestionaryToApi(String token, Map<String, dynamic> questionsResp,
   }
 
   switch (type) {
-    case TypeQuestionary.avalFisica:
+    case TypeQuestionary.avaliacao_fisica:
       index = 'Objetivo';
       await setChoicesToString();
       dataForFetch = modelQuestionAvaliacaoFisicaToJson(
@@ -161,7 +189,7 @@ sendQuestionaryToApi(String token, Map<String, dynamic> questionsResp,
         ),
       );
       break;
-    case TypeQuestionary.histDoencas:
+    case TypeQuestionary.historico_doencas:
       index = 'Tem alguma das doenças abaixo?';
       await setChoicesToString();
       dataForFetch = modelQuestionHistoricoDoencasToJson(
@@ -174,7 +202,7 @@ sendQuestionaryToApi(String token, Map<String, dynamic> questionsResp,
         ),
       );
       break;
-    case TypeQuestionary.histAtividades:
+    case TypeQuestionary.historico_atividades:
       dataForFetch = modelQuestionHistoricoAtividadesToJson(
         ModelQuestionHistoricoAtividades(
           atividadeFisica: questionsResp[

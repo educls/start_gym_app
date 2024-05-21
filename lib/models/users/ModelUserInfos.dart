@@ -33,7 +33,7 @@ class Mensagem {
   int id;
   String accounttype;
   String name;
-  String numberwhats;
+  dynamic numberwhats;
   String email;
   String password;
 
@@ -41,7 +41,7 @@ class Mensagem {
     required this.id,
     required this.accounttype,
     required this.name,
-    required this.numberwhats,
+    this.numberwhats,
     required this.email,
     required this.password,
   });

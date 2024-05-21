@@ -10,31 +10,31 @@ ModelEditUser modelEditUserFromJson(String str) =>
 String modelEditUserToJson(ModelEditUser data) => json.encode(data.toJson());
 
 class ModelEditUser {
-  String? photo;
   String? name;
+  String? photo;
   String? numWhats;
   String? email;
   String? password;
 
   ModelEditUser({
-    this.photo,
     this.name,
+    this.photo,
     this.numWhats,
     this.email,
     this.password,
   });
 
   factory ModelEditUser.fromJson(Map<String, dynamic> json) => ModelEditUser(
-        photo: json["photo"],
         name: json["name"],
+        photo: json["photo"],
         numWhats: json["numWhats"],
         email: json["email"],
         password: json["password"],
       );
 
   Map<String, dynamic> toJson() => {
-        "photo": photo,
         "name": name,
+        "photo": photo,
         "numWhats": numWhats,
         "email": email,
         "password": password,

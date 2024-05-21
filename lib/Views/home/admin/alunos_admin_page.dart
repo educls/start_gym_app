@@ -1,4 +1,15 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+
+import '../../../controllers/users/users_controller.dart';
+import '../../../models/users/ModelALunosInfos.dart';
+import '../../../utils/provider/data_provider.dart';
 
 class AlunosAdminPage extends StatefulWidget {
   const AlunosAdminPage({super.key});
@@ -8,10 +19,163 @@ class AlunosAdminPage extends StatefulWidget {
 }
 
 class _AlunosAdminPageState extends State<AlunosAdminPage> {
+  late String userToken;
+  List<ModelAlunosInfos> alunosInfos = [];
+  late http.Response response;
+  DataAppProvider? value;
+  late Uint8List bytes;
+  late Image image = Image.asset('assets/img/profile_tab.png');
+
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  void initProvider() {
+    value = context.watch<DataAppProvider>();
+  }
+
+  void setAlunosInfos(resAlunosInfos) {
+    setState(() {
+      alunosInfos = resAlunosInfos;
+    });
+  }
+
+  void setLoading(bool isLoading) {
+    setState(() {
+      _isLoading = isLoading;
+    });
+  }
+
+  Future<void> searchAlunosInfos() async {
+    initProvider();
+    response = await getAlunosInfos(value!.token);
+    List<ModelAlunosInfos> _alunosInfos =
+        modelAlunosInfosFromMap(response.body);
+    setAlunosInfos(_alunosInfos);
+  }
+
+  Future<void> reloadAlunosInfos() async {
+    setLoading(true);
+    searchAlunosInfos();
+    Timer(
+      const Duration(milliseconds: 500),
+      () {
+        setLoading(false);
+      },
+    );
+  }
+
+  bool isBase64(String value) {
+    try {
+      base64Decode(value);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Alunos Admin'),
+    if (alunosInfos.isEmpty) {
+      reloadAlunosInfos();
+    }
+    return Scaffold(
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              itemCount: alunosInfos.length,
+              itemBuilder: (context, index) {
+                final infoAluno = alunosInfos[index];
+                Uint8List photoBytes = Uint8List(0);
+                if (infoAluno.photo != null && isBase64(infoAluno.photo!)) {
+                  photoBytes = base64Decode(infoAluno.photo!);
+                }
+                return AnimationConfiguration.staggeredList(
+                  position: index,
+                  child: SlideAnimation(
+                    verticalOffset: 50.0,
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      color: const Color.fromRGBO(255, 255, 255, 0.705),
+                      elevation: 8,
+                      margin:
+                          const EdgeInsets.only(top: 30, right: 10, left: 10),
+                      child: ListTile(
+                        leading: Padding(
+                          padding: const EdgeInsets.only(
+                            right: 10,
+                          ),
+                          child: CircleAvatar(
+                            backgroundImage: infoAluno.photo != null &&
+                                    isBase64(infoAluno.photo!)
+                                ? MemoryImage(photoBytes)
+                                : image.image,
+                            radius: 25,
+                          ),
+                        ),
+                        title: Text(infoAluno.name!),
+                        trailing: Text(infoAluno.numberwhats == null
+                            ? '(xx) xxxxx-xxxx'
+                            : infoAluno.numberwhats!),
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Stack(
+                                children: [
+                                  AlertDialog(
+                                    title: Column(
+                                      children: [
+                                        Center(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(10),
+                                            child: CircleAvatar(
+                                              backgroundImage: infoAluno
+                                                              .photo !=
+                                                          null &&
+                                                      isBase64(infoAluno.photo!)
+                                                  ? MemoryImage(photoBytes)
+                                                  : image.image,
+                                              radius: 80,
+                                            ),
+                                          ),
+                                        ),
+                                        Center(child: Text(infoAluno.name!))
+                                      ],
+                                    ),
+                                    content: Text(
+                                        'Nome: ${infoAluno.name} \nNumero: ${infoAluno.numberwhats}\n'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () async {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('Voltar'),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, '/sign-up-new-Aluno');
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

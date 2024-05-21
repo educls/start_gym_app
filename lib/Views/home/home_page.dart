@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
   List<Widget> bottomBarPagesProfessor = const [
     TreinosProfessorPage(),
     AgendaTreinosProfessorPage(),
-    // PerfilProfessorPage(),
+    AlunosAdminPage(),
   ];
   List<Widget> bottomBarPagesAluno = const [
     TreinosAlunoPage(),
@@ -94,11 +94,12 @@ class _HomePageState extends State<HomePage> {
     initProvider();
     setLoading(true);
     await Future.delayed(const Duration(milliseconds: 1000));
+    print(value!.token);
     response = await getInformationsUser(value!.token);
 
     modelUserInfos = modelUserInfosFromMap(response.body);
 
-    if (isBase64(modelUserInfos.photo)) {
+    if (isBase64(modelUserInfos.photo) && modelUserInfos.photo != '') {
       bytes = base64Decode(modelUserInfos.photo);
       image = Image.memory(bytes);
     } else {

@@ -38,10 +38,10 @@ class NavBarItemsCustom {
             icon: Icon(Icons.schedule),
             label: 'Agenda',
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.person),
-          //   label: 'Perfil',
-          // ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Alunos',
+          ),
         ];
       case NavBarType.aluno:
         return const [
