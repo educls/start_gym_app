@@ -172,7 +172,7 @@ class _AlunosAdminPageState extends State<AlunosAdminPage> {
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, '/sign-up-new-Aluno');
+          Navigator.pushNamed(context, '/sign-up-new-aluno');
         },
         child: const Icon(Icons.add),
       ),

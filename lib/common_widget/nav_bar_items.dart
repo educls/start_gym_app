@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../Views/home/home_page.dart';
+import '../utils/enums/user_roles.dart';
 
 class NavBarItemsCustom {
   final NavBarType type;

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:start_gym_app/common/color_extension.dart';
 import 'package:start_gym_app/utils/constants/path_contants.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NavBar extends StatelessWidget {
   const NavBar({super.key});

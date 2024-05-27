@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
@@ -6,9 +5,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:start_gym_app/functions/sign_up/pick_img_perfil.dart';
+import 'package:start_gym_app/functions/sign_up/image_helper.dart';
 import 'package:start_gym_app/functions/sign_up/sign_up_functions.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -139,7 +137,7 @@ class _SignUpPageState extends State<SignUpPage> {
               children: [
                 TextButton(
                     onPressed: () {
-                      PickImgFunction(
+                      ImageHelper(
                         context: context,
                         setImgFile: setImgFile,
                         setBase64Image: setBase64Image,
@@ -154,7 +152,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     )),
                 TextButton(
                   onPressed: () {
-                    PickImgFunction(
+                    ImageHelper(
                       context: context,
                       setImgFile: setImgFile,
                       setBase64Image: setBase64Image,

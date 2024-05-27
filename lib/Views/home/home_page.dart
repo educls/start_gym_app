@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -10,7 +9,10 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../controllers/users/users_controller.dart';
 import '../../models/users/ModelUserInfos.dart';
+import '../../utils/enums/user_roles.dart';
 import '../../utils/provider/data_provider.dart';
+import '../../widgets/appbar/custom_appbar.dart';
+import '../../widgets/custom_loading.dart';
 import 'admin/agenda_treinos_admin_page.dart';
 import 'admin/alunos_admin_page.dart';
 import 'admin/professores_admin_page.dart';
@@ -25,7 +27,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-enum NavBarType { admin, professor, aluno }
+
 
 class _HomePageState extends State<HomePage> {
   DataAppProvider? value;
@@ -56,6 +58,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    getInfoUser();
   }
 
   void setLoading(bool isLoading) {
@@ -69,7 +72,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   String _accountType = '';
-  void setUser(String accountType) {
+  void setUserType(String accountType) {
     setState(() {
       _accountType = accountType;
     });
@@ -91,12 +94,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   void getInfoUser() async {
-    initProvider();
     setLoading(true);
     await Future.delayed(const Duration(milliseconds: 1000));
-    print(value!.token);
-    response = await getInformationsUser(value!.token);
 
+    response = await getInformationsUser(Provider.of<DataAppProvider>(context, listen: false).token);
     modelUserInfos = modelUserInfosFromMap(response.body);
 
     if (isBase64(modelUserInfos.photo) && modelUserInfos.photo != '') {
@@ -106,92 +107,55 @@ class _HomePageState extends State<HomePage> {
       image = Image.asset('assets/img/profile_tab.png');
     }
 
-    setUser(modelUserInfos.mensagem.accounttype);
+    setUserType(modelUserInfos.mensagem.accounttype);
     setLoading(false);
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading ||
-        value == null ||
-        modelUserInfos.mensagem.accounttype == '') {
-      getInfoUser();
-      return Scaffold(
-        body: Center(
-          child: LoadingAnimationWidget.dotsTriangle(
-            color: Colors.black,
-            size: 30,
-          ),
-        ),
-      );
-    } else {
-      return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: true,
-          title: Text(
-            "Olá ${modelUserInfos.mensagem.name}",
-            textAlign: TextAlign.end,
-          ),
-          titleSpacing: 0,
-          actions: [
-            GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, '/edit-user-perfil');
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(right: 10, top: 1),
-                child: CircleAvatar(
-                  backgroundImage: image.image,
-                  radius: 35,
-                ),
+    return Scaffold(
+      body: _isLoading
+          ? Center(
+              child: LoadingAnimationWidget.dotsTriangle(
+                color: Colors.black,
+                size: 30,
               ),
             )
-          ],
-        ),
-        body: _isLoading
-            ? Center(
-                child: LoadingAnimationWidget.dotsTriangle(
-                  color: Colors.white,
-                  size: 30,
-                ),
-              )
-            : Center(
-                child: modelUserInfos.mensagem.accounttype == 'admin'
-                    ? bottomBarPagesAdmin[_currentIndex]
-                    : modelUserInfos.mensagem.accounttype == 'professor'
-                        ? bottomBarPagesProfessor[_currentIndex]
-                        : bottomBarPagesAluno[_currentIndex],
-              ),
-        bottomNavigationBar: NavBarCustom(
-          type: _accountType == 'admin'
-              ? NavBarType.admin
-              : _accountType == 'professor'
-                  ? NavBarType.professor
-                  : NavBarType.aluno,
-          itemsBar: _accountType == 'admin'
-              ? bottomBarPagesAdmin
-              : _accountType == 'professor'
-                  ? bottomBarPagesProfessor
-                  : bottomBarPagesAluno,
-          currentIndex: _currentIndex,
-          setCurrentIndexNavBar: setCurrentIndexNavBar,
-        ),
-      );
-    }
+          : buildHomePage(),
+    );
   }
 
-  Future<Uint8List> imageToBytes(String imagePath) async {
-    // Carrega a imagem como um arquivo
-    File imageFile = File(imagePath);
-
-    // Verifica se o arquivo de imagem existe
-    // Lê o conteúdo do arquivo como bytes
-    List<int> bytes = await imageFile.readAsBytes();
-
-    // Converte a lista de inteiros em Uint8List
-    Uint8List uint8list = Uint8List.fromList(bytes);
-
-    // Retorna os bytes da imagem
-    return uint8list;
+  Widget buildHomePage() {
+    return Scaffold(
+      appBar: CustomAppBar(
+        userName: modelUserInfos.mensagem.name,
+        userImage: image,
+        type: NavBarType.aluno,
+        editRoute: '/edit-aluno-perfil',
+      ),
+      body: _isLoading
+          ? const CustomLoading(color: Color.fromARGB(255, 0, 0, 0),)
+          : Center(
+              child: modelUserInfos.mensagem.accounttype == 'admin'
+                  ? bottomBarPagesAdmin[_currentIndex]
+                  : modelUserInfos.mensagem.accounttype == 'professor'
+                      ? bottomBarPagesProfessor[_currentIndex]
+                      : bottomBarPagesAluno[_currentIndex],
+            ),
+      bottomNavigationBar: NavBarCustom(
+        type: _accountType == 'admin'
+            ? NavBarType.admin
+            : _accountType == 'professor'
+                ? NavBarType.professor
+                : NavBarType.aluno,
+        itemsBar: _accountType == 'admin'
+            ? bottomBarPagesAdmin
+            : _accountType == 'professor'
+                ? bottomBarPagesProfessor
+                : bottomBarPagesAluno,
+        currentIndex: _currentIndex,
+        setCurrentIndexNavBar: setCurrentIndexNavBar,
+      ),
+    );
   }
 }

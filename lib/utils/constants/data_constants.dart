@@ -2,7 +2,6 @@ import "package:start_gym_app/utils/constants/path_contants.dart";
 import "package:start_gym_app/utils/constants/text_constants.dart";
 import 'package:start_gym_app/data/exercise_data.dart';
 import 'package:start_gym_app/data/workout_data.dart';
-import 'package:start_gym_app/Views/onboarding/widget/onboarding_tile.dart';
 
 class DataConstants {
 // Workouts

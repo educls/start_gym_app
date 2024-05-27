@@ -12,19 +12,18 @@ class ResetPasswordFunctions {
   final Function setEmailSend;
   final Function setLoading;
 
-  const ResetPasswordFunctions(
-      {required this.context,
-      required this.emailController,
-      required this.startTimerForResetPassword,
-      required this.setEmailSend,
-      required this.setLoading});
+  const ResetPasswordFunctions({
+    required this.context,
+    required this.emailController,
+    required this.startTimerForResetPassword,
+    required this.setEmailSend,
+    required this.setLoading,
+  });
 
-  Future<void> onPressedForSendEmailResetPasswordButton(
-      BuildContext context) async {
+  Future<void> onPressedForSendEmailResetPasswordButton() async {
     // Envia a requisicao do Envio de email para a API e armazena a resposta
     //a ser tratata pelo app
-    http.Response response =
-        await userSendEmailForResetPassword(emailController.text);
+    http.Response response = await userSendEmailForResetPassword(emailController.text);
 
     if (response.statusCode == 200) {
       startTimerForResetPassword();

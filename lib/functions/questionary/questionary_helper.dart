@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:quickalert/quickalert.dart';
-import 'package:start_gym_app/Views/questions/questions_page.dart';
 import 'package:start_gym_app/utils/provider/data_provider.dart';
 
 import '../../controllers/users/users_controller.dart';
+import '../../utils/enums/questionary_roles.dart';
 
 class SendImageListMinhaEvolucaoHelper {
   final BuildContext context;

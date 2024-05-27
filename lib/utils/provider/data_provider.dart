@@ -1,19 +1,46 @@
 import 'package:flutter/foundation.dart';
 
+import '../../models/users/ModelUserInfos.dart';
+
 class DataAppProvider with ChangeNotifier, DiagnosticableTreeMixin {
   String _token = 'token';
-  String _email = 'teste@';
+  late ModelUserInfos _userInfos;
 
   String get token => _token;
-  String get email => _email;
+  ModelUserInfos get userInfos => _userInfos;
+
+  void setUserInfos(userInfos) {
+    _userInfos = userInfos;
+    notifyListeners();
+  }
 
   void setToken(token) {
     _token = token;
     notifyListeners();
   }
 
+  void setName(name) {
+    userInfos.mensagem.name = name;
+    notifyListeners();
+  }
+
+  void setPhoto(photobase64) {
+    userInfos.photo = photobase64;
+    notifyListeners();
+  }
+
+  void setNumWhats(numWhats) {
+    userInfos.mensagem.numberwhats = numWhats;
+    notifyListeners();
+  }
+
   void setEmail(email) {
-    _email = email;
+    userInfos.mensagem.email = email;
+    notifyListeners();
+  }
+  
+  void setPassword(password) {
+    userInfos.mensagem.password = password;
     notifyListeners();
   }
 

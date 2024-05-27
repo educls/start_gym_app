@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:start_gym_app/common_widget/nav_bar_items.dart';
 
-import '../Views/home/home_page.dart';
+import '../utils/enums/user_roles.dart';
 
 class NavBarCustom extends StatelessWidget {
   final NavBarType type;

@@ -1,12 +1,9 @@
 import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:start_gym_app/Views/questions/questions_page.dart';
 
 import '../../../functions/date_formatter.dart';
 import '../../../utils/constants/questions_constants.dart';
+import '../../../utils/enums/questionary_roles.dart';
 
 class SeeResponseQuestionaryPage extends StatefulWidget {
   final TypeQuestionary type;

@@ -6,6 +6,8 @@ import 'package:quickalert/quickalert.dart';
 
 import '../../common/color_extension.dart';
 import '../../controllers/users/users_controller.dart';
+import '../../helpers/remember_credentials_login.dart';
+import '../../models/users/ModelUserInfos.dart';
 import '../../utils/provider/data_provider.dart';
 
 class LoginFunctions {
@@ -17,7 +19,6 @@ class LoginFunctions {
   final int attempts;
   final Function startTimer;
   final Function setAttempts;
-  final Function saveCredentialsAndPreferences;
 
   const LoginFunctions({
     required this.context,
@@ -28,11 +29,10 @@ class LoginFunctions {
     required this.attempts,
     required this.startTimer,
     required this.setAttempts,
-    required this.saveCredentialsAndPreferences,
   });
 
   Future<void> onPressedForLoginButton(BuildContext context) async {
-    final value = Provider.of<DataAppProvider>(context, listen: false);
+    final provider = Provider.of<DataAppProvider>(context, listen: false);
 
     // Envia a requisicao de LOGIN para a API e armazena a resposta a ser
     // tratata pelo app
@@ -73,9 +73,7 @@ class LoginFunctions {
         QuickAlert.show(
           context: context,
           type: QuickAlertType.warning,
-          text: body['tentativas'] >= 3
-              ? '${body['mensagem']}\n${5 - body['tentativas']} tentativas até o bloqueio temporário'
-              : '${body['mensagem']}',
+          text: body['tentativas'] >= 3 ? '${body['mensagem']}\n${5 - body['tentativas']} tentativas até o bloqueio temporário' : '${body['mensagem']}',
           confirmBtnText: 'Ok',
           title: 'Aviso',
           confirmBtnColor: TColor.darkYellow,
@@ -83,15 +81,31 @@ class LoginFunctions {
       }
     } else {
       if (rememberUser) {
-        saveCredentialsAndPreferences();
+        RememberCredentials().saveCredentialsAndPreferences(
+          emailController.text,
+          passwordController.text,
+          rememberUser,
+        );
       }
       await Future.delayed(const Duration(milliseconds: 300));
       setAttempts(0);
       var body = json.decode(response.body);
-      value.setToken(body["token"]);
+      provider.setToken(body["token"]);
+      response = await getInformationsUser(body["token"]);
+      provider.setUserInfos(modelUserInfosFromMap(response.body));
+      String type = provider.userInfos.mensagem.accounttype;
+      print(type);
       setLoading(false);
-      // ignore: use_build_context_synchronously
-      Navigator.pushNamed(context, '/home');
+
+      if (type == 'admin') {
+        Navigator.pushNamed(context, '/home_admin');
+      }
+      if (type == 'professor') {
+        Navigator.pushNamed(context, '/home_professor');
+      }
+      if (type == 'aluno') {
+        Navigator.pushNamed(context, '/home_aluno');
+      }
     }
   }
 }

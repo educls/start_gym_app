@@ -1,568 +1,86 @@
-import 'dart:convert';
-import 'dart:ffi';
-import 'dart:isolate';
-import 'dart:typed_data';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+// import 'package:start_gym_app/widgets/custom_editable_field_name.dart';
+// import 'package:start_gym_app/widgets/custom_img_picker.dart';
+// import '../../utils/enums/edit_user_types.dart';
+// import '../../utils/enums/questionary_roles.dart';
+// import '../../widgets/custom_back_button.dart';
+// import '../../widgets/custom_editable_field.dart';
+// import '../../widgets/custom_loading.dart';
+// import '../../widgets/custom_options_questionary.dart';
 
-import 'package:brasil_fields/brasil_fields.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_pw_validator/flutter_pw_validator.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:provider/provider.dart';
-import 'package:quickalert/quickalert.dart';
-import 'package:start_gym_app/Views/questions/questions_page.dart';
-import 'package:start_gym_app/models/users/ModelEditUser.dart';
+// class EditInfoUserPage extends StatefulWidget {
+//   const EditInfoUserPage({super.key});
 
-import '../../common/color_extension.dart';
-import '../../common_widget/round_button.dart';
-import '../../common_widget/round_textfield.dart';
-import '../../controllers/users/users_controller.dart';
-import '../../functions/sign_up/pick_img_perfil.dart';
-import '../../models/users/ModelUserInfos.dart';
-
-import '../../utils/provider/data_provider.dart';
-
-enum TypeEditUser {
-  name,
-  photo,
-  numWhats,
-  email,
-  password,
-}
-
-class EditInfoUserPage extends StatefulWidget {
-  const EditInfoUserPage({super.key});
-
-  @override
-  State<EditInfoUserPage> createState() => _EditInfoUserPageState();
-}
-
-class _EditInfoUserPageState extends State<EditInfoUserPage> {
-  TextEditingController txtName = TextEditingController();
-  TextEditingController txtEmail = TextEditingController();
-  TextEditingController txtPhone = TextEditingController();
-  TextEditingController txtPassword = TextEditingController();
-
-  late String dataForFetch;
-
-  bool isEditingName = false;
-  void setEditingName(bool isEditing) {
-    setState(() {
-      isEditingName = isEditing;
-    });
-    if (!isEditingName) {
-      editUserInfo(txtName.text, TypeEditUser.name);
-    }
-  }
-
-  void setBase64Image(String base64Img) {
-    setState(() {
-      base64Image = base64Img;
-      bytes = base64Decode(base64Image);
-      image = Image.memory(bytes);
-    });
-    editUserInfo(base64Image, TypeEditUser.photo);
-  }
-
-  bool isEditingPhone = false;
-  void setEditingPhone(bool isEditing) {
-    setState(() {
-      isEditingPhone = isEditing;
-    });
-    if (!isEditingPhone) {
-      editUserInfo(txtPhone.text, TypeEditUser.numWhats);
-    }
-  }
-
-  bool isEditingEmail = false;
-  void setEditingEmail(bool isEditing) {
-    setState(() {
-      isEditingEmail = isEditing;
-    });
-    if (!isEditingEmail) {
-      editUserInfo(txtEmail.text, TypeEditUser.email);
-    }
-  }
-
-  bool isEditingPassoword = false;
-  void setEditingPassword(bool isEditing) {
-    setState(() {
-      isEditingPassoword = isEditing;
-    });
-    if (!isEditingPassoword) {
-      editUserInfo(txtPassword.text, TypeEditUser.password);
-    }
-  }
-
-  void editUserInfo(String data, TypeEditUser type) {
-    switch (type) {
-      case TypeEditUser.name:
-        dataForFetch = modelEditUserToJson(ModelEditUser(name: data));
-        break;
-      case TypeEditUser.photo:
-        dataForFetch = modelEditUserToJson(ModelEditUser(photo: data));
-        break;
-      case TypeEditUser.numWhats:
-        dataForFetch = modelEditUserToJson(ModelEditUser(numWhats: data));
-        break;
-      case TypeEditUser.email:
-        dataForFetch = modelEditUserToJson(ModelEditUser(email: data));
-        break;
-      case TypeEditUser.password:
-        dataForFetch = modelEditUserToJson(ModelEditUser(password: data));
-        break;
-      default:
-    }
-
-    editUserEachInput(dataForFetch, value!.token);
-    print(dataForFetch);
-  }
-
-  String base64Image = '';
-  XFile? _imageFile;
-  late Image image = Image.asset('assets/img/profile_tab.png');
-
-  late http.Response response;
-
-  Map<String, dynamic> userInfos = {};
-  late ModelUserInfos modelUserInfos;
-
-  final GlobalKey<FormState> _formkeysignup = GlobalKey<FormState>();
-
-  DataAppProvider? value;
-  late Uint8List bytes = Uint8List(0);
-
-  bool _isLoading = false;
-  void setLoading(bool isLoading) {
-    setState(() {
-      _isLoading = isLoading;
-    });
-  }
-
-  bool isCheck = false;
-  bool showPassword = false;
-  void togglePasswordVisibility() {
-    setState(() {
-      showPassword = !showPassword;
-    });
-  }
-
-  void initProvider() {
-    value = context.watch<DataAppProvider>();
-  }
-
-  void setUser(ModelUserInfos _modelUserInfos) {
-    setState(() {
-      txtName.text = _modelUserInfos.mensagem.name;
-      if (_modelUserInfos.mensagem.numberwhats == null) {
-        txtPhone.text = '(xx) xxxxx-xxxx';
-      }
-      if (_modelUserInfos.mensagem.numberwhats != null) {
-        txtPhone.text = _modelUserInfos.mensagem.numberwhats;
-      }
-      txtEmail.text = _modelUserInfos.mensagem.email;
-      txtPassword.text = _modelUserInfos.mensagem.password;
-    });
-  }
-
-  void setImgFile(XFile? imgFile) {
-    setState(() {
-      _imageFile = imgFile;
-    });
-  }
-
-  void setPassword(String txtPass) {
-    setState(() {
-      txtPassword.text = txtPass;
-    });
-  }
-
-  void getInfoUser() async {
-    initProvider();
-    setLoading(true);
-    await Future.delayed(const Duration(milliseconds: 500));
-    response = await getInformationsUser(value!.token);
-
-    modelUserInfos = modelUserInfosFromMap(response.body);
-
-    if (isBase64(modelUserInfos.photo) && modelUserInfos.photo != '') {
-      bytes = base64Decode(modelUserInfos.photo);
-      image = Image.memory(bytes);
-    }
-
-    setUser(modelUserInfos);
-    setLoading(false);
-  }
-
-  bool isBase64(String value) {
-    try {
-      base64Decode(value);
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (txtEmail.text.isEmpty) {
-      getInfoUser();
-    }
-    return Scaffold(
-      body: Stack(
-        children: [
-          _isLoading
-              ? Center(
-                  child: LoadingAnimationWidget.dotsTriangle(
-                    color: Colors.black,
-                    size: 50,
-                  ),
-                )
-              : buildFormEditUser(bytes),
-        ],
-      ),
-    );
-  }
-
-  void showChoiceForPhotoPerfil() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Center(
-            child: Text(
-              'Escolha uma opção',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-          ),
-          actions: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                    onPressed: () {
-                      PickImgFunction(
-                        context: context,
-                        setImgFile: setImgFile,
-                        setBase64Image: setBase64Image,
-                      ).pickImage(ImageSource.gallery);
-                      Navigator.of(context).pop();
-                      Clipboard.setData(ClipboardData(text: base64Image));
-                    },
-                    child: Icon(
-                      Icons.photo_library,
-                      size: 60,
-                      color: Colors.grey[600],
-                    )),
-                TextButton(
-                  onPressed: () {
-                    PickImgFunction(
-                      context: context,
-                      setImgFile: setImgFile,
-                      setBase64Image: setBase64Image,
-                    ).pickImage(ImageSource.camera);
-                    Navigator.of(context).pop();
-                    Clipboard.setData(ClipboardData(text: base64Image));
-                  },
-                  child: Icon(
-                    Icons.camera_alt,
-                    size: 60,
-                    color: Colors.grey[600],
-                  ),
-                ),
-              ],
-            )
-          ],
-        );
-      },
-    );
-  }
-
-  Widget buildFormEditUser(bytes) {
-    var media = MediaQuery.of(context).size;
-    return SingleChildScrollView(
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Form(
-            key: _formkeysignup,
-            child: Column(
-              children: AnimationConfiguration.toStaggeredList(
-                duration: const Duration(milliseconds: 350),
-                childAnimationBuilder: (widget) => SlideAnimation(
-                  horizontalOffset: 80.0,
-                  child: FadeInAnimation(
-                    child: widget,
-                  ),
-                ),
-                children: [
-                  const SizedBox(height: 5),
-                  TextField(
-                    style: TextStyle(
-                      color: TColor.lighBlue,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                    controller: txtName,
-                    decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                        icon: Icon(isEditingName ? Icons.check : Icons.edit,
-                            color: Colors.grey),
-                        onPressed: () {
-                          setEditingName(!isEditingName);
-                        },
-                      ),
-                      border: InputBorder.none,
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                    ),
-                    readOnly: !isEditingName,
-                  ),
-                  const SizedBox(height: 5),
-                  Center(
-                    child: GestureDetector(
-                      onTap: () {
-                        showChoiceForPhotoPerfil();
-                      },
-                      child: Container(
-                        width: 140,
-                        height: 140,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.grey[300],
-                        ),
-                        child: Stack(
-                          children: [
-                            Container(
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(80),
-                                child: CircleAvatar(
-                                  backgroundImage: image.image,
-                                  minRadius: 0,
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: Container(
-                                height: 45,
-                                width: 45,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      offset: const Offset(0.0, 1),
-                                      spreadRadius: 2,
-                                      blurRadius: 2,
-                                      color: Colors.black.withOpacity(
-                                        0.2,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                child: const Center(
-                                  child: ImageIcon(
-                                    AssetImage('assets/img/camera_tab.png'),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  buildEditableField('Telefone', txtPhone, false,
-                      isEditingPhone, setEditingPhone, TypeEditUser.numWhats),
-                  buildEditableField('Email', txtEmail, false, isEditingEmail,
-                      setEditingEmail, TypeEditUser.email),
-                  buildEditableField(
-                      'Senha',
-                      txtPassword,
-                      true,
-                      isEditingPassoword,
-                      setEditingPassword,
-                      TypeEditUser.password),
-                  const SizedBox(height: 5),
-                  buildOption(
-                      'Avaliação física', TypeQuestionary.avaliacao_fisica),
-                  buildOption('Histórico de atividades',
-                      TypeQuestionary.historico_atividades),
-                  buildOption('Histórico de doenças',
-                      TypeQuestionary.historico_doencas),
-                  buildOption('Minha evolução', TypeQuestionary.minha_evolucao),
-                  const SizedBox(height: 10),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: TextButton.icon(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      icon: Icon(Icons.arrow_back, color: Colors.blue[900]),
-                      label: Text(
-                        'Voltar',
-                        style: TextStyle(color: Colors.blue[900]),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget buildEditableField(
-      String label,
-      TextEditingController controller,
-      bool isPassword,
-      bool isEditing,
-      Function setEditingState,
-      TypeEditUser? type) {
-    return StatefulBuilder(
-      builder: (context, setState) {
-        return Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      label,
-                      style: TextStyle(
-                        color: TColor.lighBlue,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 226, 226, 226),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: TextField(
-                  inputFormatters: type == TypeEditUser.numWhats
-                      ? [
-                          FilteringTextInputFormatter.digitsOnly,
-                          TelefoneInputFormatter(),
-                        ]
-                      : [],
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: isEditing ? Colors.black : Colors.black38),
-                  controller: controller,
-                  decoration: InputDecoration(
-                    suffixIcon: IconButton(
-                      icon: Icon(isEditing ? Icons.check : Icons.edit,
-                          color: Colors.grey),
-                      onPressed: () {
-                        setEditingState(!isEditing);
-                      },
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                  ),
-                  obscureText: isPassword ? !isEditing : isPassword,
-                  readOnly: !isEditing,
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget buildOption(String text, TypeQuestionary enumType) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: TextButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => QuestionarioWidget(type: enumType),
-            ),
-          );
-        },
-        child: Text(
-          text,
-          style: TextStyle(
-            color: TColor.lighBlue,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// setLoading(true);
-// await Future.delayed(const Duration(milliseconds: 200));
-// http.Response response = await editUser(
-//     base64Image,
-//     txtName.text,
-//     txtNumero.text,
-//     txtEmail.text,
-//     txtPassword.text,
-//     value!.token);
-
-// if (response.statusCode == 201) {
-//   QuickAlert.show(
-//     context: context,
-//     type: QuickAlertType.success,
-//     title: 'Sucesso',
-//     text: 'Usuario Atualizado',
-//     disableBackBtn: true,
-//     barrierDismissible: false,
-//     confirmBtnText: 'Ok',
-//     onConfirmBtnTap: () {
-//       setLoading(false);
-//       Navigator.pop(context);
-//       Navigator.pop(context);
-//     },
-//   );
-// } else {
-//   QuickAlert.show(
-//     context: context,
-//     type: QuickAlertType.warning,
-//     text: 'Usuario não atualizado',
-//     confirmBtnText: 'Ok',
-//     title: 'Aviso',
-//     confirmBtnColor: TColor.primaryColor1,
-//     onConfirmBtnTap: () {
-//       setLoading(false);
-//       Navigator.pop(context);
-//     },
-//   );
+//   @override
+//   State<EditInfoUserPage> createState() => _EditInfoUserPageState();
 // }
 
-// setLoading(false);
+// class _EditInfoUserPageState extends State<EditInfoUserPage> {
+//   bool _isLoading = false;
+//   void setLoading(bool isLoading) {
+//     setState(() {
+//       _isLoading = isLoading;
+//     });
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Stack(
+//         children: [
+//           _isLoading ? const CustomLoading() : buildFormEditUser(),
+//         ],
+//       ),
+//     );
+//   }
+
+//   Widget buildFormEditUser() {
+//     var media = MediaQuery.of(context).size;
+//     return SingleChildScrollView(
+//       child: Padding(
+//         padding: const EdgeInsets.symmetric(horizontal: 20),
+//         child: Column(
+//           children: AnimationConfiguration.toStaggeredList(
+//             duration: const Duration(milliseconds: 350),
+//             childAnimationBuilder: (widget) => SlideAnimation(
+//               child: FadeInAnimation(
+//                 child: widget,
+//               ),
+//             ),
+//             children: [
+//               SizedBox(height: media.height * 0.03),
+//               const CustomBackButton(),
+//               CustomEditableFieldName(
+//                 type: TypeEditUser.name,
+//               ),
+//               const SizedBox(height: 5),
+//               const CustomImgPickerAvatar(),
+//               const SizedBox(height: 10),
+//               const CustomEditableField(
+//                 label: 'Telefone',
+//                 isPassword: false,
+//                 type: TypeEditUser.numWhats,
+//               ),
+//               const CustomEditableField(
+//                 label: 'Email',
+//                 isPassword: false,
+//                 type: TypeEditUser.email,
+//               ),
+//               const CustomEditableField(
+//                 label: 'Senha',
+//                 isPassword: true,
+//                 type: TypeEditUser.password,
+//               ),
+//               const SizedBox(height: 5),
+//               const OptionsQuestionary(text: 'Avaliação física', type: TypeQuestionary.avaliacao_fisica),
+//               const OptionsQuestionary(text: 'Histórico de atividades', type: TypeQuestionary.historico_atividades),
+//               const OptionsQuestionary(text: 'Histórico de doenças', type: TypeQuestionary.historico_doencas),
+//               const OptionsQuestionary(text: 'Minha evolução', type: TypeQuestionary.minha_evolucao),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
