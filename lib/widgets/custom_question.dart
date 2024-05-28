@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quickalert/quickalert.dart';
 
 import '../common_widget/round_button.dart';
 import '../utils/constants/questions_constants.dart';
@@ -80,13 +81,11 @@ class Pergunta extends StatelessWidget {
                 width: 130,
                 title: 'Próxima',
                 onPressed: () async {
-                  if (isChoiceList) {
-                    // Pegar escolhas selecionadas
-                    // List<Choice> selectedChoices = (currentQuestionValue).where((choice) => choice.isSelected).toList();
-                    nextQuestion();
-                  } else {
-                    onRespostaSelecionada(resposta.text);
+                  if (!isChoiceList) {
+                    textControllerValidation(context);
+                    return;
                   }
+                  choiceListValidation(context, currentQuestionValue);
                 },
               ),
             ],
@@ -94,5 +93,23 @@ class Pergunta extends StatelessWidget {
         )
       ],
     );
+  }
+
+  textControllerValidation(BuildContext context) {
+    if (resposta.text.isEmpty) {
+      QuickAlert.show(context: context, type: QuickAlertType.warning, title: "Campo Vazio", confirmBtnText: "Ok");
+      return;
+    }
+    onRespostaSelecionada(resposta.text);
+  }
+
+  choiceListValidation(BuildContext context, List<Choice> currentQuestionValue) {
+    // Pegar escolhas selecionadas
+    List<Choice> selectedChoices = (currentQuestionValue).where((choice) => choice.isSelected).toList();
+    if (selectedChoices.isEmpty) {
+      QuickAlert.show(context: context, type: QuickAlertType.warning, title: "Campo Vazio", confirmBtnText: "Ok");
+      return;
+    }
+    nextQuestion();
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../utils/constants/tittle_questionary.dart';
 import '../../utils/enums/questionary_roles.dart';
 import '../../widgets/forms/custom_form_my_evolution.dart';
 import '../../widgets/forms/custom_form_questionary.dart';
@@ -27,7 +28,8 @@ class _QuestionaryPageState extends State<QuestionaryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.type.name),
+        centerTitle: true,
+        title: Text(TittleQuestionary.getTittleQuestionary(widget.type)),
       ),
       body: Stack(
         children: [

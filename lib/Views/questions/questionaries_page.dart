@@ -12,8 +12,10 @@ import 'package:start_gym_app/models/users/ModelGetQuestionaryMinhaEvolucao.dart
 import 'package:start_gym_app/widgets/custom_loading.dart';
 
 import '../../models/users/ModelGetQuestionaryAvalFisica.dart';
+import '../../utils/constants/tittle_questionary.dart';
 import '../../utils/enums/questionary_roles.dart';
 import '../../utils/provider/data_provider.dart';
+import '../../widgets/appbar/custom_appbar_edit_user.dart';
 
 class QuestionariesWidget extends StatefulWidget {
   final TypeQuestionary type;
@@ -94,13 +96,11 @@ class _QuestionariesWidgetState extends State<QuestionariesWidget> {
       getQuestionaryInfos();
     }
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        title: Text(type.name),
-      ),
       body: Column(
         children: [
+          CustomAppBarEditUser(
+            title: TittleQuestionary.getTittleQuestionary(type),
+          ),
           Align(
             alignment: Alignment.centerLeft,
             child: TextButton.icon(
@@ -118,7 +118,10 @@ class _QuestionariesWidgetState extends State<QuestionariesWidget> {
             child: Stack(
               children: [
                 _isLoading
-                    ? const Center(child: CustomLoading(color: Color.fromARGB(255, 0, 0, 0),))
+                    ? const Center(
+                        child: CustomLoading(
+                        color: Color.fromARGB(255, 0, 0, 0),
+                      ))
                     : firstTime == false
                         ? buildListViewsQuestionary()
                         : QuestionaryPage(type: type),

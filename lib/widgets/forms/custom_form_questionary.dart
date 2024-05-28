@@ -76,13 +76,7 @@ class _CustomFormQuestionaryState extends State<CustomFormQuestionary> with Ques
                 nextQuestion: nextQuestion,
                 previousQuestion: previousQuestion,
               )
-            : const Text(
-                'Questionário concluído!',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+            : const Center()
       ],
     );
   }

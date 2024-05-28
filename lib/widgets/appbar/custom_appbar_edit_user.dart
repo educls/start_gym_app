@@ -4,11 +4,11 @@ import '../../utils/constants/color_constants.dart';
 
 class CustomAppBarEditUser extends StatelessWidget {
   final String title;
-  final String pathLogo;
+  final String? pathLogo;
   const CustomAppBarEditUser({
     super.key,
     required this.title,
-    required this.pathLogo,
+    this.pathLogo,
   });
 
   @override
@@ -30,8 +30,9 @@ class CustomAppBarEditUser extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
+              if(pathLogo == '')
               ImageIcon(
-                AssetImage(pathLogo),
+                AssetImage(pathLogo!),
                 color: const Color.fromRGBO(242, 187, 19, 5),
                 size: 60,
               ),
