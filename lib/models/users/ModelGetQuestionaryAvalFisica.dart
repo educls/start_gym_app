@@ -19,7 +19,7 @@ String modelGetQuestionaryInfosToMap(
 
 class ModelGetQuestionaryAvaliacaoFisica {
   int? idAvaliacao;
-  int? idUsuario;
+  String? idUsuario;
   String? objetivos;
   String? peso;
   String? altura;

@@ -20,7 +20,7 @@ class DataAppProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   void setName(name) {
-    userInfos.mensagem.name = name;
+    userInfos.name = name;
     notifyListeners();
   }
 
@@ -30,17 +30,17 @@ class DataAppProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   void setNumWhats(numWhats) {
-    userInfos.mensagem.numberwhats = numWhats;
+    userInfos.numberwhats = numWhats;
     notifyListeners();
   }
 
   void setEmail(email) {
-    userInfos.mensagem.email = email;
+    userInfos.email = email;
     notifyListeners();
   }
   
   void setPassword(password) {
-    userInfos.mensagem.password = password;
+    userInfos.password = password;
     notifyListeners();
   }
 

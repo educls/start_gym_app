@@ -90,10 +90,13 @@ class LoginFunctions {
       await Future.delayed(const Duration(milliseconds: 300));
       setAttempts(0);
       var body = json.decode(response.body);
+      print(body);
       provider.setToken(body["token"]);
       response = await getInformationsUser(body["token"]);
-      provider.setUserInfos(modelUserInfosFromMap(response.body));
-      String type = provider.userInfos.mensagem.accounttype;
+      var bodyUserInfos = json.decode(response.body);
+      provider.setUserInfos(modelUserInfosFromMap(json.encode(bodyUserInfos["userInfos"])));
+      print(body['userInfos']);
+      String type = provider.userInfos.accounttype;
       print(type);
       setLoading(false);
 

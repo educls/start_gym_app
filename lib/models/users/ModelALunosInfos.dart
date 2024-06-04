@@ -14,7 +14,7 @@ String modelAlunosInfosToMap(ModelAlunosInfos data) =>
     json.encode(data.toMap());
 
 class ModelAlunosInfos {
-  int? id;
+  String? id;
   String? name;
   String? numberwhats;
   String? email;

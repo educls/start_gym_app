@@ -119,7 +119,7 @@ class _ProfessoresAdminPageState extends State<ProfessoresAdminPage> {
                           ),
                         ),
                         title: Text(infoTeacher.name),
-                        trailing: Text(infoTeacher.numberwhats),
+                        trailing: infoTeacher.numberwhats != null ? Text(infoTeacher.numberwhats!) : const Text('(xx) xxxxx-xxxx'),
                         onTap: () {
                           showDialog(
                             context: context,

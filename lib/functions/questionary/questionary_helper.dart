@@ -57,7 +57,7 @@ class QuestionaryHelper {
 
   Future<void> onPressedForSendQuestionary() async {
     setLoading(true);
-    await Future.delayed(const Duration(milliseconds: 1000));
+    await Future.delayed(const Duration(milliseconds: 100));
     sendQuestionaryToApi(value.token, questionsMap, type);
     QuickAlert.show(
       context: context,

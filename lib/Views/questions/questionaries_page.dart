@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:http/http.dart' as http;
@@ -76,7 +78,7 @@ class _QuestionariesWidgetState extends State<QuestionariesWidget> {
           break;
       }
     });
-    if (questionsResp != null) {
+    if (questionsResp != null && questionsResp.isNotEmpty) {
       firstTime = false;
     }
   }

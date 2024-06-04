@@ -3,16 +3,22 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:start_gym_app/models/users/ModelUserInfos.dart';
 
 import '../controllers/users/users_controller.dart';
 import '../functions/sign_up/image_helper.dart';
+import '../helpers/is_base64_helper.dart';
 import '../models/users/ModelEditUser.dart';
+import '../utils/constants/path_contants.dart';
 import '../utils/provider/data_provider.dart';
 import '../widgets/custom_alert.dart';
 
 mixin ImagePickerStateHelper<T extends StatefulWidget> on State<T> {
   
-  late Image image = Image.memory(base64Decode(Provider.of<DataAppProvider>(context, listen: false).userInfos.photo));
+  late ModelUserInfos userInfos = Provider.of<DataAppProvider>(context, listen: false).userInfos;
+  late Image image = userInfos.photo != null && IsBase64(base64: userInfos.photo!).verify()
+              ? Image.memory(base64Decode(userInfos.photo!))
+              : Image.asset(PathConstants.photoDefault);
   List<String?> base64Images = List.filled(3, null);
 
   void setBase64Image(String base64Img) {

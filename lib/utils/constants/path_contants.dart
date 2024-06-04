@@ -34,4 +34,7 @@ class PathConstants {
 
   // Background Login IMG
   static const String bgLoginImg = 'assets/images/bg.png';
+
+  // Icon User PhotoEmpty
+  static const String photoDefault = 'assets/img/profile_tab.png';
 }

@@ -100,14 +100,14 @@ class _HomePageState extends State<HomePage> {
     response = await getInformationsUser(Provider.of<DataAppProvider>(context, listen: false).token);
     modelUserInfos = modelUserInfosFromMap(response.body);
 
-    if (isBase64(modelUserInfos.photo) && modelUserInfos.photo != '') {
-      bytes = base64Decode(modelUserInfos.photo);
+    if (isBase64(modelUserInfos.photo!) && modelUserInfos.photo != '') {
+      bytes = base64Decode(modelUserInfos.photo!);
       image = Image.memory(bytes);
     } else {
       image = Image.asset('assets/img/profile_tab.png');
     }
 
-    setUserType(modelUserInfos.mensagem.accounttype);
+    setUserType(modelUserInfos.accounttype);
     setLoading(false);
   }
 
@@ -128,7 +128,7 @@ class _HomePageState extends State<HomePage> {
   Widget buildHomePage() {
     return Scaffold(
       appBar: CustomAppBar(
-        userName: modelUserInfos.mensagem.name,
+        userName: modelUserInfos.name,
         userImage: image,
         type: NavBarType.aluno,
         editRoute: '/edit-aluno-perfil',
@@ -136,9 +136,9 @@ class _HomePageState extends State<HomePage> {
       body: _isLoading
           ? const CustomLoading(color: Color.fromARGB(255, 0, 0, 0),)
           : Center(
-              child: modelUserInfos.mensagem.accounttype == 'admin'
+              child: modelUserInfos.accounttype == 'admin'
                   ? bottomBarPagesAdmin[_currentIndex]
-                  : modelUserInfos.mensagem.accounttype == 'professor'
+                  : modelUserInfos.accounttype == 'professor'
                       ? bottomBarPagesProfessor[_currentIndex]
                       : bottomBarPagesAluno[_currentIndex],
             ),

@@ -72,7 +72,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         radius: 35,
                       ),
                       Text(
-                        '  ${Provider.of<DataAppProvider>(context, listen: true).userInfos.mensagem.accounttype}',
+                        '  ${Provider.of<DataAppProvider>(context, listen: true).userInfos.accounttype}',
                         textAlign: TextAlign.end,
                         style: const TextStyle(color: Colors.white),
                       ),

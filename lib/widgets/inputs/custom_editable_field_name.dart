@@ -36,7 +36,7 @@ class _CustomEditableFieldNameState extends State<CustomEditableFieldName> {
 
   void setUser(TypeEditUser type) {
     ModelUserInfos modelUserInfos = Provider.of<DataAppProvider>(context, listen: false).userInfos;
-    controller.text = modelUserInfos.mensagem.name;
+    controller.text = modelUserInfos.name;
   }
 
   @override

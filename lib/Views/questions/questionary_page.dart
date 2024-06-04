@@ -27,10 +27,6 @@ class _QuestionaryPageState extends State<QuestionaryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(TittleQuestionary.getTittleQuestionary(widget.type)),
-      ),
       body: Stack(
         children: [
           isLoading

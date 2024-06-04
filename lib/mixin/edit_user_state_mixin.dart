@@ -52,13 +52,13 @@ mixin EditUserStateHelpers<T extends StatefulWidget> on State<T> {
     setState(() {
       switch (type) {
         case TypeEditUser.numWhats:
-          controller.text = provider.mensagem.numberwhats ?? '(xx) xxxxx-xxxx';
+          controller.text = provider.numberwhats ?? '(xx) xxxxx-xxxx';
           break;
         case TypeEditUser.email:
-          controller.text = provider.mensagem.email;
+          controller.text = provider.email;
           break;
         case TypeEditUser.password:
-          controller.text = provider.mensagem.password;
+          controller.text = provider.password;
           break;
         default:
       }

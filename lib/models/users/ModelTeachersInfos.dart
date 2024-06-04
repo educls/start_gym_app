@@ -14,9 +14,9 @@ String modelTeachersInfosToMap(List<ModelTeachersInfos> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toMap())));
 
 class ModelTeachersInfos {
-  int id;
+  String id;
   String name;
-  String numberwhats;
+  String? numberwhats;
   String? photo;
 
   ModelTeachersInfos({
