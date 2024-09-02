@@ -48,13 +48,13 @@ class _EditAlunoInfosPageState extends State<EditAlunoInfosPage> with EditUserSt
             ),
             const CustomBackButton(),
             CustomEditableFieldName(
-              type: TypeEditUser.name,
+              type: TypeEditUser.nome,
             ),
             const CustomImgPickerAvatar(),
             const CustomEditableField(
               label: 'Telefone',
               isPassword: false,
-              type: TypeEditUser.numWhats,
+              type: TypeEditUser.telefone,
             ),
             const CustomEditableField(
               label: 'Email',

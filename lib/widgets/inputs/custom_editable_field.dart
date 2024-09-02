@@ -68,7 +68,7 @@ class _CustomEditableFieldState extends State<CustomEditableField> with EditUser
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: TextField(
-                    inputFormatters: widget.type == TypeEditUser.numWhats
+                    inputFormatters: widget.type == TypeEditUser.telefone
                         ? [
                             FilteringTextInputFormatter.digitsOnly,
                             TelefoneInputFormatter(),

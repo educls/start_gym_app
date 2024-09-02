@@ -94,7 +94,7 @@ Future<http.Response> signUpNewAluno(String name, String email, String password,
 
 Future<http.Response> editUser(String photo, String name, String numWhats, String email, String password, String userToken) async {
   var data = modelEditUserToJson(
-    ModelEditUser(photo: photo, name: name, numWhats: numWhats, email: email, password: password),
+    ModelEditUser(foto: photo, nome: name, telefone: numWhats, email: email, password: password),
   );
 
   http.Response response = await fetchApiUsers.fetchEditUser(data, userToken);
@@ -103,6 +103,7 @@ Future<http.Response> editUser(String photo, String name, String numWhats, Strin
 }
 
 Future<http.Response> editUserEachInput(String data, String userToken) async {
+  print(data);
   http.Response response = await fetchApiUsers.fetchEditUser(data, userToken);
 
   return response;

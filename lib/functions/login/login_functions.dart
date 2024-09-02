@@ -93,10 +93,11 @@ class LoginFunctions {
       print(body);
       provider.setToken(body["token"]);
       response = await getInformationsUser(body["token"]);
-      var bodyUserInfos = json.decode(response.body);
-      provider.setUserInfos(modelUserInfosFromMap(json.encode(bodyUserInfos["userInfos"])));
+      print(response.body);
+      // var bodyUserInfos = json.decode(response.body);
+      provider.setUserInfos(modelUserInfosFromMap(response.body));
       print(body['userInfos']);
-      String type = provider.userInfos.accounttype;
+      String type = provider.userInfos.tipo_usuario;
       print(type);
       setLoading(false);
 

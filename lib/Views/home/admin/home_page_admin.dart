@@ -33,9 +33,9 @@ class _HomePageAdminState extends State<HomePageAdmin> with HomeStateHelpers<Hom
     var userInfos = Provider.of<DataAppProvider>(context, listen: true).userInfos;
     return Scaffold(
       appBar: CustomAppBar(
-        userName: Provider.of<DataAppProvider>(context, listen: false).userInfos.name,
-        userImage: userInfos.photo != null && IsBase64(base64: userInfos.photo!).verify()
-              ? Image.memory(base64Decode(userInfos.photo!))
+        userName: Provider.of<DataAppProvider>(context, listen: false).userInfos.nome,
+        userImage: userInfos.foto != null && IsBase64(base64: userInfos.foto!).verify()
+              ? Image.memory(base64Decode(userInfos.foto!))
               : Image.asset(PathConstants.photoDefault),
         type: NavBarType.admin,
         editRoute: '/edit-admin-perfil',

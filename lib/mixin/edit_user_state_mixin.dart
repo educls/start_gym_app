@@ -24,8 +24,8 @@ mixin EditUserStateHelpers<T extends StatefulWidget> on State<T> {
     DataAppProvider provider = Provider.of<DataAppProvider>(context, listen: false);
     late String dataForFetch;
     switch (type) {
-      case TypeEditUser.numWhats:
-        dataForFetch = modelEditUserToJson(ModelEditUser(numWhats: data));
+      case TypeEditUser.telefone:
+        dataForFetch = modelEditUserToJson(ModelEditUser(telefone: data));
         setState(() {
           provider.setNumWhats(data);
         });
@@ -51,8 +51,8 @@ mixin EditUserStateHelpers<T extends StatefulWidget> on State<T> {
     ModelUserInfos provider = Provider.of<DataAppProvider>(context, listen: false).userInfos;
     setState(() {
       switch (type) {
-        case TypeEditUser.numWhats:
-          controller.text = provider.numberwhats ?? '(xx) xxxxx-xxxx';
+        case TypeEditUser.telefone:
+          controller.text = provider.telefone ?? '(xx) xxxxx-xxxx';
           break;
         case TypeEditUser.email:
           controller.text = provider.email;

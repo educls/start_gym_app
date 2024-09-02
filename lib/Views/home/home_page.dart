@@ -27,8 +27,6 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-
-
 class _HomePageState extends State<HomePage> {
   DataAppProvider? value;
   late http.Response response;
@@ -98,16 +96,17 @@ class _HomePageState extends State<HomePage> {
     await Future.delayed(const Duration(milliseconds: 1000));
 
     response = await getInformationsUser(Provider.of<DataAppProvider>(context, listen: false).token);
+    print(response);
     modelUserInfos = modelUserInfosFromMap(response.body);
 
-    if (isBase64(modelUserInfos.photo!) && modelUserInfos.photo != '') {
-      bytes = base64Decode(modelUserInfos.photo!);
+    if (isBase64(modelUserInfos.foto!) && modelUserInfos.foto != '') {
+      bytes = base64Decode(modelUserInfos.foto!);
       image = Image.memory(bytes);
     } else {
       image = Image.asset('assets/img/profile_tab.png');
     }
 
-    setUserType(modelUserInfos.accounttype);
+    setUserType(modelUserInfos.tipo_usuario);
     setLoading(false);
   }
 
@@ -128,7 +127,7 @@ class _HomePageState extends State<HomePage> {
   Widget buildHomePage() {
     return Scaffold(
       appBar: CustomAppBar(
-        userName: modelUserInfos.name,
+        userName: modelUserInfos.nome,
         userImage: image,
         type: NavBarType.aluno,
         editRoute: '/edit-aluno-perfil',
@@ -136,9 +135,9 @@ class _HomePageState extends State<HomePage> {
       body: _isLoading
           ? const CustomLoading(color: Color.fromARGB(255, 0, 0, 0),)
           : Center(
-              child: modelUserInfos.accounttype == 'admin'
+              child: modelUserInfos.tipo_usuario == 'admin'
                   ? bottomBarPagesAdmin[_currentIndex]
-                  : modelUserInfos.accounttype == 'professor'
+                  : modelUserInfos.tipo_usuario == 'professor'
                       ? bottomBarPagesProfessor[_currentIndex]
                       : bottomBarPagesAluno[_currentIndex],
             ),

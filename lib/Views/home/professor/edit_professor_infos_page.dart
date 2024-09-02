@@ -49,7 +49,7 @@ class _EditProfessorInfosPageState extends State<EditProfessorInfosPage> with Ed
             ),
             const CustomBackButton(),
             CustomEditableFieldName(
-              type: TypeEditUser.name,
+              type: TypeEditUser.nome,
             ),
             const SizedBox(height: 5),
             const CustomImgPickerAvatar(),
@@ -57,7 +57,7 @@ class _EditProfessorInfosPageState extends State<EditProfessorInfosPage> with Ed
             const CustomEditableField(
               label: 'Telefone',
               isPassword: false,
-              type: TypeEditUser.numWhats,
+              type: TypeEditUser.telefone,
             ),
             const CustomEditableField(
               label: 'Email',

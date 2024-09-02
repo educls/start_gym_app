@@ -34,9 +34,9 @@ class _HomePageAlunoState extends State<HomePageAluno> with HomeStateHelpers<Hom
     var userInfos = Provider.of<DataAppProvider>(context, listen: true).userInfos;
     return Scaffold(
         appBar: CustomAppBar(
-          userName: Provider.of<DataAppProvider>(context, listen: true).userInfos.name,
-          userImage: IsBase64(base64: userInfos.photo!).verify()
-              ? Image.memory(base64Decode(userInfos.photo!))
+          userName: Provider.of<DataAppProvider>(context, listen: true).userInfos.nome,
+          userImage: IsBase64(base64: userInfos.foto!).verify()
+              ? Image.memory(base64Decode(userInfos.foto!))
               : Image.asset(PathConstants.photoDefault),
           type: NavBarType.aluno,
           editRoute: '/edit-aluno-perfil',

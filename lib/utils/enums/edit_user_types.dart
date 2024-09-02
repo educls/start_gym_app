@@ -1,1 +1,1 @@
-enum TypeEditUser { name, photo, numWhats, email, password }
+enum TypeEditUser { nome, foto, telefone, email, password }

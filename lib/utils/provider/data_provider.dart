@@ -20,17 +20,17 @@ class DataAppProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   void setName(name) {
-    userInfos.name = name;
+    userInfos.nome = name;
     notifyListeners();
   }
 
   void setPhoto(photobase64) {
-    userInfos.photo = photobase64;
+    userInfos.foto = photobase64;
     notifyListeners();
   }
 
   void setNumWhats(numWhats) {
-    userInfos.numberwhats = numWhats;
+    userInfos.telefone = numWhats;
     notifyListeners();
   }
 

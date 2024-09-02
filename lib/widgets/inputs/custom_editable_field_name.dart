@@ -28,7 +28,7 @@ class _CustomEditableFieldNameState extends State<CustomEditableFieldName> {
     setState(() {
       isEditing = _isEditing;
       if (!isEditing) {
-        editUserEachInput(modelEditUserToJson(ModelEditUser(name: controller.text)), Provider.of<DataAppProvider>(context, listen: false).token);
+        editUserEachInput(modelEditUserToJson(ModelEditUser(nome: controller.text)), Provider.of<DataAppProvider>(context, listen: false).token);
         provider.setName(controller.text);
       }
     });
@@ -36,7 +36,7 @@ class _CustomEditableFieldNameState extends State<CustomEditableFieldName> {
 
   void setUser(TypeEditUser type) {
     ModelUserInfos modelUserInfos = Provider.of<DataAppProvider>(context, listen: false).userInfos;
-    controller.text = modelUserInfos.name;
+    controller.text = modelUserInfos.nome;
   }
 
   @override

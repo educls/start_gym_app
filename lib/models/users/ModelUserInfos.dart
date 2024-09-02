@@ -9,69 +9,70 @@ ModelUserInfos modelUserInfosFromMap(String str) => ModelUserInfos.fromMap(json.
 String modelUserInfosToMap(ModelUserInfos data) => json.encode(data.toMap());
 
 class ModelUserInfos {
-    String? id;
-    String accounttype;
-    dynamic teachertype;
-    String? photo;
-    String name;
-    String? numberwhats;
+    String id_usuario;
+    String tipo_usuario;
+    String? foto;
+    String nome;
+    String? telefone;
     String email;
     String password;
-    int? blocked;
-    dynamic blockedAt;
-    dynamic blockedUntil;
-    int? loginAttempts;
-    DateTime? createdAt;
-    DateTime? updatedAt;
+    int bloqueado;
+    DateTime? bloqueado_em;
+    DateTime? bloqueado_ate;
+    DateTime? data_nascimento;
+    int? login_tentativas;
+    DateTime? criado_em;
+    DateTime? atualizado_em;
 
     ModelUserInfos({
-        this.id,
-        required this.accounttype,
-        this.teachertype,
-        this.photo,
-        required this.name,
-        this.numberwhats,
+        required this.id_usuario,
+        required this.tipo_usuario,
+        this.foto,
+        required this.nome,
+        this.telefone,
         required this.email,
         required this.password,
-        this.blocked,
-        this.blockedAt,
-        this.blockedUntil,
-        this.loginAttempts,
-        this.createdAt,
-        this.updatedAt,
+        required this.bloqueado,
+        this.bloqueado_em,
+        this.bloqueado_ate,
+        this.data_nascimento,
+        this.login_tentativas,
+        this.criado_em,
+        this.atualizado_em,
     });
 
     factory ModelUserInfos.fromMap(Map<String, dynamic> json) => ModelUserInfos(
-        id: json["id"],
-        accounttype: json["accounttype"],
-        teachertype: json["teachertype"],
-        photo: json["photo"],
-        name: json["name"],
-        numberwhats: json["numberwhats"],
-        email: json["email"],
-        password: json["password"],
-        blocked: json["blocked"],
-        blockedAt: json["blocked_at"],
-        blockedUntil: json["blocked_until"],
-        loginAttempts: json["login_attempts"],
-        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+        id_usuario: json["id_usuario"].toString(),
+        tipo_usuario: json["tipo_usuario"] ?? "",
+        foto: json["foto"],
+        nome: json["nome"] ?? "",
+        telefone: json["telefone"],
+        email: json["email"] ?? "",
+        password: json["password"] ?? "",
+        bloqueado: json["bloqueado"] ?? 0,
+        bloqueado_em: json["bloqueado_em"] == null ? null : DateTime.parse(json["bloqueado_em"]),
+        bloqueado_ate: json["bloqueado_ate"] == null ? null : DateTime.parse(json["bloqueado_ate"]),
+        data_nascimento: json["data_nascimento"] == null ? null : DateTime.parse(json["data_nascimento"]),
+        login_tentativas: json["login_tentativas"] ?? 0,
+        criado_em: json["criado_em"] == null ? null : DateTime.parse(json["criado_em"]),
+        atualizado_em: json["atualizado_em"] == null ? null : DateTime.parse(json["atualizado_em"]),
     );
 
     Map<String, dynamic> toMap() => {
-        "id": id,
-        "accounttype": accounttype,
-        "teachertype": teachertype,
-        "photo": photo,
-        "name": name,
-        "numberwhats": numberwhats,
+        "id_usuario": id_usuario,
+        "tipo_usuario": tipo_usuario,
+        "foto": foto,
+        "nome": nome,
+        "telefone": telefone,
         "email": email,
         "password": password,
-        "blocked": blocked,
-        "blocked_at": blockedAt,
-        "blocked_until": blockedUntil,
-        "login_attempts": loginAttempts,
-        "created_at": createdAt?.toIso8601String(),
-        "updated_at": updatedAt?.toIso8601String(),
+        "bloqueado": bloqueado,
+        "bloqueado_em": bloqueado_em?.toIso8601String(),
+        "bloqueado_ate": bloqueado_ate?.toIso8601String(),
+        "data_nascimento": data_nascimento?.toIso8601String(),
+        "login_tentativas": login_tentativas,
+        "criado_em": criado_em?.toIso8601String(),
+        "atualizado_em": atualizado_em?.toIso8601String(),
     };
 }
+

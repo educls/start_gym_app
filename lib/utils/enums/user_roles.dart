@@ -1,1 +1,5 @@
-enum NavBarType { admin, professor, aluno }
+enum NavBarType {
+  admin,
+  professor,
+  aluno,
+}
