@@ -6,6 +6,7 @@ import 'package:start_gym_app/views/home/aluno/edit_aluno_infos_page.dart';
 import 'package:start_gym_app/views/home/aluno/home_page_aluno.dart';
 import 'package:start_gym_app/views/home/professor/edit_professor_infos_page.dart';
 import 'package:start_gym_app/views/home/professor/home_page_professor.dart';
+import 'package:start_gym_app/views/home/professor/treino/adicionar_treino_page.dart';
 
 import 'views/login/login_page.dart';
 import 'views/home/admin/sign_up_new_teacher_page.dart';
@@ -52,6 +53,7 @@ class MyApp extends StatelessWidget {
         '/edit-aluno-perfil': (context) => const EditAlunoInfosPage(),
         '/edit-admin-perfil': (context) => const EditAdminInfosPage(),
         '/edit-professor-perfil': (context) => const EditProfessorInfosPage(),
+        '/adicionar-treino': (context) => const CategoriaMuscScreen(),
       },
     );
   }

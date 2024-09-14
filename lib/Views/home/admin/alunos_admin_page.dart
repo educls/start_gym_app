@@ -90,8 +90,8 @@ class _AlunosAdminPageState extends State<AlunosAdminPage> {
               itemBuilder: (context, index) {
                 final infoAluno = alunosInfos[index];
                 Uint8List photoBytes = Uint8List(0);
-                if (infoAluno.photo != null && isBase64(infoAluno.photo!)) {
-                  photoBytes = base64Decode(infoAluno.photo!);
+                if (infoAluno.foto != null && isBase64(infoAluno.foto!)) {
+                  photoBytes = base64Decode(infoAluno.foto!);
                 }
                 return AnimationConfiguration.staggeredList(
                   position: index,
@@ -111,17 +111,17 @@ class _AlunosAdminPageState extends State<AlunosAdminPage> {
                             right: 10,
                           ),
                           child: CircleAvatar(
-                            backgroundImage: infoAluno.photo != null &&
-                                    isBase64(infoAluno.photo!)
+                            backgroundImage: infoAluno.foto != null &&
+                                    isBase64(infoAluno.foto!)
                                 ? MemoryImage(photoBytes)
                                 : image.image,
                             radius: 25,
                           ),
                         ),
-                        title: Text(infoAluno.name!),
-                        trailing: Text(infoAluno.numberwhats == null
+                        title: Text(infoAluno.email!),
+                        trailing: Text(infoAluno.telefone == null
                             ? '(xx) xxxxx-xxxx'
-                            : infoAluno.numberwhats!),
+                            : infoAluno.telefone!),
                         onTap: () {
                           showDialog(
                             context: context,
@@ -136,20 +136,20 @@ class _AlunosAdminPageState extends State<AlunosAdminPage> {
                                             padding: const EdgeInsets.all(10),
                                             child: CircleAvatar(
                                               backgroundImage: infoAluno
-                                                              .photo !=
+                                                              .foto !=
                                                           null &&
-                                                      isBase64(infoAluno.photo!)
+                                                      isBase64(infoAluno.foto!)
                                                   ? MemoryImage(photoBytes)
                                                   : image.image,
                                               radius: 80,
                                             ),
                                           ),
                                         ),
-                                        Center(child: Text(infoAluno.name!))
+                                        Center(child: Text(infoAluno.email!))
                                       ],
                                     ),
                                     content: Text(
-                                        'Nome: ${infoAluno.name} \nNumero: ${infoAluno.numberwhats}\n'),
+                                        'Nome: ${infoAluno.nome} \nNumero: ${infoAluno.telefone}\n'),
                                     actions: [
                                       TextButton(
                                         onPressed: () async {

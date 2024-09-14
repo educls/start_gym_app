@@ -31,6 +31,10 @@ class NavBarItemsCustom {
       case NavBarType.professor:
         return const [
           BottomNavigationBarItem(
+            icon: Icon(Icons.dashboard_customize_rounded),
+            label: 'Dashboard',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.fitness_center),
             label: 'Treinos',
           ),
@@ -46,13 +50,17 @@ class NavBarItemsCustom {
       case NavBarType.aluno:
         return const [
           BottomNavigationBarItem(
+            icon: Icon(Icons.dashboard_customize_rounded),
+            label: 'Dashboard',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.fitness_center),
             label: 'Treinos',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Perfil',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.person),
+          //   label: 'Perfil',
+          // ),
         ];
     }
   }

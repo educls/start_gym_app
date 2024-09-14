@@ -22,7 +22,13 @@ class _CustomBodyHomeState extends State<CustomBodyHome> with HomeStateHelpers<C
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isLoading ? const CustomLoading(color: Color.fromARGB(255, 0, 0, 0),) : Center(child: widget.bottomBarPages[currentIndex]),
+      body: isLoading
+          ? const CustomLoading(
+              color: Color.fromARGB(255, 0, 0, 0),
+            )
+          : Center(
+              child: widget.bottomBarPages[currentIndex],
+            ),
       bottomNavigationBar: NavBarCustom(
         type: widget.type,
         itemsBar: widget.bottomBarPages,

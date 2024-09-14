@@ -68,6 +68,7 @@ class FetchApiUsers {
       method: 'GET',
       authToken: token,
     ).fetch();
+    print(resp.body);
     return resp;
   }
 

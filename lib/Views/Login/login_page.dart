@@ -42,7 +42,10 @@ class _LoginPageState extends State<LoginPage> with LoginStateHelpers<LoginPage>
               children: [
                 _buildTop(),
                 const SizedBox(height: 200),
-                if (isLoading) const CustomLoading(color: Color.fromARGB(255, 255, 255, 255),),
+                if (isLoading)
+                  const CustomLoading(
+                    color: Color.fromARGB(255, 255, 255, 255),
+                  ),
               ],
             ),
           ),

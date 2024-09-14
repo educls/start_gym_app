@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:start_gym_app/utils/constants/path_contants.dart';
+import 'package:start_gym_app/widgets/custom_back_button.dart';
+
+import '../../../../widgets/appbar/custom_appbar_edit_user.dart';
 
 class CategoriaMuscScreen extends StatefulWidget {
   const CategoriaMuscScreen({super.key});
@@ -11,30 +15,15 @@ class _CategoriaMuscScreenState extends State<CategoriaMuscScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF0A1F44), // Fundo azul escuro
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0A1F44), // Azul escuro
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            // Ação para voltar
-          },
-        ),
-        title: Row(
-          children: [
-            Image.asset(
-              'assets/logo.png', // Coloque sua imagem do logotipo aqui
-              height: 30,
-            ),
-            const SizedBox(width: 10),
-            const Text('Start Gym'),
-          ],
-        ),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            const CustomAppBarEditUser(
+              title: "Start Gym",
+              pathLogo: PathConstants.logoStartGym,
+            ),
+            const CustomBackButton(),
             TextField(
               decoration: InputDecoration(
                 filled: true,
@@ -54,16 +43,16 @@ class _CategoriaMuscScreenState extends State<CategoriaMuscScreen> {
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
                 children: [
-                  _buildGridItem('Ombros', 'assets/ombros.png'),
-                  _buildGridItem('Peitoral', 'assets/peitoral.png'),
-                  _buildGridItem('Bíceps', 'assets/biceps.png'),
-                  _buildGridItem('Tríceps', 'assets/triceps.png'),
-                  _buildGridItem('Antebraços', 'assets/antebracos.png'),
-                  _buildGridItem('Dorsal', 'assets/dorsal.png'),
-                  _buildGridItem('Abdômen', 'assets/abdomen.png'),
-                  _buildGridItem('Inferiores', 'assets/inferiores.png'),
-                  _buildGridItem('Aeróbicos', 'assets/aerobicos.png'),
-                  _buildGridItem('Alongamentos', 'assets/alongamentos.png'),
+                  _buildGridItem('Ombros', 'assets/images/adicionar_treino/ombro.png'),
+                  _buildGridItem('Peitoral', 'assets/images/adicionar_treino/peitoral.png'),
+                  _buildGridItem('Bíceps', 'assets/images/adicionar_treino/biceps.png'),
+                  _buildGridItem('Tríceps', 'assets/images/adicionar_treino/triceps.png'),
+                  _buildGridItem('Antebraços', 'assets/images/adicionar_treino/antebraco.png'),
+                  _buildGridItem('Dorsal', 'assets/images/adicionar_treino/dorsal.png'),
+                  _buildGridItem('Abdômen', 'assets/images/adicionar_treino/abdominal.png'),
+                  _buildGridItem('Inferiores', 'assets/images/adicionar_treino/inferiores.png'),
+                  _buildGridItem('Aeróbicos', 'assets/images/adicionar_treino/aerobico.png'),
+                  _buildGridItem('Alongamentos', 'assets/images/adicionar_treino/alongamento.png'),
                 ],
               ),
             ),
@@ -88,7 +77,7 @@ class _CategoriaMuscScreenState extends State<CategoriaMuscScreen> {
             ),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Image.asset(imagePath),
+              child: Image.asset(imagePath, ),
             ),
           ),
         ),

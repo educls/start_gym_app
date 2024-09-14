@@ -49,6 +49,7 @@ dependencies:
   loading_animation_widget: ^1.2.1
   flutter_staggered_animations: ^1.1.1
   flutter_launcher_icons: ^0.13.1
+  table_calendar: ^3.1.2
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +78,11 @@ flutter:
     - assets/images/
     - assets/img/
     - assets/icons-questionary/
+    - assets/icons/
+    - assets/
+    - assets/images/home_professor/
+    - assets/images/adicionar_treino/
+    - assets/images/home_aluno/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -15,33 +15,33 @@ String modelAlunosInfosToMap(ModelAlunosInfos data) =>
 
 class ModelAlunosInfos {
   String? id;
-  String? name;
-  String? numberwhats;
+  String? nome;
+  String? telefone;
   String? email;
-  String? photo;
+  String? foto;
 
   ModelAlunosInfos({
     this.id,
-    this.name,
-    this.numberwhats,
+    this.nome,
+    this.telefone,
     this.email,
-    this.photo,
+    this.foto,
   });
 
   factory ModelAlunosInfos.fromMap(Map<String, dynamic> json) =>
       ModelAlunosInfos(
         id: json["id"],
-        name: json["name"],
-        numberwhats: json["numberwhats"],
+        nome: json["nome"],
+        telefone: json["telefone"],
         email: json["email"],
-        photo: json["photo"],
+        foto: json["foto"],
       );
 
   Map<String, dynamic> toMap() => {
         "id": id,
-        "name": name,
-        "numberwhats": numberwhats,
+        "nome": nome,
+        "telefone": telefone,
         "email": email,
-        "photo": photo,
+        "foto": foto,
       };
 }
