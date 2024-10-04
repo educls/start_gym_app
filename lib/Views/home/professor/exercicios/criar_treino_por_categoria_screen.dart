@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:start_gym_app/utils/constants/color_constants.dart';
+import 'package:start_gym_app/utils/constants/path_contants.dart';
 
 class CriarTreinoPorCategoriaScreen extends StatefulWidget {
   const CriarTreinoPorCategoriaScreen({super.key});
 
   @override
-  State<CriarTreinoPorCategoriaScreen> createState() => _CriarTreinoPorCategoriaScreenState();
+  State<CriarTreinoPorCategoriaScreen> createState() =>
+      _CriarTreinoPorCategoriaScreenState();
 }
 
-class _CriarTreinoPorCategoriaScreenState extends State<CriarTreinoPorCategoriaScreen> {
+class _CriarTreinoPorCategoriaScreenState
+    extends State<CriarTreinoPorCategoriaScreen> {
   // Valores pré-definidos
   final int _series = 3;
   final int _reps = 15;
@@ -17,8 +21,20 @@ class _CriarTreinoPorCategoriaScreenState extends State<CriarTreinoPorCategoriaS
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Start Gym", style: TextStyle(color: Colors.white)),
-        backgroundColor: const Color(0xFF0A1E5C), // Azul escuro
+        backgroundColor: ColorConstants.darkBlue,
+        title: Row(
+          children: [
+            Image.asset(
+              'assets/images/logoStartGymAmarelo.png', // Caminho da sua imagem
+              height: 30, // Tamanho da imagem
+            ),
+            const SizedBox(width: 10), // Espaçamento entre a imagem e o texto
+            const Text(
+              "Start Gym",
+              style: TextStyle(color: Colors.white), // Estilo do texto
+            ),
+          ],
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -112,7 +128,8 @@ class _CriarTreinoPorCategoriaScreenState extends State<CriarTreinoPorCategoriaS
                   // Ação ao adicionar exercício
                 },
                 style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
                   ),

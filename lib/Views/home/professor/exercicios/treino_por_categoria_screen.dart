@@ -4,7 +4,8 @@ class TreinoPorCategoriaScreen extends StatefulWidget {
   const TreinoPorCategoriaScreen({super.key});
 
   @override
-  State<TreinoPorCategoriaScreen> createState() => _TreinoPorCategoriaScreenState();
+  State<TreinoPorCategoriaScreen> createState() =>
+      _TreinoPorCategoriaScreenState();
 }
 
 class _TreinoPorCategoriaScreenState extends State<TreinoPorCategoriaScreen> {
@@ -47,7 +48,8 @@ class _TreinoPorCategoriaScreenState extends State<TreinoPorCategoriaScreen> {
                 color: const Color(0xFF0A1E5C),
                 borderRadius: BorderRadius.circular(20.0),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
               child: const Text(
                 'Ombros',
                 style: TextStyle(color: Colors.white, fontSize: 18.0),
@@ -73,7 +75,8 @@ class _TreinoPorCategoriaScreenState extends State<TreinoPorCategoriaScreen> {
                   // Ação ao finalizar o treino
                 },
                 style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
                   ),

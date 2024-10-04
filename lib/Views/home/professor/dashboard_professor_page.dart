@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:start_gym_app/views/home/admin/alunos_admin_page.dart';
 import 'package:start_gym_app/views/home/professor/exercicios/treino_por_categoria_screen.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:start_gym_app/utils/constants/color_constants.dart';
 
 class DashboardProfessorPage extends StatefulWidget {
   const DashboardProfessorPage({super.key});
@@ -14,7 +15,7 @@ class _DashboardProfessorPageState extends State<DashboardProfessorPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0A1546),
+      backgroundColor: ColorConstants.darkBlue,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -30,7 +31,7 @@ class _DashboardProfessorPageState extends State<DashboardProfessorPage> {
                   subtitle: 'Treinos\nConcluídos\nEsta Semana',
                   icon: Icons.fitness_center,
                   iconPath: 'assets/images/home_professor/musculo-do-braco.png',
-                  color: Colors.yellow.shade700,
+                  color: ColorConstants.darkYellow,
                   height: 250,
                   main: true,
                 ),
@@ -41,13 +42,17 @@ class _DashboardProfessorPageState extends State<DashboardProfessorPage> {
                     children: [
                       _buildStatusCard(
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const AlunosAdminPage()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const AlunosAdminPage()));
                         },
                         title: 'Alunos',
                         value: '5',
                         subtitle: 'Ativos',
                         iconPath: 'assets/images/home_professor/aluna_peso.png',
-                        color: Colors.yellow.shade700,
+                        color: ColorConstants.darkYellow,
                         width: 200,
                         icon: Icons.timer,
                         main: false,
@@ -60,7 +65,7 @@ class _DashboardProfessorPageState extends State<DashboardProfessorPage> {
                         title: 'Adicionar',
                         subtitle: 'Aluno',
                         iconPath: 'assets/images/home_professor/alunoAdd.png',
-                        color: Colors.black,
+                        color: ColorConstants.darkBlue,
                         main: false,
                         width: 200,
                       ),
@@ -72,7 +77,7 @@ class _DashboardProfessorPageState extends State<DashboardProfessorPage> {
                         title: 'Adicionar',
                         subtitle: 'Treino',
                         iconPath: 'assets/images/home_professor/treinoAdd.png',
-                        color: Colors.black,
+                        color: ColorConstants.darkBlue,
                         main: false,
                         width: 200,
                       ),
@@ -90,7 +95,8 @@ class _DashboardProfessorPageState extends State<DashboardProfessorPage> {
                   const Row(
                     children: [
                       Image(
-                        image: AssetImage("assets/images/logoStartGymAmarelo.png"),
+                        image:
+                            AssetImage("assets/images/logoStartGymAmarelo.png"),
                         width: 50,
                         height: 50,
                       ),
@@ -100,7 +106,7 @@ class _DashboardProfessorPageState extends State<DashboardProfessorPage> {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.yellow,
+                          color: ColorConstants.darkYellow,
                         ),
                       ),
                     ],
@@ -161,7 +167,7 @@ class _DashboardProfessorPageState extends State<DashboardProfessorPage> {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: ColorConstants.darkBlue,
                   ),
                 ),
               ],
@@ -182,13 +188,16 @@ class _DashboardProfessorPageState extends State<DashboardProfessorPage> {
                       Text(
                         subtitle,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 12, color: Colors.grey),
+                        style:
+                            const TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ],
                   )
                 : value != null
                     ? Row(
-                        mainAxisAlignment: (main == true) ? MainAxisAlignment.start : MainAxisAlignment.center,
+                        mainAxisAlignment: (main == true)
+                            ? MainAxisAlignment.start
+                            : MainAxisAlignment.center,
                         children: [
                           Text(
                             value,
@@ -202,7 +211,8 @@ class _DashboardProfessorPageState extends State<DashboardProfessorPage> {
                           Text(
                             subtitle,
                             textAlign: TextAlign.center,
-                            style: const TextStyle(fontSize: 12, color: Colors.grey),
+                            style: const TextStyle(
+                                fontSize: 12, color: ColorConstants.grey),
                           ),
                         ],
                       )
@@ -211,7 +221,8 @@ class _DashboardProfessorPageState extends State<DashboardProfessorPage> {
                           Text(
                             subtitle,
                             textAlign: TextAlign.center,
-                            style: const TextStyle(fontSize: 12, color: Colors.grey),
+                            style: const TextStyle(
+                                fontSize: 12, color: ColorConstants.grey),
                           ),
                         ],
                       )
@@ -236,7 +247,7 @@ Widget _buildCalendar() {
       focusedDay: DateTime.now(),
       calendarStyle: const CalendarStyle(
         todayDecoration: BoxDecoration(
-          color: Colors.blue,
+          color: ColorConstants.darkYellow,
           shape: BoxShape.circle,
         ),
         selectedDecoration: BoxDecoration(
@@ -248,7 +259,7 @@ Widget _buildCalendar() {
         formatButtonVisible: false,
         titleCentered: true,
         titleTextStyle: TextStyle(
-          color: Colors.black,
+          color: ColorConstants.darkBlue,
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),

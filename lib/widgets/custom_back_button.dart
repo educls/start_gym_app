@@ -8,11 +8,13 @@ class CustomBackButton extends StatelessWidget {
     return Align(
       alignment: Alignment.centerLeft,
       child: TextButton.icon(
-        onPressed: () {Navigator.of(context).pop();},
-        icon: Icon(Icons.arrow_back, color: Colors.blue[900]),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        icon: Icon(Icons.arrow_back_ios, color: Colors.white),
         label: Text(
-          'Voltar',
-          style: TextStyle(color: Colors.blue[900]),
+          '',
+          style: TextStyle(color: Colors.white),
         ),
       ),
     );
