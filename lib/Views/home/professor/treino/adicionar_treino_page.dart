@@ -70,26 +70,40 @@ class _CategoriaMuscScreenState extends State<CategoriaMuscScreen> {
                   crossAxisSpacing: 5,
                   mainAxisSpacing: 20,
                   children: [
+                    _buildGridItem('Ombros',
+                        'assets/images/adicionar_treino/ombro.png', '/ombros'),
                     _buildGridItem(
-                        'Ombros', 'assets/images/adicionar_treino/ombro.png'),
-                    _buildGridItem('Peitoral',
-                        'assets/images/adicionar_treino/peitoral.png'),
+                        'Peitoral',
+                        'assets/images/adicionar_treino/peitoral.png',
+                        '/peitoral'),
+                    _buildGridItem('Bíceps',
+                        'assets/images/adicionar_treino/biceps.png', '/biceps'),
                     _buildGridItem(
-                        'Bíceps', 'assets/images/adicionar_treino/biceps.png'),
-                    _buildGridItem('Tríceps',
-                        'assets/images/adicionar_treino/triceps.png'),
-                    _buildGridItem('Antebraços',
-                        'assets/images/adicionar_treino/antebraco.png'),
+                        'Tríceps',
+                        'assets/images/adicionar_treino/triceps.png',
+                        '/triceps'),
                     _buildGridItem(
-                        'Dorsal', 'assets/images/adicionar_treino/dorsal.png'),
-                    _buildGridItem('Abdômen',
-                        'assets/images/adicionar_treino/abdominal.png'),
-                    _buildGridItem('Inferiores',
-                        'assets/images/adicionar_treino/inferiores.png'),
-                    _buildGridItem('Aeróbico',
-                        'assets/images/adicionar_treino/aerobico.png'),
-                    _buildGridItem('Alongamento',
-                        'assets/images/adicionar_treino/alongamento.png'),
+                        'Antebraços',
+                        'assets/images/adicionar_treino/antebraco.png',
+                        '/antebracos'),
+                    _buildGridItem('Dorsal',
+                        'assets/images/adicionar_treino/dorsal.png', '/dorsal'),
+                    _buildGridItem(
+                        'Abdômen',
+                        'assets/images/adicionar_treino/abdominal.png',
+                        '/abdomen'),
+                    _buildGridItem(
+                        'Inferiores',
+                        'assets/images/adicionar_treino/inferiores.png',
+                        '/inferiores'),
+                    _buildGridItem(
+                        'Aeróbico',
+                        'assets/images/adicionar_treino/aerobico.png',
+                        '/aerobico'),
+                    _buildGridItem(
+                        'Alongamento',
+                        'assets/images/adicionar_treino/alongamento.png',
+                        '/alongamento'),
                   ],
                 ),
               ),
@@ -100,30 +114,35 @@ class _CategoriaMuscScreenState extends State<CategoriaMuscScreen> {
     );
   }
 
-  Widget _buildGridItem(String title, String imagePath) {
-    return Column(
-      children: [
-        Expanded(
-          child: Container(
-            width: 200, // Largura fixa
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Image.asset(
-                imagePath,
+  Widget _buildGridItem(String title, String imagePath, String route) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, route);
+      },
+      child: Column(
+        children: [
+          Expanded(
+            child: Container(
+              width: 200, // Largura fixa
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset(
+                  imagePath,
+                ),
               ),
             ),
           ),
-        ),
-        const SizedBox(height: 5),
-        Text(
-          title,
-          style: const TextStyle(color: Colors.white, fontSize: 15),
-        ),
-      ],
+          const SizedBox(height: 5),
+          Text(
+            title,
+            style: const TextStyle(color: Colors.white, fontSize: 15),
+          ),
+        ],
+      ),
     );
   }
 }
