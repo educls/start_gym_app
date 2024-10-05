@@ -15,20 +15,20 @@ import '../widgets/custom_alert.dart';
 
 mixin ImagePickerStateHelper<T extends StatefulWidget> on State<T> {
   
-  late ModelUserInfos userInfos = Provider.of<DataAppProvider>(context, listen: false).userInfos;
-  late Image image = userInfos.foto != null && IsBase64(base64: userInfos.foto!).verify()
-              ? Image.memory(base64Decode(userInfos.foto!))
-              : Image.asset(PathConstants.photoDefault);
+  // late ModelUserInfos userInfos = Provider.of<DataAppProvider>(context, listen: false).userInfos;
+  // late Image image = userInfos.foto != null && IsBase64(base64: userInfos.foto!).verify()
+  //             ? Image.memory(base64Decode(userInfos.foto!))
+  //             : Image.asset(PathConstants.photoDefault);
   List<String?> base64Images = List.filled(3, null);
 
   void setBase64Image(String base64Img) {
-    DataAppProvider provider = Provider.of<DataAppProvider>(context, listen: false);
-    setState(() {
-      image = Image.memory(base64Decode(base64Img));
-      print('image editing');
-      editUserEachInput(modelEditUserToJson(ModelEditUser(foto: base64Img)), provider.token);
-      provider.setPhoto(base64Img);
-    });
+    // DataAppProvider provider = Provider.of<DataAppProvider>(context, listen: false);
+    // setState(() {
+    //   image = Image.memory(base64Decode(base64Img));
+    //   print('image editing');
+    //   editUserEachInput(modelEditUserToJson(ModelEditUser(foto: base64Img)), provider.token);
+    //   provider.setPhoto(base64Img);
+    // });
   }
 
   void setBase64ImageList(int index, String base64Image) {

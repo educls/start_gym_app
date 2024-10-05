@@ -95,14 +95,14 @@ class _BuildLoginFormState extends State<BuildLoginForm> with LoginStateHelpers<
               await Future.delayed(const Duration(milliseconds: 500));
               //Classe que executa toda a logica de LOGIN
               await LoginFunctions(
-                context: context,
+                // context: context,
                 emailController: emailController,
-                passwordController: passwordController,
-                rememberUser: rememberUser,
+                // passwordController: passwordController,
+                // rememberUser: rememberUser,
                 setLoading: widget.setLoading,
-                attempts: attempts,
-                startTimer: startTimer,
-                setAttempts: setAttempts,
+                // attempts: attempts,
+                // startTimer: startTimer,
+                // setAttempts: setAttempts,
               ).onPressedForLoginButton(context);
             }
           : () {

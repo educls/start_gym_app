@@ -22,7 +22,7 @@ class _ProfessoresAdminPageState extends State<ProfessoresAdminPage> {
   late String userToken;
   List<ModelTeachersInfos> professoresInfos = [];
   late http.Response response;
-  DataAppProvider? value;
+  // DataAppProvider? value;
   late Uint8List bytes;
   late Image image = Image.asset('assets/img/profile_tab.png');
 
@@ -33,15 +33,15 @@ class _ProfessoresAdminPageState extends State<ProfessoresAdminPage> {
     super.dispose();
   }
 
-  void initProvider() {
-    value = context.watch<DataAppProvider>();
-  }
+  // void initProvider() {
+  //   value = context.watch<DataAppProvider>();
+  // }
 
-  void setTeacherInfos(resProfessoresInfos) {
-    setState(() {
-      professoresInfos = resProfessoresInfos;
-    });
-  }
+  // void setTeacherInfos(resProfessoresInfos) {
+  //   setState(() {
+  //     professoresInfos = resProfessoresInfos;
+  //   });
+  // }
 
   void setLoading(bool isLoading) {
     setState(() {
@@ -49,24 +49,24 @@ class _ProfessoresAdminPageState extends State<ProfessoresAdminPage> {
     });
   }
 
-  Future<void> searchTeacherInfos() async {
-    initProvider();
-    response = await getTeachersInfos(value!.token);
-    List<ModelTeachersInfos> _professoresInfos =
-        modelTeachersInfosFromMap(response.body);
-    setTeacherInfos(_professoresInfos);
-  }
+  // Future<void> searchTeacherInfos() async {
+  //   initProvider();
+  //   response = await getTeachersInfos(value!.token);
+  //   List<ModelTeachersInfos> _professoresInfos =
+  //       modelTeachersInfosFromMap(response.body);
+  //   setTeacherInfos(_professoresInfos);
+  // }
 
-  Future<void> reloadTeacherInfos() async {
-    setLoading(true);
-    searchTeacherInfos();
-    Timer(
-      const Duration(milliseconds: 500),
-      () {
-        setLoading(false);
-      },
-    );
-  }
+  // Future<void> reloadTeacherInfos() async {
+  //   setLoading(true);
+  //   searchTeacherInfos();
+  //   Timer(
+  //     const Duration(milliseconds: 500),
+  //     () {
+  //       setLoading(false);
+  //     },
+  //   );
+  // }
 
   bool isBase64(String value) {
     try {
@@ -79,9 +79,9 @@ class _ProfessoresAdminPageState extends State<ProfessoresAdminPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (professoresInfos.isEmpty) {
-      reloadTeacherInfos();
-    }
+    // if (professoresInfos.isEmpty) {
+    //   reloadTeacherInfos();
+    // }
     return Scaffold(
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())

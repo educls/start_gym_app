@@ -7,14 +7,14 @@ import '../../utils/enums/questionary_roles.dart';
 
 class SendImageListMinhaEvolucaoHelper {
   final BuildContext context;
-  final DataAppProvider value;
+  // final DataAppProvider value;
   final List<String?> base64Images;
   final Function setLoading;
   final TypeQuestionary type;
 
   const SendImageListMinhaEvolucaoHelper({
     required this.context,
-    required this.value,
+    // required this.value,
     required this.base64Images,
     required this.setLoading,
     required this.type,
@@ -22,7 +22,7 @@ class SendImageListMinhaEvolucaoHelper {
 
   Future<void> onPressedForSendImageListMinhaEvolucao() async {
     setLoading(true);
-    sendImageListMinhaEvolucao(value.token, base64Images, type);
+    // sendImageListMinhaEvolucao(value.token, base64Images, type);
     await Future.delayed(const Duration(milliseconds: 1000));
     QuickAlert.show(
       context: context,
@@ -43,14 +43,14 @@ class SendImageListMinhaEvolucaoHelper {
 class QuestionaryHelper {
   final BuildContext context;
   final Function setLoading;
-  final DataAppProvider value;
+  // final DataAppProvider value;
   final TypeQuestionary type;
   final Map<String, dynamic> questionsMap;
 
   const QuestionaryHelper({
     required this.context,
     required this.setLoading,
-    required this.value,
+    // required this.value,
     required this.type,
     required this.questionsMap,
   });
@@ -58,7 +58,7 @@ class QuestionaryHelper {
   Future<void> onPressedForSendQuestionary() async {
     setLoading(true);
     await Future.delayed(const Duration(milliseconds: 100));
-    sendQuestionaryToApi(value.token, questionsMap, type);
+    // sendQuestionaryToApi(value.token, questionsMap, type);
     QuickAlert.show(
       context: context,
       type: QuickAlertType.success,

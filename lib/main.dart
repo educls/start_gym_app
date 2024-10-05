@@ -30,10 +30,11 @@ import 'common/color_extension.dart';
 
 void main() {
   runApp(
-    MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => DataAppProvider())],
-      child: const MyApp(),
-    ),
+    const MyApp()
+    // MultiProvider(
+    //   providers: [ChangeNotifierProvider(create: (_) => DataAppProvider())],
+    //   child: const MyApp(),
+    // ),
   );
 }
 

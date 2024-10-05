@@ -32,7 +32,7 @@ class QuestionariesWidget extends StatefulWidget {
 
 class _QuestionariesWidgetState extends State<QuestionariesWidget> {
   late TypeQuestionary type;
-  DataAppProvider? value;
+  // DataAppProvider? value;
 
   dynamic questionsResp;
 
@@ -83,20 +83,20 @@ class _QuestionariesWidgetState extends State<QuestionariesWidget> {
     }
   }
 
-  void getQuestionaryInfos() async {
-    setLoading(true);
-    response = await getQuestionary(Provider.of<DataAppProvider>(context, listen: false).token, type);
+  // void getQuestionaryInfos() async {
+  //   setLoading(true);
+  //   response = await getQuestionary(Provider.of<DataAppProvider>(context, listen: false).token, type);
 
-    setQuestionaryInfos(response.body);
-    await Future.delayed(const Duration(milliseconds: 1000));
-    setLoading(false);
-  }
+  //   setQuestionaryInfos(response.body);
+  //   await Future.delayed(const Duration(milliseconds: 1000));
+  //   setLoading(false);
+  // }
 
   @override
   Widget build(BuildContext context) {
-    if (questionsResp == null) {
-      getQuestionaryInfos();
-    }
+    // if (questionsResp == null) {
+    //   getQuestionaryInfos();
+    // }
     return Scaffold(
       body: Column(
         children: [

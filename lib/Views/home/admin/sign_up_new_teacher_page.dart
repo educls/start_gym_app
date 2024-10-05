@@ -30,7 +30,7 @@ class _SignUpNewTeacherState extends State<SignUpNewTeacher> {
     "Fisioterapeuta"
   ];
   String dropdownValue = '';
-  DataAppProvider? value;
+  // DataAppProvider? value;
 
   bool _isLoading = false;
   void setLoading(bool isLoading) {
@@ -53,15 +53,15 @@ class _SignUpNewTeacherState extends State<SignUpNewTeacher> {
     });
   }
 
-  void initProvider() {
-    value = context.watch<DataAppProvider>();
-  }
+  // void initProvider() {
+  //   value = context.watch<DataAppProvider>();
+  // }
 
   @override
   Widget build(BuildContext context) {
-    if (value == null) {
-      initProvider();
-    }
+    // if (value == null) {
+    //   initProvider();
+    // }
     var media = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -178,63 +178,63 @@ class _SignUpNewTeacherState extends State<SignUpNewTeacher> {
                             isLoading: _isLoading,
                             title: "Cadastrar",
                             onPressed: () async {
-                              setLoading(true);
-                              await Future.delayed(
-                                  const Duration(milliseconds: 200));
-                              if (txtName.text.isEmpty ||
-                                  txtEmail.text.isEmpty ||
-                                  txtPassword.text.isEmpty ||
-                                  _dropValue.value.isEmpty) {
-                                QuickAlert.show(
-                                  context: context,
-                                  type: QuickAlertType.warning,
-                                  text: 'Alguns Campos estão vazios',
-                                  confirmBtnText: 'Ok',
-                                  title: 'Aviso',
-                                  confirmBtnColor: TColor.primaryColor1,
-                                  onConfirmBtnTap: () {
-                                    setLoading(false);
-                                    Navigator.pop(context);
-                                  },
-                                );
-                              } else {
-                                http.Response response = await signUpNewTeacher(
-                                    txtName.text,
-                                    txtEmail.text,
-                                    txtPassword.text,
-                                    _dropValue.value,
-                                    value!.token);
-                                if (response.statusCode == 401) {
-                                  QuickAlert.show(
-                                    context: context,
-                                    type: QuickAlertType.warning,
-                                    text: 'Professor não cadastrado',
-                                    confirmBtnText: 'Ok',
-                                    title: 'Aviso',
-                                    confirmBtnColor: TColor.primaryColor1,
-                                    onConfirmBtnTap: () {
-                                      setLoading(false);
-                                      Navigator.pop(context);
-                                    },
-                                  );
-                                } else {
-                                  QuickAlert.show(
-                                    context: context,
-                                    type: QuickAlertType.success,
-                                    title: 'Sucesso',
-                                    text: 'Cadastro Realizado!',
-                                    disableBackBtn: true,
-                                    barrierDismissible: false,
-                                    confirmBtnText: 'Ok',
-                                    onConfirmBtnTap: () {
-                                      setLoading(false);
-                                      Navigator.pop(context);
-                                      Navigator.pop(context);
-                                    },
-                                  );
-                                }
-                                setLoading(false);
-                              }
+                              // setLoading(true);
+                              // await Future.delayed(
+                              //     const Duration(milliseconds: 200));
+                              // if (txtName.text.isEmpty ||
+                              //     txtEmail.text.isEmpty ||
+                              //     txtPassword.text.isEmpty ||
+                              //     _dropValue.value.isEmpty) {
+                              //   QuickAlert.show(
+                              //     context: context,
+                              //     type: QuickAlertType.warning,
+                              //     text: 'Alguns Campos estão vazios',
+                              //     confirmBtnText: 'Ok',
+                              //     title: 'Aviso',
+                              //     confirmBtnColor: TColor.primaryColor1,
+                              //     onConfirmBtnTap: () {
+                              //       setLoading(false);
+                              //       Navigator.pop(context);
+                              //     },
+                              //   );
+                              // } else {
+                              //   http.Response response = await signUpNewTeacher(
+                              //       txtName.text,
+                              //       txtEmail.text,
+                              //       txtPassword.text,
+                              //       _dropValue.value,
+                              //       value!.token);
+                              //   if (response.statusCode == 401) {
+                              //     QuickAlert.show(
+                              //       context: context,
+                              //       type: QuickAlertType.warning,
+                              //       text: 'Professor não cadastrado',
+                              //       confirmBtnText: 'Ok',
+                              //       title: 'Aviso',
+                              //       confirmBtnColor: TColor.primaryColor1,
+                              //       onConfirmBtnTap: () {
+                              //         setLoading(false);
+                              //         Navigator.pop(context);
+                              //       },
+                              //     );
+                              //   } else {
+                              //     QuickAlert.show(
+                              //       context: context,
+                              //       type: QuickAlertType.success,
+                              //       title: 'Sucesso',
+                              //       text: 'Cadastro Realizado!',
+                              //       disableBackBtn: true,
+                              //       barrierDismissible: false,
+                              //       confirmBtnText: 'Ok',
+                              //       onConfirmBtnTap: () {
+                              //         setLoading(false);
+                              //         Navigator.pop(context);
+                              //         Navigator.pop(context);
+                              //       },
+                              //     );
+                              //   }
+                              //   setLoading(false);
+                              // }
                             },
                           ),
                           SizedBox(

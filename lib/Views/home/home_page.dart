@@ -28,7 +28,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  DataAppProvider? value;
+  // DataAppProvider? value;
   late http.Response response;
   bool _isLoading = false;
   Map<String, dynamic> userInfos = {};
@@ -65,9 +65,9 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void initProvider() {
-    value = context.watch<DataAppProvider>();
-  }
+  // void initProvider() {
+  //   value = context.watch<DataAppProvider>();
+  // }
 
   String _accountType = '';
   void setUserType(String accountType) {
@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
     setLoading(true);
     await Future.delayed(const Duration(milliseconds: 1000));
 
-    response = await getInformationsUser(Provider.of<DataAppProvider>(context, listen: false).token);
+    // response = await getInformationsUser(Provider.of<DataAppProvider>(context, listen: false).token);
     print(response);
     modelUserInfos = modelUserInfosFromMap(response.body);
 
@@ -127,7 +127,7 @@ class _HomePageState extends State<HomePage> {
   Widget buildHomePage() {
     return Scaffold(
       appBar: CustomAppBar(
-        userName: modelUserInfos.nome,
+        // userName: modelUserInfos.nome,
         userImage: image,
         type: NavBarType.aluno,
         editRoute: '/edit-aluno-perfil',

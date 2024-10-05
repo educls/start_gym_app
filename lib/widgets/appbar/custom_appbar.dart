@@ -7,14 +7,14 @@ import '../../utils/enums/user_roles.dart';
 import '../../utils/provider/data_provider.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String userName;
+  // final String userName;
   final NavBarType type;
   final Image userImage;
   final String editRoute;
 
   const CustomAppBar({
     super.key,
-    required this.userName,
+    // required this.userName,
     required this.type,
     required this.userImage,
     required this.editRoute,
@@ -48,7 +48,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       ),
                       const SizedBox(width: 10),
                       Text(
-                        userName,
+                        'usuariuo',
+                        // userName,
                         style: const TextStyle(color: Colors.white, fontSize: 22),
                       ),
                     ],
@@ -72,7 +73,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         radius: 35,
                       ),
                       Text(
-                        '  ${Provider.of<DataAppProvider>(context, listen: true).userInfos.tipo_usuario}',
+                        'teste',
+                        // '  ${Provider.of<DataAppProvider>(context, listen: true).userInfos.tipo_usuario}',
                         textAlign: TextAlign.end,
                         style: const TextStyle(color: Colors.white),
                       ),

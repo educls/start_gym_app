@@ -31,13 +31,14 @@ class _HomePageAlunoState extends State<HomePageAluno> with HomeStateHelpers<Hom
   }
 
   Widget buildHomePageAluno() {
-    var userInfos = Provider.of<DataAppProvider>(context, listen: true).userInfos;
+    // var userInfos = Provider.of<DataAppProvider>(context, listen: true).userInfos;
     return Scaffold(
         appBar: CustomAppBar(
-          userName: Provider.of<DataAppProvider>(context, listen: true).userInfos.nome,
-          userImage: IsBase64(base64: userInfos.foto!).verify()
-              ? Image.memory(base64Decode(userInfos.foto!))
-              : Image.asset(PathConstants.photoDefault),
+          userImage: Image.asset(PathConstants.photoDefault),
+          // userName: Provider.of<DataAppProvider>(context, listen: true).userInfos.nome,
+          // userImage: IsBase64(base64: userInfos.foto!).verify()
+          //     ? Image.memory(base64Decode(userInfos.foto!))
+          //     : Image.asset(PathConstants.photoDefault),
           type: NavBarType.aluno,
           editRoute: '/edit-aluno-perfil',
         ),

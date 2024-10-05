@@ -39,7 +39,7 @@ class _CustomImgPickerAvatarState extends State<CustomImgPickerAvatar> with Imag
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(80),
                     child: CircleAvatar(
-                      backgroundImage: image.image,
+                      // backgroundImage: image.image,
                       minRadius: 0,
                     ),
                   ),

@@ -11,10 +11,10 @@ class CustomBackButton extends StatelessWidget {
         onPressed: () {
           Navigator.of(context).pop();
         },
-        icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+        icon: Icon(Icons.arrow_back_ios, color: Colors.black),
         label: Text(
-          '',
-          style: TextStyle(color: Colors.white),
+          'voltar',
+          style: TextStyle(color: Colors.black),
         ),
       ),
     );

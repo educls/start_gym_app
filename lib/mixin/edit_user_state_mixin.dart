@@ -21,47 +21,47 @@ mixin EditUserStateHelpers<T extends StatefulWidget> on State<T> {
   }
 
   void editUserInfo(String data, TypeEditUser type) {
-    DataAppProvider provider = Provider.of<DataAppProvider>(context, listen: false);
+    // DataAppProvider provider = Provider.of<DataAppProvider>(context, listen: false);
     late String dataForFetch;
     switch (type) {
       case TypeEditUser.telefone:
-        dataForFetch = modelEditUserToJson(ModelEditUser(telefone: data));
-        setState(() {
-          provider.setNumWhats(data);
-        });
+        // dataForFetch = modelEditUserToJson(ModelEditUser(telefone: data));
+        // setState(() {
+        //   provider.setNumWhats(data);
+        // });
         break;
       case TypeEditUser.email:
-        dataForFetch = modelEditUserToJson(ModelEditUser(email: data));
-        setState(() {
-          provider.setEmail(data);
-        });
+        // dataForFetch = modelEditUserToJson(ModelEditUser(email: data));
+        // setState(() {
+        //   provider.setEmail(data);
+        // });
         break;
       case TypeEditUser.password:
-        dataForFetch = modelEditUserToJson(ModelEditUser(password: data));
-        setState(() {
-          provider.setPassword(data);
-        });
+        // dataForFetch = modelEditUserToJson(ModelEditUser(password: data));
+        // setState(() {
+        //   provider.setPassword(data);
+        // });
         break;
       default:
     }
-    editUserEachInput(dataForFetch, provider.token);
+    // editUserEachInput(dataForFetch, provider.token);
   }
 
   void setUser(TypeEditUser type) {
-    ModelUserInfos provider = Provider.of<DataAppProvider>(context, listen: false).userInfos;
+    // ModelUserInfos provider = Provider.of<DataAppProvider>(context, listen: false).userInfos;
     setState(() {
-      switch (type) {
-        case TypeEditUser.telefone:
-          controller.text = provider.telefone ?? '(xx) xxxxx-xxxx';
-          break;
-        case TypeEditUser.email:
-          controller.text = provider.email;
-          break;
-        case TypeEditUser.password:
-          controller.text = provider.password;
-          break;
-        default:
-      }
+      // switch (type) {
+      //   case TypeEditUser.telefone:
+      //     controller.text = provider.telefone ?? '(xx) xxxxx-xxxx';
+      //     break;
+      //   case TypeEditUser.email:
+      //     controller.text = provider.email;
+      //     break;
+      //   case TypeEditUser.password:
+      //     controller.text = provider.password;
+      //     break;
+      //   default:
+      // }
     });
   }
 }

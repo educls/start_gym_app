@@ -32,13 +32,14 @@ class _HomePageProfessorState extends State<HomePageProfessor> with HomeStateHel
   }
 
   Widget buildHomePageProfessor() {
-    var userInfos = Provider.of<DataAppProvider>(context, listen: true).userInfos;
+    // var userInfos = Provider.of<DataAppProvider>(context, listen: true).userInfos;
     return Scaffold(
       appBar: CustomAppBar(
-        userName: Provider.of<DataAppProvider>(context, listen: false).userInfos.nome,
-        userImage: userInfos.foto != null && IsBase64(base64: userInfos.foto!).verify()
-              ? Image.memory(base64Decode(userInfos.foto!))
-              : Image.asset(PathConstants.photoDefault),
+        userImage: Image.asset(PathConstants.photoDefault),
+        // userName: Provider.of<DataAppProvider>(context, listen: false).userInfos.nome,
+        // userImage: userInfos.foto != null && IsBase64(base64: userInfos.foto!).verify()
+        //       ? Image.memory(base64Decode(userInfos.foto!))
+        //       : Image.asset(PathConstants.photoDefault),
         type: NavBarType.professor,
         editRoute: '/edit-professor-perfil',
       ),

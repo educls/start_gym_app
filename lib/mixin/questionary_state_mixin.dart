@@ -43,13 +43,13 @@ mixin QuestionaryStateHelper<T extends StatefulWidget> on State<T> {
       progresso = (indicePergunta / totalPerguntas) * 100;
     });
     if (indicePergunta == totalPerguntas) {
-      QuestionaryHelper(
-        context: context,
-        setLoading: setLoading,
-        value: Provider.of<DataAppProvider>(context, listen: false),
-        type: type,
-        questionsMap: questionsMap,
-      ).onPressedForSendQuestionary();
+      // QuestionaryHelper(
+      //   context: context,
+      //   setLoading: setLoading,
+      //   value: Provider.of<DataAppProvider>(context, listen: false),
+      //   type: type,
+      //   questionsMap: questionsMap,
+      // ).onPressedForSendQuestionary();
     }
   }
 

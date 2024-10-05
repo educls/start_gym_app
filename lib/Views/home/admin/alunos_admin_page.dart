@@ -22,7 +22,7 @@ class _AlunosAdminPageState extends State<AlunosAdminPage> {
   late String userToken;
   List<ModelAlunosInfos> alunosInfos = [];
   late http.Response response;
-  DataAppProvider? value;
+  // DataAppProvider? value;
   late Uint8List bytes;
   late Image image = Image.asset('assets/img/profile_tab.png');
 
@@ -33,15 +33,15 @@ class _AlunosAdminPageState extends State<AlunosAdminPage> {
     super.dispose();
   }
 
-  void initProvider() {
-    value = context.watch<DataAppProvider>();
-  }
+  // void initProvider() {
+  //   value = context.watch<DataAppProvider>();
+  // }
 
-  void setAlunosInfos(resAlunosInfos) {
-    setState(() {
-      alunosInfos = resAlunosInfos;
-    });
-  }
+  // void setAlunosInfos(resAlunosInfos) {
+  //   setState(() {
+  //     alunosInfos = resAlunosInfos;
+  //   });
+  // }
 
   void setLoading(bool isLoading) {
     setState(() {
@@ -49,24 +49,24 @@ class _AlunosAdminPageState extends State<AlunosAdminPage> {
     });
   }
 
-  Future<void> searchAlunosInfos() async {
-    initProvider();
-    response = await getAlunosInfos(value!.token);
-    List<ModelAlunosInfos> _alunosInfos =
-        modelAlunosInfosFromMap(response.body);
-    setAlunosInfos(_alunosInfos);
-  }
+  // Future<void> searchAlunosInfos() async {
+  //   initProvider();
+  //   response = await getAlunosInfos(value!.token);
+  //   List<ModelAlunosInfos> _alunosInfos =
+  //       modelAlunosInfosFromMap(response.body);
+  //   setAlunosInfos(_alunosInfos);
+  // }
 
-  Future<void> reloadAlunosInfos() async {
-    setLoading(true);
-    searchAlunosInfos();
-    Timer(
-      const Duration(milliseconds: 500),
-      () {
-        setLoading(false);
-      },
-    );
-  }
+  // Future<void> reloadAlunosInfos() async {
+  //   setLoading(true);
+  //   searchAlunosInfos();
+  //   Timer(
+  //     const Duration(milliseconds: 500),
+  //     () {
+  //       setLoading(false);
+  //     },
+  //   );
+  // }
 
   bool isBase64(String value) {
     try {
@@ -79,10 +79,14 @@ class _AlunosAdminPageState extends State<AlunosAdminPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (alunosInfos.isEmpty) {
-      reloadAlunosInfos();
-    }
+    // if (alunosInfos.isEmpty) {
+    //   reloadAlunosInfos();
+    // }
     return Scaffold(
+      appBar: AppBar(
+        title: Text("ALunos"),
+        centerTitle: true,
+      ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : ListView.builder(
@@ -103,25 +107,19 @@ class _AlunosAdminPageState extends State<AlunosAdminPage> {
                       ),
                       color: const Color.fromRGBO(255, 255, 255, 0.705),
                       elevation: 8,
-                      margin:
-                          const EdgeInsets.only(top: 30, right: 10, left: 10),
+                      margin: const EdgeInsets.only(top: 30, right: 10, left: 10),
                       child: ListTile(
                         leading: Padding(
                           padding: const EdgeInsets.only(
                             right: 10,
                           ),
                           child: CircleAvatar(
-                            backgroundImage: infoAluno.foto != null &&
-                                    isBase64(infoAluno.foto!)
-                                ? MemoryImage(photoBytes)
-                                : image.image,
+                            backgroundImage: infoAluno.foto != null && isBase64(infoAluno.foto!) ? MemoryImage(photoBytes) : image.image,
                             radius: 25,
                           ),
                         ),
                         title: Text(infoAluno.email!),
-                        trailing: Text(infoAluno.telefone == null
-                            ? '(xx) xxxxx-xxxx'
-                            : infoAluno.telefone!),
+                        trailing: Text(infoAluno.telefone == null ? '(xx) xxxxx-xxxx' : infoAluno.telefone!),
                         onTap: () {
                           showDialog(
                             context: context,
@@ -135,12 +133,7 @@ class _AlunosAdminPageState extends State<AlunosAdminPage> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(10),
                                             child: CircleAvatar(
-                                              backgroundImage: infoAluno
-                                                              .foto !=
-                                                          null &&
-                                                      isBase64(infoAluno.foto!)
-                                                  ? MemoryImage(photoBytes)
-                                                  : image.image,
+                                              backgroundImage: infoAluno.foto != null && isBase64(infoAluno.foto!) ? MemoryImage(photoBytes) : image.image,
                                               radius: 80,
                                             ),
                                           ),
@@ -148,8 +141,7 @@ class _AlunosAdminPageState extends State<AlunosAdminPage> {
                                         Center(child: Text(infoAluno.email!))
                                       ],
                                     ),
-                                    content: Text(
-                                        'Nome: ${infoAluno.nome} \nNumero: ${infoAluno.telefone}\n'),
+                                    content: Text('Nome: ${infoAluno.nome} \nNumero: ${infoAluno.telefone}\n'),
                                     actions: [
                                       TextButton(
                                         onPressed: () async {
