@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:start_gym_app/utils/constants/color_constants.dart';
 
 import '../../../helpers/is_base64_helper.dart';
 import '../../../mixin/home_state_mixin.dart';
@@ -18,21 +19,29 @@ class HomePageAluno extends StatefulWidget {
   State<HomePageAluno> createState() => _HomePageAlunoState();
 }
 
-class _HomePageAlunoState extends State<HomePageAluno> with HomeStateHelpers<HomePageAluno> {
+class _HomePageAlunoState extends State<HomePageAluno>
+    with HomeStateHelpers<HomePageAluno> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isLoading
-          ? const CustomLoading(
-              color: Color.fromARGB(255, 0, 0, 0),
-            )
-          : buildHomePageAluno(),
+      backgroundColor: ColorConstants.darkBlue,
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(0),
+          child: isLoading
+              ? const CustomLoading(
+                  color: Color.fromARGB(255, 0, 0, 0),
+                )
+              : buildHomePageAluno(),
+        ),
+      ),
     );
   }
 
   Widget buildHomePageAluno() {
     // var userInfos = Provider.of<DataAppProvider>(context, listen: true).userInfos;
     return Scaffold(
+        backgroundColor: ColorConstants.darkBlue,
         appBar: CustomAppBar(
           userImage: Image.asset(PathConstants.photoDefault),
           // userName: Provider.of<DataAppProvider>(context, listen: true).userInfos.nome,
@@ -42,6 +51,7 @@ class _HomePageAlunoState extends State<HomePageAluno> with HomeStateHelpers<Hom
           type: NavBarType.aluno,
           editRoute: '/edit-aluno-perfil',
         ),
-        body: CustomBodyHome(bottomBarPages: bottomBarPagesAluno, type: NavBarType.aluno));
+        body: CustomBodyHome(
+            bottomBarPages: bottomBarPagesAluno, type: NavBarType.aluno));
   }
 }

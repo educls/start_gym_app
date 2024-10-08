@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:start_gym_app/utils/constants/color_constants.dart';
 
 class DashboardAlunoPage extends StatefulWidget {
   const DashboardAlunoPage({super.key});
@@ -14,26 +15,27 @@ class _DashboardAlunoPageState extends State<DashboardAlunoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0A1546),
+      backgroundColor: ColorConstants.darkBlue,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Cards com estatísticas
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(13.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _buildStatusCard(
+                  _buildStatusCardFinished(
                     title: "Completos",
-                    value: "16",
+                    value: "15",
                     subtitle: "Treinos Concluídos",
                     icon: Icons.fitness_center,
                     iconPath: 'assets/images/home_aluno/musculo-do-braco.png',
-                    color: Colors.yellow.shade700,
-                    height: 250,
+                    color: ColorConstants.darkYellow,
+                    height: 237,
                     main: true,
+                    width: 160,
                   ),
                   Column(
                     children: [
@@ -42,10 +44,11 @@ class _DashboardAlunoPageState extends State<DashboardAlunoPage> {
                         value: "2",
                         subtitle: "Treinos",
                         icon: Icons.directions_run,
-                        iconPath: 'assets/images/home_aluno/cronometro.png',
-                        color: Colors.orange,
+                        iconPath: 'assets/images/home_aluno/progresso.png',
+                        color: ColorConstants.darkYellow,
                         width: 200,
                         main: false,
+                        height: 110,
                       ),
                       const SizedBox(height: 16),
                       _buildStatusCard(
@@ -53,10 +56,11 @@ class _DashboardAlunoPageState extends State<DashboardAlunoPage> {
                         value: "57",
                         subtitle: "Minutos",
                         icon: Icons.timer,
-                        iconPath: 'assets/images/home_aluno/progresso.png',
+                        iconPath: 'assets/images/home_aluno/cronometro.png',
                         color: Colors.green,
                         width: 200,
                         main: false,
+                        height: 110,
                       ),
                     ],
                   ),
@@ -81,7 +85,7 @@ class _DashboardAlunoPageState extends State<DashboardAlunoPage> {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.yellow,
+                          color: ColorConstants.darkYellow,
                         ),
                       ),
                     ],
@@ -99,7 +103,7 @@ class _DashboardAlunoPageState extends State<DashboardAlunoPage> {
     );
   }
 
-  Widget _buildStatusCard({
+  Widget _buildStatusCardFinished({
     required String title,
     required String value,
     required String subtitle,
@@ -113,7 +117,7 @@ class _DashboardAlunoPageState extends State<DashboardAlunoPage> {
     return Container(
       width: width,
       height: height,
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -124,46 +128,121 @@ class _DashboardAlunoPageState extends State<DashboardAlunoPage> {
         children: [
           // Ícone customizado
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
                 iconPath!,
-                height: 24,
-                width: 24,
+                height: 27,
+                width: 27,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(width: 5),
               Text(
                 title,
                 style: const TextStyle(
-                  fontSize: 16,
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: ColorConstants.darkBlue,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 25), // Espaço entre a Row e a próxima linha
           Column(
+            mainAxisAlignment:
+                MainAxisAlignment.center, // Centraliza verticalmente
             children: [
               Text(
                 value,
                 style: TextStyle(
-                  fontSize: 32,
+                  fontSize: 60,
                   fontWeight: FontWeight.bold,
-                  color: color,
+                  color: ColorConstants.darkYellow,
                 ),
               ),
-              const SizedBox(height: 4),
               Text(
                 subtitle,
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12, color: Colors.grey),
+                style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromRGBO(26, 25, 68, 0.729)),
               ),
+              const SizedBox(height: 25),
             ],
           )
         ],
       ),
     );
   }
+}
+
+Widget _buildStatusCard({
+  required String title,
+  required String value,
+  required String subtitle,
+  required Color color,
+  required bool main,
+  IconData? icon,
+  String? iconPath,
+  double width = 140,
+  double? height,
+}) {
+  return Container(
+    width: width,
+    height: height,
+    padding: const EdgeInsets.all(6),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Ícone customizado
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              iconPath!,
+              height: 27,
+              width: 27,
+            ),
+            const SizedBox(width: 5),
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: ColorConstants.darkBlue,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 4),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 42,
+                fontWeight: FontWeight.bold,
+                color: ColorConstants.darkYellow,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              subtitle,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                  fontSize: 15, color: Color.fromRGBO(26, 25, 68, 0.729)),
+            ),
+          ],
+        )
+      ],
+    ),
+  );
 }
 
 // Função para construir o calendário

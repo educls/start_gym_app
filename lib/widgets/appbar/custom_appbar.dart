@@ -24,10 +24,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        color: ColorConstants.blue,
+        color: ColorConstants.darkBlue,
       ),
       child: SizedBox(
-        height: 150,
+        height: 170,
         child: Padding(
           padding: const EdgeInsets.all(25.0),
           child: Row(
@@ -43,25 +43,29 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         onTap: () => Navigator.pop(context),
                         child: const Text(
                           "Olá,",
-                          style: TextStyle(color: Color.fromARGB(255, 204, 174, 4), fontSize: 22),
+                          style: TextStyle(
+                            color: ColorConstants.darkYellow,
+                            fontSize: 30,
+                          ),
                         ),
                       ),
                       const SizedBox(width: 10),
                       Text(
-                        'usuariuo',
+                        'usuario',
                         // userName,
-                        style: const TextStyle(color: Colors.white, fontSize: 22),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 30),
                       ),
                     ],
                   ),
                   const Text(
                     'Acompanhe sua conquistas',
-                    style: TextStyle(color: Colors.white, fontSize: 15),
+                    style: TextStyle(color: Colors.white, fontSize: 17),
                   ),
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 10),
+                padding: const EdgeInsets.only(top: 4, right: 5),
                 child: GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, editRoute);
@@ -70,7 +74,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     children: [
                       CircleAvatar(
                         backgroundImage: userImage.image,
-                        radius: 35,
+                        radius: 37,
                       ),
                       Text(
                         'teste',
