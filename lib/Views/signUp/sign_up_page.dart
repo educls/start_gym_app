@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,6 +9,7 @@ import 'package:start_gym_app/functions/sign_up/image_helper.dart';
 import 'package:start_gym_app/functions/sign_up/sign_up_functions.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:start_gym_app/utils/constants/path_contants.dart';
 
 import '../../common/color_extension.dart';
 import '../../common_widget/round_button.dart';
@@ -278,8 +278,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                       ),
                                       child: const Center(
                                         child: ImageIcon(
-                                          AssetImage(
-                                              'assets/img/camera_tab.png'),
+                                          AssetImage(PathConstants.camera),
                                         ),
                                       ),
                                     ),

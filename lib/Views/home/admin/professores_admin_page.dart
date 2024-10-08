@@ -7,6 +7,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:start_gym_app/models/users/ModelTeachersInfos.dart';
+import 'package:start_gym_app/utils/constants/path_contants.dart';
 
 import '../../../controllers/users/users_controller.dart';
 import '../../../utils/provider/data_provider.dart';
@@ -24,7 +25,7 @@ class _ProfessoresAdminPageState extends State<ProfessoresAdminPage> {
   late http.Response response;
   // DataAppProvider? value;
   late Uint8List bytes;
-  late Image image = Image.asset('assets/img/profile_tab.png');
+  late Image image = Image.asset(PathConstants.profile);
 
   bool _isLoading = false;
 
@@ -119,7 +120,9 @@ class _ProfessoresAdminPageState extends State<ProfessoresAdminPage> {
                           ),
                         ),
                         title: Text(infoTeacher.name),
-                        trailing: infoTeacher.numberwhats != null ? Text(infoTeacher.numberwhats!) : const Text('(xx) xxxxx-xxxx'),
+                        trailing: infoTeacher.numberwhats != null
+                            ? Text(infoTeacher.numberwhats!)
+                            : const Text('(xx) xxxxx-xxxx'),
                         onTap: () {
                           showDialog(
                             context: context,

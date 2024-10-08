@@ -1,6 +1,5 @@
-
 import 'package:flutter/material.dart';
-
+import 'package:start_gym_app/utils/constants/path_contants.dart';
 import '../mixin/image_picker_mixin.dart';
 
 class CustomImgPickerAvatar extends StatefulWidget {
@@ -12,8 +11,8 @@ class CustomImgPickerAvatar extends StatefulWidget {
   State<CustomImgPickerAvatar> createState() => _CustomImgPickerAvatarState();
 }
 
-class _CustomImgPickerAvatarState extends State<CustomImgPickerAvatar> with ImagePickerStateHelper<CustomImgPickerAvatar> {
-
+class _CustomImgPickerAvatarState extends State<CustomImgPickerAvatar>
+    with ImagePickerStateHelper<CustomImgPickerAvatar> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -28,7 +27,6 @@ class _CustomImgPickerAvatarState extends State<CustomImgPickerAvatar> with Imag
             height: 140,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.grey[300],
             ),
             child: Stack(
               children: [
@@ -66,7 +64,7 @@ class _CustomImgPickerAvatarState extends State<CustomImgPickerAvatar> with Imag
                     ),
                     child: const Center(
                       child: ImageIcon(
-                        AssetImage('assets/img/camera_tab.png'),
+                        AssetImage(PathConstants.camera),
                       ),
                     ),
                   ),

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:start_gym_app/utils/constants/color_constants.dart';
+import 'package:start_gym_app/utils/constants/path_contants.dart';
 
 import '../../../helpers/is_base64_helper.dart';
 import '../../../mixin/home_state_mixin.dart';
@@ -43,7 +44,7 @@ class _HomePageAlunoState extends State<HomePageAluno>
     return Scaffold(
         backgroundColor: ColorConstants.darkBlue,
         appBar: CustomAppBar(
-          userImage: Image.asset(PathConstants.photoDefault),
+          userImage: Image.asset(PathConstants.profile),
           // userName: Provider.of<DataAppProvider>(context, listen: true).userInfos.nome,
           // userImage: IsBase64(base64: userInfos.foto!).verify()
           //     ? Image.memory(base64Decode(userInfos.foto!))

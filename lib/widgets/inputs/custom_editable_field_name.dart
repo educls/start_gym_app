@@ -16,7 +16,8 @@ class CustomEditableFieldName extends StatefulWidget {
   });
 
   @override
-  State<CustomEditableFieldName> createState() => _CustomEditableFieldNameState();
+  State<CustomEditableFieldName> createState() =>
+      _CustomEditableFieldNameState();
 }
 
 class _CustomEditableFieldNameState extends State<CustomEditableFieldName> {
@@ -54,7 +55,8 @@ class _CustomEditableFieldNameState extends State<CustomEditableFieldName> {
         controller: controller,
         decoration: InputDecoration(
           suffixIcon: IconButton(
-            icon: Icon(isEditing ? Icons.check : Icons.edit, color: Colors.grey),
+            icon:
+                Icon(isEditing ? Icons.check : Icons.edit, color: Colors.grey),
             onPressed: () {
               setEditingState(!isEditing);
             },

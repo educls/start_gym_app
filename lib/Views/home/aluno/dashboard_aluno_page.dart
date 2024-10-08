@@ -1,8 +1,10 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:start_gym_app/utils/constants/color_constants.dart';
+import "package:start_gym_app/utils/constants/path_contants.dart";
 
 class DashboardAlunoPage extends StatefulWidget {
   const DashboardAlunoPage({super.key});
@@ -30,8 +32,7 @@ class _DashboardAlunoPageState extends State<DashboardAlunoPage> {
                     title: "Completos",
                     value: "15",
                     subtitle: "Treinos Concluídos",
-                    icon: Icons.fitness_center,
-                    iconPath: 'assets/images/home_aluno/musculo-do-braco.png',
+                    iconPath: PathConstants.braco,
                     color: ColorConstants.darkYellow,
                     height: 237,
                     main: true,
@@ -43,8 +44,7 @@ class _DashboardAlunoPageState extends State<DashboardAlunoPage> {
                         title: "Em progresso",
                         value: "2",
                         subtitle: "Treinos",
-                        icon: Icons.directions_run,
-                        iconPath: 'assets/images/home_aluno/progresso.png',
+                        iconPath: PathConstants.progresso,
                         color: ColorConstants.darkYellow,
                         width: 200,
                         main: false,
@@ -55,8 +55,7 @@ class _DashboardAlunoPageState extends State<DashboardAlunoPage> {
                         title: "Tempo dedicado",
                         value: "57",
                         subtitle: "Minutos",
-                        icon: Icons.timer,
-                        iconPath: 'assets/images/home_aluno/cronometro.png',
+                        iconPath: PathConstants.cronometro,
                         color: Colors.green,
                         width: 200,
                         main: false,
@@ -76,10 +75,15 @@ class _DashboardAlunoPageState extends State<DashboardAlunoPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Row(
+                  Row(
                     children: [
-                      Icon(Icons.fitness_center, color: Colors.yellow),
-                      SizedBox(width: 8),
+                      Image.asset(
+                        PathConstants.logoStartGym,
+                        width: 50,
+                        height: 50,
+                        color: ColorConstants.darkYellow,
+                      ),
+                      const SizedBox(width: 10),
                       Text(
                         "TREINOS DA SEMANA",
                         style: TextStyle(

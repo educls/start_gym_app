@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:start_gym_app/common_widget/navigation_bar.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import "package:start_gym_app/utils/constants/path_contants.dart";
 
 import '../../controllers/users/users_controller.dart';
 import '../../models/users/ModelUserInfos.dart';
@@ -103,7 +104,7 @@ class _HomePageState extends State<HomePage> {
       bytes = base64Decode(modelUserInfos.foto!);
       image = Image.memory(bytes);
     } else {
-      image = Image.asset('assets/img/profile_tab.png');
+      image = Image.asset(PathConstants.profile);
     }
 
     setUserType(modelUserInfos.tipo_usuario);
@@ -133,7 +134,9 @@ class _HomePageState extends State<HomePage> {
         editRoute: '/edit-aluno-perfil',
       ),
       body: _isLoading
-          ? const CustomLoading(color: Color.fromARGB(255, 0, 0, 0),)
+          ? const CustomLoading(
+              color: Color.fromARGB(255, 0, 0, 0),
+            )
           : Center(
               child: modelUserInfos.tipo_usuario == 'admin'
                   ? bottomBarPagesAdmin[_currentIndex]

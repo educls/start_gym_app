@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:start_gym_app/mixin/edit_user_state_mixin.dart';
+import 'package:start_gym_app/utils/constants/color_constants.dart';
 import 'package:start_gym_app/widgets/questionary/custom_questionary_picker.dart';
 
 import '../../../utils/constants/path_contants.dart';
@@ -19,19 +20,35 @@ class EditAlunoInfosPage extends StatefulWidget {
   State<EditAlunoInfosPage> createState() => _EditAlunoInfosPageState();
 }
 
-class _EditAlunoInfosPageState extends State<EditAlunoInfosPage> with EditUserStateHelpers<EditAlunoInfosPage> {
+class _EditAlunoInfosPageState extends State<EditAlunoInfosPage>
+    with EditUserStateHelpers<EditAlunoInfosPage> {
   @override
   Widget build(BuildContext context) {
+    final media = MediaQuery.of(context);
     return Scaffold(
-      body: Stack(
-        children: [
-          isLoading ? const CustomLoading(color: Color.fromARGB(255, 0, 0, 0),) : buildFormEditUser(),
-        ],
+      body: SafeArea(
+        child: Stack(
+          children: [
+            isLoading
+                ? const CustomLoading(color: ColorConstants.darkBlue)
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(child: buildFormEditUser(media)),
+                      const SizedBox
+                          .shrink(), // Para ocupar espaço sem conteúdo
+                      const QuestionaryPicker(), // Fica na parte inferior
+                    ],
+                  ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget buildFormEditUser() {
+  Widget buildFormEditUser(MediaQueryData media) {
+    double containerHeight =
+        media.size.height * 0.8; // Ajuste conforme necessário
     return SingleChildScrollView(
       child: Column(
         children: AnimationConfiguration.toStaggeredList(
@@ -46,28 +63,42 @@ class _EditAlunoInfosPageState extends State<EditAlunoInfosPage> with EditUserSt
               title: "Start Gym",
               pathLogo: PathConstants.logoStartGym,
             ),
-            const CustomBackButton(),
-            CustomEditableFieldName(
-              type: TypeEditUser.nome,
+            SizedBox(height: media.size.height * 0.02), // Margem superior
+            Padding(
+              padding:
+                  EdgeInsets.symmetric(horizontal: media.size.width * 0.05),
+              child: CustomEditableFieldName(
+                type: TypeEditUser.nome,
+              ),
             ),
             const CustomImgPickerAvatar(),
-            const CustomEditableField(
-              label: 'Telefone',
-              isPassword: false,
-              type: TypeEditUser.telefone,
+            Padding(
+              padding:
+                  EdgeInsets.symmetric(horizontal: media.size.width * 0.01),
+              child: const CustomEditableField(
+                label: 'Telefone',
+                isPassword: false,
+                type: TypeEditUser.telefone,
+              ),
             ),
-            const CustomEditableField(
-              label: 'Email',
-              isPassword: false,
-              type: TypeEditUser.email,
+            Padding(
+              padding:
+                  EdgeInsets.symmetric(horizontal: media.size.width * 0.01),
+              child: const CustomEditableField(
+                label: 'Email',
+                isPassword: false,
+                type: TypeEditUser.email,
+              ),
             ),
-            const CustomEditableField(
-              label: 'Senha',
-              isPassword: true,
-              type: TypeEditUser.password,
+            Padding(
+              padding:
+                  EdgeInsets.symmetric(horizontal: media.size.width * 0.01),
+              child: const CustomEditableField(
+                label: 'Senha',
+                isPassword: true,
+                type: TypeEditUser.password,
+              ),
             ),
-            const SizedBox(height: 5),
-            const QuestionaryPicker(),
           ],
         ),
       ),

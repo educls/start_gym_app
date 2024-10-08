@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:start_gym_app/utils/constants/path_contants.dart';
 
 import '../../../controllers/users/users_controller.dart';
 import '../../../models/users/ModelALunosInfos.dart';
@@ -24,7 +25,7 @@ class _AlunosAdminPageState extends State<AlunosAdminPage> {
   late http.Response response;
   // DataAppProvider? value;
   late Uint8List bytes;
-  late Image image = Image.asset('assets/img/profile_tab.png');
+  late Image image = Image.asset(PathConstants.profile);
 
   bool _isLoading = false;
 
@@ -107,19 +108,25 @@ class _AlunosAdminPageState extends State<AlunosAdminPage> {
                       ),
                       color: const Color.fromRGBO(255, 255, 255, 0.705),
                       elevation: 8,
-                      margin: const EdgeInsets.only(top: 30, right: 10, left: 10),
+                      margin:
+                          const EdgeInsets.only(top: 30, right: 10, left: 10),
                       child: ListTile(
                         leading: Padding(
                           padding: const EdgeInsets.only(
                             right: 10,
                           ),
                           child: CircleAvatar(
-                            backgroundImage: infoAluno.foto != null && isBase64(infoAluno.foto!) ? MemoryImage(photoBytes) : image.image,
+                            backgroundImage: infoAluno.foto != null &&
+                                    isBase64(infoAluno.foto!)
+                                ? MemoryImage(photoBytes)
+                                : image.image,
                             radius: 25,
                           ),
                         ),
                         title: Text(infoAluno.email!),
-                        trailing: Text(infoAluno.telefone == null ? '(xx) xxxxx-xxxx' : infoAluno.telefone!),
+                        trailing: Text(infoAluno.telefone == null
+                            ? '(xx) xxxxx-xxxx'
+                            : infoAluno.telefone!),
                         onTap: () {
                           showDialog(
                             context: context,
@@ -133,7 +140,11 @@ class _AlunosAdminPageState extends State<AlunosAdminPage> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(10),
                                             child: CircleAvatar(
-                                              backgroundImage: infoAluno.foto != null && isBase64(infoAluno.foto!) ? MemoryImage(photoBytes) : image.image,
+                                              backgroundImage: infoAluno.foto !=
+                                                          null &&
+                                                      isBase64(infoAluno.foto!)
+                                                  ? MemoryImage(photoBytes)
+                                                  : image.image,
                                               radius: 80,
                                             ),
                                           ),
@@ -141,7 +152,8 @@ class _AlunosAdminPageState extends State<AlunosAdminPage> {
                                         Center(child: Text(infoAluno.email!))
                                       ],
                                     ),
-                                    content: Text('Nome: ${infoAluno.nome} \nNumero: ${infoAluno.telefone}\n'),
+                                    content: Text(
+                                        'Nome: ${infoAluno.nome} \nNumero: ${infoAluno.telefone}\n'),
                                     actions: [
                                       TextButton(
                                         onPressed: () async {

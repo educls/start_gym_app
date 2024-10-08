@@ -1,6 +1,7 @@
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:start_gym_app/utils/constants/color_constants.dart';
 
 import '../../common/color_extension.dart';
 import '../../mixin/edit_user_state_mixin.dart';
@@ -21,8 +22,8 @@ class CustomEditableField extends StatefulWidget {
   State<StatefulWidget> createState() => _CustomEditableFieldState();
 }
 
-class _CustomEditableFieldState extends State<CustomEditableField> with EditUserStateHelpers<CustomEditableField> {
-
+class _CustomEditableFieldState extends State<CustomEditableField>
+    with EditUserStateHelpers<CustomEditableField> {
   void setEditingState(bool setEditing) {
     setState(() {
       isEditing = setEditing;
@@ -51,8 +52,9 @@ class _CustomEditableFieldState extends State<CustomEditableField> with EditUser
                         child: Text(
                           widget.label,
                           style: TextStyle(
-                            color: TColor.lighBlue,
+                            color: ColorConstants.darkBlue,
                             fontWeight: FontWeight.bold,
+                            fontSize: 15,
                           ),
                         ),
                       ),
@@ -74,12 +76,17 @@ class _CustomEditableFieldState extends State<CustomEditableField> with EditUser
                             TelefoneInputFormatter(),
                           ]
                         : [],
-                    style: TextStyle(fontWeight: FontWeight.bold, color: isEditing ? Colors.black : Colors.black38),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: isEditing ? Colors.black : Colors.black38),
                     controller: controller,
                     decoration: InputDecoration(
                       suffixIcon: IconButton(
-                        icon: Icon(isEditing ? Icons.check : Icons.edit, color: Colors.grey),
-                        onPressed: () {setEditingState(!isEditing);},
+                        icon: Icon(isEditing ? Icons.check : Icons.edit,
+                            color: Colors.grey),
+                        onPressed: () {
+                          setEditingState(!isEditing);
+                        },
                       ),
                       border: InputBorder.none,
                       contentPadding: const EdgeInsets.symmetric(
@@ -87,7 +94,8 @@ class _CustomEditableFieldState extends State<CustomEditableField> with EditUser
                         vertical: 12,
                       ),
                     ),
-                    obscureText: widget.isPassword ? !isEditing : widget.isPassword,
+                    obscureText:
+                        widget.isPassword ? !isEditing : widget.isPassword,
                     readOnly: !isEditing,
                   ),
                 ),

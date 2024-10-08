@@ -25,7 +25,7 @@ class _CriarTreinoPorCategoriaScreenState
         title: Row(
           children: [
             Image.asset(
-              'assets/images/logoStartGymAmarelo.png', // Caminho da sua imagem
+              PathConstants.logoStartGym, // Caminho da sua imagem
               height: 30, // Tamanho da imagem
             ),
             const SizedBox(width: 10), // Espaçamento entre a imagem e o texto

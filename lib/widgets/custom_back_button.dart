@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:start_gym_app/utils/constants/color_constants.dart';
+import 'package:start_gym_app/utils/constants/path_contants.dart';
 
 class CustomBackButton extends StatelessWidget {
   const CustomBackButton({super.key});
@@ -7,14 +9,15 @@ class CustomBackButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.centerLeft,
-      child: TextButton.icon(
+      child: TextButton(
         onPressed: () {
           Navigator.of(context).pop();
         },
-        icon: Icon(Icons.arrow_back_ios, color: Colors.black),
-        label: Text(
-          'voltar',
-          style: TextStyle(color: Colors.black),
+        child: Image.asset(
+          PathConstants.arrowLeft,
+          color: ColorConstants.white,
+          width: 24, // Defina a largura desejada
+          height: 24, // Defina a altura desejada
         ),
       ),
     );

@@ -27,7 +27,6 @@ class OptionQuestionary extends StatelessWidget {
           ));
         },
         child: Container(
-          width: media.width * 0.4,
           height: media.height * 0.1,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
@@ -42,7 +41,9 @@ class OptionQuestionary extends StatelessWidget {
               ),
               Text(
                 text,
-                style: const TextStyle(color: ColorConstants.blue, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    color: ColorConstants.darkBlue,
+                    fontWeight: FontWeight.bold),
               ),
             ],
           ),
