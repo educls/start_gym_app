@@ -65,7 +65,7 @@ class _SignUpNewTeacherState extends State<SignUpNewTeacher> {
     var media = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Cadastrar novo Profissionail"),
+        title: const Text("Cadastrar novo Profissional"),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())

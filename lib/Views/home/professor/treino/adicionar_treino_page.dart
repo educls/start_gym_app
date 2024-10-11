@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:start_gym_app/Views/home/professor/exercicios/criar_treino_por_categoria_screen.dart';
+import 'package:start_gym_app/Views/home/professor/exercicios/definicoes_exercicio_page.dart';
 import 'package:start_gym_app/utils/constants/path_contants.dart';
 import 'package:start_gym_app/widgets/custom_back_button.dart';
 import 'package:start_gym_app/utils/constants/color_constants.dart';
@@ -100,7 +102,7 @@ class _CategoriaMuscScreenState extends State<CategoriaMuscScreen> {
   Widget _buildGridItem(String title, String imagePath, String route) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, route);
+        Navigator.push(context, MaterialPageRoute(builder: (context) => DefinicoesExercicioPage(title: title)));
       },
       child: Column(
         children: [

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:start_gym_app/Views/home/professor/treino/criar_treino_page.dart';
+import 'package:start_gym_app/common/color_extension.dart';
+import 'package:start_gym_app/widgets/custom_back_button.dart';
 
 class TreinoPorCategoriaScreen extends StatefulWidget {
   const TreinoPorCategoriaScreen({super.key});
 
   @override
-  State<TreinoPorCategoriaScreen> createState() =>
-      _TreinoPorCategoriaScreenState();
+  State<TreinoPorCategoriaScreen> createState() => _TreinoPorCategoriaScreenState();
 }
 
 class _TreinoPorCategoriaScreenState extends State<TreinoPorCategoriaScreen> {
@@ -15,20 +17,19 @@ class _TreinoPorCategoriaScreenState extends State<TreinoPorCategoriaScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: const IconThemeData(
+          color: Color.fromARGB(255, 255, 255, 255),
+        ),
+        centerTitle: true,
         title: const Text("Start Gym", style: TextStyle(color: Colors.white)),
         backgroundColor: const Color(0xFF0A1E5C), // Azul escuro
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            // Ação para o botão voltar
-          },
-        ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const CustomBackButton(),
             // Barra de busca
             TextField(
               decoration: InputDecoration(
@@ -48,14 +49,12 @@ class _TreinoPorCategoriaScreenState extends State<TreinoPorCategoriaScreen> {
                 color: const Color(0xFF0A1E5C),
                 borderRadius: BorderRadius.circular(20.0),
               ),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: const Text(
                 'Ombros',
                 style: TextStyle(color: Colors.white, fontSize: 18.0),
               ),
             ),
-            const SizedBox(height: 16.0),
             // Lista de exercícios
             Expanded(
               child: ListView(
@@ -72,11 +71,11 @@ class _TreinoPorCategoriaScreenState extends State<TreinoPorCategoriaScreen> {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  // Ação ao finalizar o treino
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const CriarTreinoScreen()));
                 },
                 style: ElevatedButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                  backgroundColor: TColor.primaryColor1,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
                   ),

@@ -78,9 +78,10 @@ flutter:
     - assets/images/
     - assets/images/icons_questionary/
     - assets/images/home_professor/
-    - assets/images/adicionar_treino/
+    - assets/images/add_training/
     - assets/images/perfil_aluno/
     - assets/images/home_aluno/
+    - assets/img/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

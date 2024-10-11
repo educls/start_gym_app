@@ -7,6 +7,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:start_gym_app/utils/constants/path_contants.dart';
+import 'package:start_gym_app/views/home/professor/exercicios/treino_por_categoria_screen.dart';
 
 import '../../../controllers/users/users_controller.dart';
 import '../../../models/users/ModelALunosInfos.dart';
@@ -85,19 +86,19 @@ class _AlunosAdminPageState extends State<AlunosAdminPage> {
     // }
     return Scaffold(
       appBar: AppBar(
-        title: Text("ALunos"),
+        title: const Text("Alunos"),
         centerTitle: true,
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : ListView.builder(
-              itemCount: alunosInfos.length,
+              itemCount: 5,
               itemBuilder: (context, index) {
-                final infoAluno = alunosInfos[index];
+                // final infoAluno = alunosInfos[index];
                 Uint8List photoBytes = Uint8List(0);
-                if (infoAluno.foto != null && isBase64(infoAluno.foto!)) {
-                  photoBytes = base64Decode(infoAluno.foto!);
-                }
+                // if (infoAluno.foto != null && isBase64(infoAluno.foto!)) {
+                //   photoBytes = base64Decode(infoAluno.foto!);
+                // }
                 return AnimationConfiguration.staggeredList(
                   position: index,
                   child: SlideAnimation(
@@ -116,17 +117,12 @@ class _AlunosAdminPageState extends State<AlunosAdminPage> {
                             right: 10,
                           ),
                           child: CircleAvatar(
-                            backgroundImage: infoAluno.foto != null &&
-                                    isBase64(infoAluno.foto!)
-                                ? MemoryImage(photoBytes)
-                                : image.image,
+                            backgroundImage: image.image,
                             radius: 25,
                           ),
                         ),
-                        title: Text(infoAluno.email!),
-                        trailing: Text(infoAluno.telefone == null
-                            ? '(xx) xxxxx-xxxx'
-                            : infoAluno.telefone!),
+                        title: Text('infoAluno.email!'),
+                        trailing: Text('(xx) xxxxx-xxxx'),
                         onTap: () {
                           showDialog(
                             context: context,
@@ -140,21 +136,24 @@ class _AlunosAdminPageState extends State<AlunosAdminPage> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(10),
                                             child: CircleAvatar(
-                                              backgroundImage: infoAluno.foto !=
-                                                          null &&
-                                                      isBase64(infoAluno.foto!)
-                                                  ? MemoryImage(photoBytes)
-                                                  : image.image,
+                                              backgroundImage: image.image,
                                               radius: 80,
                                             ),
                                           ),
                                         ),
-                                        Center(child: Text(infoAluno.email!))
+                                        Center(child: Text('infoAluno.email!'))
                                       ],
                                     ),
                                     content: Text(
-                                        'Nome: ${infoAluno.nome} \nNumero: ${infoAluno.telefone}\n'),
+                                        'Nome: ${'infoAluno.nome'} \nNumero: ${'infoAluno.telefone'}\n'),
                                     actions: [
+                                      TextButton(
+                                        onPressed: () async {
+                                          Navigator.of(context).pop();
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => const TreinoPorCategoriaScreen()));
+                                        },
+                                        child: const Text('Atribuir Treino'),
+                                      ),
                                       TextButton(
                                         onPressed: () async {
                                           Navigator.of(context).pop();
@@ -178,8 +177,9 @@ class _AlunosAdminPageState extends State<AlunosAdminPage> {
         onPressed: () {
           Navigator.pushNamed(context, '/sign-up-new-aluno');
         },
-        child: const Icon(Icons.add),
+        child: Image.asset('assets/images/home_professor/alunoAdd.png'),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
